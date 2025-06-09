@@ -112,53 +112,51 @@
   </footer>
 
   <script>
-    const vagas = [
-      {
-        titulo: \"Assistente Administrativo\",
-        local: \"Araucária - PR\",
-        descricao: \"Rotinas administrativas, atendimento e organização.\"
-      },
-      {
-        titulo: \"Analista de RH\",
-        local: \"Araucária - PR\",
-        descricao: \"Recrutamento e seleção, desenvolvimento de pessoas.\"
-      },
-      {
-        titulo: \"Operador de Produção\",
-        local: \"Araucária - PR\",
-        descricao: \"Trabalho em linha de produção e controle de qualidade.\"
-      }
-    ];
-
-    function renderJobs(filter = \"\") {
-      const list = document.getElementById(\"jobList\");
-      list.innerHTML = \"\";
-
-      const filtered = vagas.filter(job =>
-        job.titulo.toLowerCase().includes(filter.toLowerCase())
-      );
-
-      filtered.forEach(job => {
-        const card = document.createElement(\"div\");
-        card.className = \"job-card\";
-        card.innerHTML = `
-          <h2>${job.titulo}</h2>
-          <p><strong>Local:</strong> ${job.local}</p>
-          <p>${job.descricao}</p>
-          <button>Candidatar-se</button>
-        `;
-        list.appendChild(card);
-      });
+  const vagas = [
+    {
+      titulo: "Assistente Administrativo",
+      local: "Araucária - PR",
+      descricao: "Rotinas administrativas, atendimento e organização."
+    },
+    {
+      titulo: "Analista de RH",
+      local: "Araucária - PR",
+      descricao: "Recrutamento e seleção, desenvolvimento de pessoas."
+    },
+    {
+      titulo: "Operador de Produção",
+      local: "Araucária - PR",
+      descricao: "Trabalho em linha de produção e controle de qualidade."
     }
+  ];
 
-    function searchJobs() {
-      const input = document.getElementById(\"searchInput\").value;
-      renderJobs(input);
-    }
+  function renderJobs(filter = "") {
+    const list = document.getElementById("jobList");
+    list.innerHTML = "";
 
-    // Renderiza ao carregar
-    renderJobs();
-  </script>
+    const filtered = vagas.filter(job =>
+      job.titulo.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    filtered.forEach(job => {
+      const card = document.createElement("div");
+      card.className = "job-card";
+      card.innerHTML = `
+        <h2>${job.titulo}</h2>
+        <p><strong>Local:</strong> ${job.local}</p>
+        <p>${job.descricao}</p>
+        <button>Candidatar-se</button>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function searchJobs() {
+    const input = document.getElementById("searchInput").value;
+    renderJobs(input);
+  }
+
+  renderJobs();
+</script>
 </body>
 </html>
-
