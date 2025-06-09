@@ -1,1 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vagas - UpLife Educacional</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f97316;
+      color: #fff;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+
+    header img {
+      max-width: 160px;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+    }
+
+    .search {
+      max-width: 500px;
+      margin: 30px auto;
+      display: flex;
+    }
+
+    .search input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px 0 0 8px;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .search button {
+      padding: 12px 20px;
+      border: none;
+      background: #e65100;
+      color: #fff;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+    }
+
+    .jobs {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .job-card {
+      background: #fff;
+      color: #333;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .job-card h2 {
+      color: #f97316;
+    }
+
+    .job-card button {
+      margin-top: 10px;
+      padding: 10px 16px;
+      background-color: #f97316;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo UpLife" />
+    <h1>Vagas UpLife Educacional</h1>
+    <p>Encontre sua oportunidade conosco!</p>
+  </header>
+
+  <div class="search">
+    <input type="text" id="searchInput" placeholder="Buscar vaga..." />
+    <button onclick="searchJobs()">Buscar</button>
+  </div>
+
+  <div class="jobs" id="jobList">
+    <!-- Vagas são inseridas pelo JS -->
+  </div>
+
+  <footer>
+    © 2025 UpLife Educacional. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    const vagas = [
+      {
+        titulo: \"Assistente Administrativo\",
+        local: \"Araucária - PR\",
+        descricao: \"Rotinas administrativas, atendimento e organização.\"
+      },
+      {
+        titulo: \"Analista de RH\",
+        local: \"Araucária - PR\",
+        descricao: \"Recrutamento e seleção, desenvolvimento de pessoas.\"
+      },
+      {
+        titulo: \"Operador de Produção\",
+        local: \"Araucária - PR\",
+        descricao: \"Trabalho em linha de produção e controle de qualidade.\"
+      }
+    ];
+
+    function renderJobs(filter = \"\") {
+      const list = document.getElementById(\"jobList\");
+      list.innerHTML = \"\";
+
+      const filtered = vagas.filter(job =>
+        job.titulo.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      filtered.forEach(job => {
+        const card = document.createElement(\"div\");
+        card.className = \"job-card\";
+        card.innerHTML = `
+          <h2>${job.titulo}</h2>
+          <p><strong>Local:</strong> ${job.local}</p>
+          <p>${job.descricao}</p>
+          <button>Candidatar-se</button>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function searchJobs() {
+      const input = document.getElementById(\"searchInput\").value;
+      renderJobs(input);
+    }
+
+    // Renderiza ao carregar
+    renderJobs();
+  </script>
+</body>
+</html>
 
