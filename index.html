@@ -3,189 +3,174 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vagas - UpLife Educacional</title>
+  <title>Vagas na Indústria – UpLife Educacional</title>
   <style>
+    :root {
+      --orange: #f97316;
+      --dark-orange: #bf360c;
+      --bg-dark: #e65100;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f97316;
-      color: #fff;
-    }
-
-    header {
-      background: #e65100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      flex-wrap: wrap;
-    }
-
-    header img {
-      height: 50px;
-    }
-
-    .nav-buttons {
-      display: flex;
-      gap: 20px;
-    }
-
-    .nav-buttons a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .social-icons img {
-      width: 24px;
-      margin-left: 10px;
-    }
-
-    h1 {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 2.2rem;
-    }
-
-    .search {
-      max-width: 500px;
-      margin: 20px auto;
-      display: flex;
-    }
-
-    .search input {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 8px 0 0 8px;
-      font-size: 1rem;
-      color: #333;
-    }
-
-    .search button {
-      padding: 12px 20px;
-      border: none;
-      background: #bf360c;
-      color: #fff;
-      border-radius: 0 8px 8px 0;
-      cursor: pointer;
-    }
-
-    .jobs {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .job-card {
+      font-family: 'Segoe UI', Arial, sans-serif;
       background: #fff;
       color: #333;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-
-    .job-card h2 {
-      color: #f97316;
+    header {
+      position: sticky; top: 0;
+      background: var(--bg-dark);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px; z-index: 10;
     }
-
-    .job-card button {
-      margin-top: 10px;
-      padding: 10px 16px;
-      background-color: #f97316;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    header img.logo { height: 50px; }
+    .nav-buttons a {
+      margin: 0 15px;
+      color: #fff; text-decoration: none;
+      font-weight: 600;
+      transition: opacity .2s;
     }
-
-    footer {
+    .nav-buttons a:hover { opacity: 0.8; }
+    .social-icons img {
+      width: 24px; margin-left: 12px;
+      filter: brightness(0) invert(1);
+      transition: opacity .2s;
+    }
+    .social-icons img:hover { opacity: 0.7; }
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, var(--orange)cc, var(--dark-orange)cc);
+      color: #fff;
+      padding: 80px 20px;
+      overflow: hidden;
       text-align: center;
-      padding: 30px;
+    }
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+    .hero p.lead {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .hero button.cta {
+      padding: 14px 28px;
+      font-size: 1rem;
+      background: #fff;
+      color: var(--dark-orange);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .hero img.decor {
+      position: absolute;
+      bottom: 0; right: 0;
+      max-width: 400px;
+      opacity: 0.3;
+    }
+    .jobs { display: grid; gap: 20px; max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+    .job-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+    }
+    .job-card .info { grid-column: 1 / -1; }
+    .job-card h3 {
+      color: var(--orange);
+      margin-bottom: 6px;
+    }
+    .job-card p { margin-bottom: 6px; }
+    .job-card a.apply {
+      grid-column: 1 / -1;
+      justify-self: end;
+      text-decoration: none;
+    }
+    .job-card .apply button {
+      padding: 8px 16px;
+      background: var(--orange);
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    footer {
+      background: var(--bg-dark);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 60px;
       font-size: 0.9rem;
+    }
+    @media(max-width:768px) {
+      .jobs { grid-template-columns: 1fr; }
+      .hero img.decor { display: none; }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <img src="logo.png" alt="Logo UpLife" />
-    <div class="nav-buttons">
-      <a href="#">Conta</a>
-      <a href="#">Sobre Nós</a>
+    <img src="logo.png" class="logo" alt="UpLife Educacional Logo" />
+    <nav class="nav-buttons">
+      <a href="#conta">Conta</a>
+      <a href="#sobre">Sobre Nós</a>
       <a href="https://uplifecursosetreinamentos.com.br/" target="_blank">Acessar Site</a>
-    </div>
+    </nav>
     <div class="social-icons">
-      <a href="https://instagram.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" /></a>
-      <a href="https://facebook.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" /></a>
-      <a href="https://wa.me/seunumerowhatsapp" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" /></a>
+      <a href="https://instagram.com" target="_blank"><img src="instagram.png" alt="Instagram"></a>
+      <a href="https://facebook.com" target="_blank"><img src="facebook.png" alt="Facebook"></a>
+      <a href="https://wa.me/seunumerowhatsapp" target="_blank"><img src="whats.png" alt="WhatsApp"></a>
     </div>
   </header>
 
-  <h1>Vagas na Indústria</h1>
+  <section class="hero">
+    <h1>Vagas na Indústria</h1>
+    <p class="lead">Tão importante quanto a oportunidade é estar sempre preparado para ela.</p>
+    <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
+      Ver Vagas
+    </button>
+    <img src="Banners (1).png" class="decor" alt="" />
+  </section>
 
-  <div class="search">
-    <input type="text" id="searchInput" placeholder="Buscar vaga..." />
-    <button onclick="searchJobs()">Buscar</button>
-  </div>
+  <section id="jobs" class="jobs">
+    <!-- Cartões serão preenchidos via JS -->
+  </section>
 
-  <div class="jobs" id="jobList"></div>
-
-  <footer>
-    © 2025 UpLife Educacional. Todos os direitos reservados.
-  </footer>
+  <footer> 2025 © UP LIFE EDUCACIONAL - CNPJ: 47.854.761/0001-74.</footer>
 
   <script>
     const vagas = [
-      {
-        titulo: "Operador de Máquinas",
-        local: "Araucária - PR",
-        descricao: "Atuar em linha de produção operando máquinas industriais.",
-        link: "https://www.linkedin.com/jobs/view/3923483938"
-      },
-      {
-        titulo: "Técnico de Manutenção",
-        local: "Curitiba - PR",
-        descricao: "Manutenção preventiva e corretiva em ambiente fabril.",
-        link: "https://www.linkedin.com/jobs/view/3926153027"
-      },
-      {
-        titulo: "Inspetor de Qualidade",
-        local: "São José dos Pinhais - PR",
-        descricao: "Inspeção de peças e controle de qualidade industrial.",
-        link: "https://www.linkedin.com/jobs/view/3921478082"
-      }
+      { titulo:"Operador de Máquinas", local:"Araucária - PR", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
+      { titulo:"Técnico de Manutenção", local:"Curitiba - PR", descricao:"Manutenção preventiva e corretiva em ambiente fabril.", link:"https://www.linkedin.com/jobs/view/3926153027" },
+      { titulo:"Inspetor de Qualidade", local:"São José dos Pinhais - PR", descricao:"Inspeção de peças e controle de qualidade industrial.", link:"https://www.linkedin.com/jobs/view/3921478082" },
+      { titulo:"Eletricista Industrial", local:"Curitiba - PR", descricao:"Instalações e manutenção elétrica em indústrias.", link:"https://www.linkedin.com/jobs/view/3928475621" },
+      { titulo:"Auxiliar de Logística", local:"Araucária - PR", descricao:"Controle de estoque e expedição de produtos industriais.", link:"https://www.linkedin.com/jobs/view/3929792034" }
     ];
 
-    function renderJobs(filter = "") {
-      const list = document.getElementById("jobList");
-      list.innerHTML = "";
-
-      const filtered = vagas.filter(job =>
-        job.titulo.toLowerCase().includes(filter.toLowerCase())
-      );
-
-      filtered.forEach(job => {
-        const card = document.createElement("div");
-        card.className = "job-card";
-        card.innerHTML = `
-          <h2>${job.titulo}</h2>
+    const jobsContainer = document.querySelector('.jobs');
+    vagas.forEach(job=>{
+      const card = document.createElement('div');
+      card.className='job-card';
+      card.innerHTML=`
+        <div class="info">
+          <h3>${job.titulo}</h3>
           <p><strong>Local:</strong> ${job.local}</p>
           <p>${job.descricao}</p>
-          <a href="${job.link}" target="_blank">
-            <button>Candidatar-se</button>
-          </a>
-        `;
-        list.appendChild(card);
-      });
-    }
-
-    function searchJobs() {
-      const input = document.getElementById("searchInput").value;
-      renderJobs(input);
-    }
-
-    renderJobs();
+        </div>
+        <a href="${job.link}" target="_blank" class="apply">
+          <button>Candidatar-se</button>
+        </a>
+      `;
+      jobsContainer.appendChild(card);
+    });
   </script>
 </body>
 </html>
