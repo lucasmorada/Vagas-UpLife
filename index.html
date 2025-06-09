@@ -19,6 +19,8 @@
     html {
       scroll-behavior: smooth;
     }
+
+    /* Header */
     header {
       position: sticky; top: 0;
       background: var(--bg-dark);
@@ -37,39 +39,43 @@
     .nav-buttons a:hover { opacity: 0.8; }
     .social-icons img {
       width: 24px; margin-left: 12px;
-      filter: none; /* Removido invert */
       transition: transform .2s;
     }
     .social-icons img:hover { transform: scale(1.1); }
 
+    /* Hero Banner */
     .hero {
       background: url('Banner.png') no-repeat center center/cover;
       color: white;
-      padding: 120px 20px;
-      text-align: center;
+      height: 400px;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
     .hero::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       z-index: 1;
     }
-    .hero h1, .hero p, .hero button {
+    .hero-content {
       position: relative;
       z-index: 2;
+      max-width: 800px;
     }
     .hero h1 {
       font-size: 3rem;
       margin-bottom: 10px;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
     }
     .hero p.lead {
       font-size: 1.3rem;
       margin-bottom: 20px;
       font-style: italic;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
     }
     .hero button.cta {
       padding: 14px 30px;
@@ -82,38 +88,42 @@
       font-weight: bold;
     }
 
-    section {
-      margin-top: 40px;
+    /* Busca */
+    .search {
+      max-width: 500px;
+      margin: 30px auto 10px;
+      padding: 0 20px;
+      text-align: center;
     }
+    .search input {
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    /* Vagas */
     .jobs {
       display: grid;
       gap: 20px;
       max-width: 1000px;
-      margin: 40px auto;
+      margin: 30px auto;
       padding: 0 20px;
     }
     .job-card {
       border: 1px solid #ddd;
       border-radius: 8px;
       padding: 20px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 10px;
       box-shadow: 0 3px 8px rgba(0,0,0,0.05);
     }
-    .job-card .info { grid-column: 1 / -1; }
     .job-card h3 {
       color: var(--orange);
       margin-bottom: 6px;
     }
     .job-card p { margin-bottom: 6px; }
-    .job-card a.apply {
-      grid-column: 1 / -1;
-      justify-self: end;
-      text-decoration: none;
-    }
-    .job-card .apply button {
+    .job-card a.apply button {
+      margin-top: 10px;
       padding: 8px 16px;
       background: var(--orange);
       border: none;
@@ -133,12 +143,14 @@
     }
 
     @media(max-width:768px) {
-      .jobs { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+      .hero p { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- HEADER -->
   <header>
     <img src="logo.png" class="logo" alt="UpLife Educacional Logo" />
     <nav class="nav-buttons">
@@ -153,22 +165,33 @@
     </div>
   </header>
 
+  <!-- HERO BANNER -->
   <section class="hero">
-    <h1>Vagas na Indústria</h1>
-    <p class="lead">Tão importante quanto a oportunidade é estar sempre preparado para ela.</p>
-    <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
-      Ver Vagas
-    </button>
+    <div class="hero-content">
+      <h1>Vagas na Indústria</h1>
+      <p class="lead">Tão importante quanto a oportunidade é estar sempre preparado para ela.</p>
+      <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
+        Ver Vagas
+      </button>
+    </div>
   </section>
 
+  <!-- BUSCA -->
+  <section class="search">
+    <input type="text" id="searchInput" placeholder="Digite o nome da vaga ou cidade..." oninput="filtrarVagas()" />
+  </section>
+
+  <!-- VAGAS -->
   <section id="jobs" class="jobs">
-    <!-- Cartões preenchidos por JS -->
+    <!-- Conteúdo via JS -->
   </section>
 
+  <!-- FOOTER -->
   <footer>
     2025 © UP LIFE EDUCACIONAL - CNPJ: 47.854.761/0001-74.
   </footer>
 
+  <!-- SCRIPT -->
   <script>
     const vagas = [
       { titulo:"Operador de Máquinas", local:"Araucária - PR", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
@@ -178,22 +201,34 @@
       { titulo:"Auxiliar de Logística", local:"Araucária - PR", descricao:"Controle de estoque e expedição de produtos industriais.", link:"https://www.linkedin.com/jobs/view/3929792034" }
     ];
 
-    const jobsContainer = document.querySelector('.jobs');
-    vagas.forEach(job => {
-      const card = document.createElement('div');
-      card.className = 'job-card';
-      card.innerHTML = `
-        <div class="info">
+    const container = document.querySelector('.jobs');
+
+    function renderVagas(lista) {
+      container.innerHTML = '';
+      lista.forEach(job => {
+        const card = document.createElement('div');
+        card.className = 'job-card';
+        card.innerHTML = `
           <h3>${job.titulo}</h3>
           <p><strong>Local:</strong> ${job.local}</p>
           <p>${job.descricao}</p>
-        </div>
-        <a href="${job.link}" target="_blank" class="apply">
-          <button>Candidatar-se</button>
-        </a>
-      `;
-      jobsContainer.appendChild(card);
-    });
+          <a href="${job.link}" target="_blank" class="apply"><button>Candidatar-se</button></a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filtrarVagas() {
+      const termo = document.getElementById('searchInput').value.toLowerCase();
+      const filtradas = vagas.filter(v =>
+        v.titulo.toLowerCase().includes(termo) ||
+        v.local.toLowerCase().includes(termo)
+      );
+      renderVagas(filtradas);
+    }
+
+    renderVagas(vagas);
   </script>
+
 </body>
 </html>
