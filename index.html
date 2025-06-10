@@ -43,49 +43,43 @@
     }
     .social-icons img:hover { transform: scale(1.1); }
 
-    /* Hero Banner */
-   .hero {
-  background: url('banner-industrial.jpg') no-repeat center center/cover;
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  text-align: center;
-  color: #fff;
-}
+    /* Título e Frase */
+    .intro {
+      text-align: center;
+      padding: 40px 20px 10px;
+    }
+    .intro h1 {
+      font-size: 3rem;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+    .intro .lead {
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #333;
+    }
 
-.hero-content {
-  max-width: 800px;
-  margin-top: 40px; /* empurra um pouco para baixo do header */
-}
+    /* Banner */
+    .hero {
+      background: url('Banner.png') no-repeat center center/cover;
+      height: 300px;
+    }
 
-.hero h1 {
-  font-size: 3.5rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-}
-
-.hero p.lead {
-  font-size: 1.8rem;
-  font-style: italic;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-}
-
-.hero button.cta {
-  padding: 14px 30px;
-  font-size: 1.1rem;
-  background: #fff;
-  color: var(--dark-orange);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  box-shadow: 1px 1px 6px rgba(0,0,0,0.3);
-}
-
+    /* Botão Ver Vagas */
+    .cta-button {
+      text-align: center;
+      padding: 30px 0;
+    }
+    .cta-button .cta {
+      padding: 14px 30px;
+      font-size: 1.2rem;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
     /* Busca */
     .search {
@@ -132,6 +126,7 @@
       font-weight: 600;
     }
 
+    /* Footer */
     footer {
       background: var(--bg-dark);
       color: #fff;
@@ -142,8 +137,9 @@
     }
 
     @media(max-width:768px) {
-      .hero h1 { font-size: 2rem; }
-      .hero p { font-size: 1rem; }
+      .intro h1 { font-size: 2rem; }
+      .intro .lead { font-size: 1.2rem; }
+      .cta-button .cta { font-size: 1rem; }
     }
   </style>
 </head>
@@ -164,33 +160,38 @@
     </div>
   </header>
 
-  <!-- HERO BANNER -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Vagas na Indústria</h1>
-      <p class="lead">Tão importante quanto a oportunidade é estar sempre preparado para ela.</p>
-      <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
-        Ver Vagas
-      </button>
-    </div>
+
+  <section class="intro">
+    <h1>Vagas na Indústria</h1>
+    <p class="lead">"Tão importante quanto a oportunidade é estar sempre preparado para ela."</p>
   </section>
 
-  <!-- BUSCA -->
+ 
+  <section class="hero"></section>
+
+  
+  <section class="cta-button">
+    <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
+      Ver Vagas
+    </button>
+  </section>
+
+ 
   <section class="search">
     <input type="text" id="searchInput" placeholder="Digite o nome da vaga ou cidade..." oninput="filtrarVagas()" />
   </section>
 
-  <!-- VAGAS -->
+  
   <section id="jobs" class="jobs">
-    <!-- Conteúdo via JS -->
+   
   </section>
 
-  <!-- FOOTER -->
+  
   <footer>
     2025 © UP LIFE EDUCACIONAL - CNPJ: 47.854.761/0001-74.
   </footer>
 
-  <!-- SCRIPT -->
+  
   <script>
     const vagas = [
       { titulo:"Operador de Máquinas", local:"Araucária - PR", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
