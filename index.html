@@ -58,13 +58,17 @@
   content: none; /* Remove sobreposição escura */
 }
     
-    .hero-content {
-  position: relative;
+   .hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  text-align: center;
   z-index: 2;
-  max-width: 800px;
   padding: 20px;
-  background: none; /* Remove o fundo */
 }
+
 
 .hero h1,
 .hero p.lead {
