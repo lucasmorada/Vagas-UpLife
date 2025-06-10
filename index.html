@@ -45,7 +45,7 @@
 
     /* Hero Banner */
     .hero {
-  background: url('banner-industrial.jpg') no-repeat center center/cover;
+  background: url('Banner.png') no-repeat center center/cover;
   color: #111;
   height: 400px;
   position: relative;
@@ -62,15 +62,16 @@
   position: relative;
   z-index: 2;
   max-width: 800px;
-  background: rgba(255, 255, 255, 0.8); /* Leve fundo branco transparente se quiser mais legibilidade */
   padding: 20px;
-  border-radius: 12px;
+  background: none; /* Remove o fundo */
 }
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
-    }
+
+.hero h1,
+.hero p.lead {
+  color: #000; /* texto preto */
+  text-shadow: 1px 1px 3px rgba(255,255,255,0.7); /* sombra clara para destacar no fundo */
+}
+
     .hero p.lead {
       font-size: 1.3rem;
       margin-bottom: 20px;
