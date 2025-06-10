@@ -45,27 +45,27 @@
 
     /* Hero Banner */
     .hero {
-      background: url('Banner.png') no-repeat center center/cover;
-      color: white;
-      height: 400px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+  background: url('banner-industrial.jpg') no-repeat center center/cover;
+  color: #111;
+  height: 400px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
     .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      z-index: 1;
-    }
+  content: none; /* Remove sobreposição escura */
+}
+    
     .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-    }
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  background: rgba(255, 255, 255, 0.8); /* Leve fundo branco transparente se quiser mais legibilidade */
+  padding: 20px;
+  border-radius: 12px;
+}
     .hero h1 {
       font-size: 3rem;
       margin-bottom: 10px;
