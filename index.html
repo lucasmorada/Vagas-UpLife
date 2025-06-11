@@ -205,55 +205,61 @@
     2025 © UP LIFE EDUCACIONAL - CNPJ: 47.854.761/0001-74.
   </footer>
 
-  <script>
-    const vagas = [
-      { titulo:"Operador de Máquinas", local:"Araucária", area:"Produção", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
-      { titulo:"Técnico de Manutenção", local:"Curitiba", area:"Manutenção", descricao:"Manutenção preventiva e corretiva em ambiente fabril.", link:"https://www.linkedin.com/jobs/view/3926153027" },
-      { titulo:"Inspetor de Qualidade", local:"São José dos Pinhais", area:"Qualidade", descricao:"Inspeção de peças e controle de qualidade industrial.", link:"https://www.linkedin.com/jobs/view/3921478082" },
-      { titulo:"Eletricista Industrial", local:"Curitiba", area:"Elétrica", descricao:"Instalações e manutenção elétrica em indústrias.", link:"https://www.linkedin.com/jobs/view/3928475621" },
-      { titulo:"Auxiliar de Logística", local:"Araucária", area:"Logística", descricao:"Controle de estoque e expedição de produtos industriais.", link:"https://www.linkedin.com/jobs/view/3929792034" }
-    ];
+  <!-- Substitua a função renderVagas pelo código abaixo -->
+<script>
+  const vagas = [
+    { id: 1, titulo:"Operador de Máquinas", local:"Araucária", area:"Produção", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
+    { id: 2, titulo:"Técnico de Manutenção", local:"Curitiba", area:"Manutenção", descricao:"Manutenção preventiva e corretiva em ambiente fabril.", link:"https://www.linkedin.com/jobs/view/3926153027" },
+    { id: 3, titulo:"Inspetor de Qualidade", local:"São José dos Pinhais", area:"Qualidade", descricao:"Inspeção de peças e controle de qualidade industrial.", link:"https://www.linkedin.com/jobs/view/3921478082" },
+    { id: 4, titulo:"Eletricista Industrial", local:"Curitiba", area:"Elétrica", descricao:"Instalações e manutenção elétrica em indústrias.", link:"https://www.linkedin.com/jobs/view/3928475621" },
+    { id: 5, titulo:"Auxiliar de Logística", local:"Araucária", area:"Logística", descricao:"Controle de estoque e expedição de produtos industriais.", link:"https://www.linkedin.com/jobs/view/3929792034" },
+    { id: 6, titulo:"Vaga Indisponível", local:"Curitiba", area:"Produção", descricao:"Esta vaga foi arquivada.", link: "" } // Não será exibida
+  ];
 
-    const container = document.querySelector('.jobs');
+  const container = document.querySelector('.jobs');
 
-    function renderVagas(lista) {
-      container.innerHTML = '';
-      if (lista.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
-        return;
-      }
-      lista.forEach(job => {
-        const card = document.createElement('div');
-        card.className = 'job-card';
-        card.innerHTML = `
-          <h3>${job.titulo}</h3>
-          <p><strong>Local:</strong> ${job.local}</p>
-          <p>${job.descricao}</p>
-          <a href="${job.link}" target="_blank" class="apply"><button>Candidatar-se</button></a>
-        `;
-        container.appendChild(card);
-      });
+  function renderVagas(lista) {
+    container.innerHTML = '';
+    const vagasDisponiveis = lista.filter(v => v.link && v.link.trim() !== '');
+    if (vagasDisponiveis.length === 0) {
+      container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
+      return;
     }
 
-    function filtrarVagas() {
-      const termo = document.getElementById('searchInput').value.toLowerCase();
-      const cidade = document.getElementById('cidadeFiltro').value;
-      const area = document.getElementById('areaFiltro').value;
+    vagasDisponiveis.forEach(job => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.innerHTML = `
+        <h3>${job.titulo}</h3>
+        <p><strong>Local:</strong> ${job.local}</p>
+        <p>${job.descricao}</p>
+        <a href="detalhes.html?vaga=${job.id}" class="apply"><button>Candidatar-se</button></a>
+      `;
+      container.appendChild(card);
+    });
+  }
 
-      const filtradas = vagas.filter(v => {
-        const matchCidade = cidade ? v.local.includes(cidade) : true;
-        const matchArea = area ? v.area === area : true;
-        const matchTermo = termo ? (
-          v.titulo.toLowerCase().includes(termo) ||
-          v.local.toLowerCase().includes(termo) ||
-          v.descricao.toLowerCase().includes(termo)
-        ) : true;
-        return matchCidade && matchArea && matchTermo;
-      });
-      renderVagas(filtradas);
-    }
+  function filtrarVagas() {
+    const termo = document.getElementById('searchInput').value.toLowerCase();
+    const cidade = document.getElementById('cidadeFiltro').value;
+    const area = document.getElementById('areaFiltro').value;
 
-    renderVagas(vagas);
-  </script>
+    const filtradas = vagas.filter(v => {
+      const matchCidade = cidade ? v.local.includes(cidade) : true;
+      const matchArea = area ? v.area === area : true;
+      const matchTermo = termo ? (
+        v.titulo.toLowerCase().includes(termo) ||
+        v.local.toLowerCase().includes(termo) ||
+        v.descricao.toLowerCase().includes(termo)
+      ) : true;
+      return matchCidade && matchArea && matchTermo;
+    });
+
+    renderVagas(filtradas);
+  }
+
+  renderVagas(vagas);
+</script>
+
 </body>
 </html>
