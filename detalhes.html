@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes da Vaga – UpLife Educacional</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #fff;
+      color: #333;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      color: #f97316;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 30px;
+      text-decoration: none;
+      color: #f97316;
+      font-weight: bold;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 1rem;
+      background: #f97316;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back">← Voltar para as vagas</a>
+  <div id="vaga-detalhes"></div>
+
+  <script>
+    const vagas = [
+      { id: 1, titulo:"Operador de Máquinas", local:"Araucária", area:"Produção", descricao:"Você irá atuar em linha de produção operando máquinas industriais de médio e grande porte. Requer atenção, agilidade e compromisso com as normas de segurança.", link:"https://www.linkedin.com/jobs/view/3923483938" },
+      { id: 2, titulo:"Técnico de Manutenção", local:"Curitiba", area:"Manutenção", descricao:"Você será responsável por manutenções preventivas e corretivas em maquinário industrial. Desejável experiência com ferramentas de diagnóstico e leitura de esquemas técnicos.", link:"https://www.linkedin.com/jobs/view/3926153027" },
+      { id: 3, titulo:"Inspetor de Qualidade", local:"São José dos Pinhais", area:"Qualidade", descricao:"Inspecionar peças, acompanhar a produção, registrar não conformidades e garantir que os produtos estejam de acordo com os padrões de qualidade estabelecidos.", link:"https://www.linkedin.com/jobs/view/3921478082" },
+      { id: 4, titulo:"Eletricista Industrial", local:"Curitiba", area:"Elétrica", descricao:"Você irá realizar instalações e manutenções em painéis, máquinas e estruturas elétricas industriais. Necessário NR10 e leitura de esquemas elétricos.", link:"https://www.linkedin.com/jobs/view/3928475621" },
+      { id: 5, titulo:"Auxiliar de Logística", local:"Araucária", area:"Logística", descricao:"Atuará com conferência de mercadorias, separação de pedidos e controle de estoque. Desejável experiência com sistemas de controle logístico.", link:"https://www.linkedin.com/jobs/view/3929792034" }
+    ];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = parseInt(urlParams.get("vaga"));
+    const vaga = vagas.find(v => v.id === id);
+
+    const container = document.getElementById("vaga-detalhes");
+
+    if (vaga) {
+      container.innerHTML = `
+        <h1>${vaga.titulo}</h1>
+        <p><strong>Local:</strong> ${vaga.local}</p>
+        <p><strong>Área:</strong> ${vaga.area}</p>
+        <p><strong>Descrição:</strong><br>${vaga.descricao}</p>
+        <a href="${vaga.link}" class="btn" target="_blank">Candidatar-se</a>
+      `;
+    } else {
+      container.innerHTML = "<p>Vaga não encontrada.</p>";
+    }
+  </script>
+</body>
+</html>
