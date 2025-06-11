@@ -20,7 +20,6 @@
       scroll-behavior: smooth;
     }
 
-    /* Header */
     header {
       position: sticky; top: 0;
       background: var(--bg-dark);
@@ -43,7 +42,6 @@
     }
     .social-icons img:hover { transform: scale(1.1); }
 
-    /* Título e Frase */
     .intro {
       text-align: center;
       padding: 40px 20px 10px;
@@ -59,13 +57,11 @@
       color: #333;
     }
 
-    /* Banner */
     .hero {
       background: url('Banner.png') no-repeat center center/cover;
       height: 300px;
     }
 
-    /* Botão Ver Vagas */
     .cta-button {
       text-align: center;
       padding: 30px 0;
@@ -81,22 +77,35 @@
       font-weight: bold;
     }
 
-    /* Busca */
     .search {
-      max-width: 500px;
+      max-width: 1000px;
       margin: 30px auto 10px;
       padding: 0 20px;
-      text-align: center;
     }
-    .search input {
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .filters select, .filters input {
       padding: 10px;
-      width: 100%;
+      font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 1rem;
+      flex: 1 1 200px;
+    }
+    .filters button {
+      background: #cba44c;
+      color: white;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
 
-    /* Vagas */
     .jobs {
       display: grid;
       gap: 20px;
@@ -126,7 +135,6 @@
       font-weight: 600;
     }
 
-    /* Footer */
     footer {
       background: var(--bg-dark);
       color: #fff;
@@ -135,7 +143,6 @@
       margin-top: 60px;
       font-size: 0.9rem;
     }
-
     @media(max-width:768px) {
       .intro h1 { font-size: 2rem; }
       .intro .lead { font-size: 1.2rem; }
@@ -144,8 +151,6 @@
   </style>
 </head>
 <body>
-
-  <!-- HEADER -->
   <header>
     <img src="logo.png" class="logo" alt="UpLife Educacional Logo" />
     <nav class="nav-buttons">
@@ -160,51 +165,63 @@
     </div>
   </header>
 
-
   <section class="intro">
     <h1>Vagas na Indústria</h1>
     <p class="lead">"Tão importante quanto a oportunidade é estar sempre preparado para ela."</p>
   </section>
 
- 
   <section class="hero"></section>
 
-  
   <section class="cta-button">
     <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
       Ver Vagas
     </button>
   </section>
 
- 
   <section class="search">
-    <input type="text" id="searchInput" placeholder="Digite o nome da vaga ou cidade..." oninput="filtrarVagas()" />
+    <div class="filters">
+      <select id="cidadeFiltro">
+        <option value="">Selecione uma cidade</option>
+        <option value="Araucária">Araucária</option>
+        <option value="Curitiba">Curitiba</option>
+        <option value="São José dos Pinhais">São José dos Pinhais</option>
+      </select>
+      <select id="areaFiltro">
+        <option value="">Selecione a área</option>
+        <option value="Manutenção">Manutenção</option>
+        <option value="Logística">Logística</option>
+        <option value="Produção">Produção</option>
+        <option value="Elétrica">Elétrica</option>
+        <option value="Qualidade">Qualidade</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Digite uma palavra-chave..." />
+      <button onclick="filtrarVagas()">Buscar Vagas →</button>
+    </div>
   </section>
 
-  
-  <section id="jobs" class="jobs">
-   
-  </section>
+  <section id="jobs" class="jobs"></section>
 
-  
   <footer>
     2025 © UP LIFE EDUCACIONAL - CNPJ: 47.854.761/0001-74.
   </footer>
 
-  
   <script>
     const vagas = [
-      { titulo:"Operador de Máquinas", local:"Araucária - PR", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
-      { titulo:"Técnico de Manutenção", local:"Curitiba - PR", descricao:"Manutenção preventiva e corretiva em ambiente fabril.", link:"https://www.linkedin.com/jobs/view/3926153027" },
-      { titulo:"Inspetor de Qualidade", local:"São José dos Pinhais - PR", descricao:"Inspeção de peças e controle de qualidade industrial.", link:"https://www.linkedin.com/jobs/view/3921478082" },
-      { titulo:"Eletricista Industrial", local:"Curitiba - PR", descricao:"Instalações e manutenção elétrica em indústrias.", link:"https://www.linkedin.com/jobs/view/3928475621" },
-      { titulo:"Auxiliar de Logística", local:"Araucária - PR", descricao:"Controle de estoque e expedição de produtos industriais.", link:"https://www.linkedin.com/jobs/view/3929792034" }
+      { titulo:"Operador de Máquinas", local:"Araucária", area:"Produção", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
+      { titulo:"Técnico de Manutenção", local:"Curitiba", area:"Manutenção", descricao:"Manutenção preventiva e corretiva em ambiente fabril.", link:"https://www.linkedin.com/jobs/view/3926153027" },
+      { titulo:"Inspetor de Qualidade", local:"São José dos Pinhais", area:"Qualidade", descricao:"Inspeção de peças e controle de qualidade industrial.", link:"https://www.linkedin.com/jobs/view/3921478082" },
+      { titulo:"Eletricista Industrial", local:"Curitiba", area:"Elétrica", descricao:"Instalações e manutenção elétrica em indústrias.", link:"https://www.linkedin.com/jobs/view/3928475621" },
+      { titulo:"Auxiliar de Logística", local:"Araucária", area:"Logística", descricao:"Controle de estoque e expedição de produtos industriais.", link:"https://www.linkedin.com/jobs/view/3929792034" }
     ];
 
     const container = document.querySelector('.jobs');
 
     function renderVagas(lista) {
       container.innerHTML = '';
+      if (lista.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
+        return;
+      }
       lista.forEach(job => {
         const card = document.createElement('div');
         card.className = 'job-card';
@@ -220,15 +237,23 @@
 
     function filtrarVagas() {
       const termo = document.getElementById('searchInput').value.toLowerCase();
-      const filtradas = vagas.filter(v =>
-        v.titulo.toLowerCase().includes(termo) ||
-        v.local.toLowerCase().includes(termo)
-      );
+      const cidade = document.getElementById('cidadeFiltro').value;
+      const area = document.getElementById('areaFiltro').value;
+
+      const filtradas = vagas.filter(v => {
+        const matchCidade = cidade ? v.local.includes(cidade) : true;
+        const matchArea = area ? v.area === area : true;
+        const matchTermo = termo ? (
+          v.titulo.toLowerCase().includes(termo) ||
+          v.local.toLowerCase().includes(termo) ||
+          v.descricao.toLowerCase().includes(termo)
+        ) : true;
+        return matchCidade && matchArea && matchTermo;
+      });
       renderVagas(filtradas);
     }
 
     renderVagas(vagas);
   </script>
-
 </body>
 </html>
