@@ -208,12 +208,30 @@
   <!-- Substitua a função renderVagas pelo código abaixo -->
 <script>
   const vagas = [
-    { id: 1, titulo:"Operador de Máquinas", local:"Araucária", area:"Produção", descricao:"Atuar em linha de produção operando máquinas industriais.", link:"https://www.linkedin.com/jobs/view/3923483938" },
-    { id: 2, titulo:"Técnico de Manutenção", local:"Curitiba", area:"Manutenção", descricao:"Manutenção preventiva e corretiva em ambiente fabril.", link:"https://www.linkedin.com/jobs/view/3926153027" },
-    { id: 3, titulo:"Inspetor de Qualidade", local:"São José dos Pinhais", area:"Qualidade", descricao:"Inspeção de peças e controle de qualidade industrial.", link:"https://www.linkedin.com/jobs/view/3921478082" },
-    { id: 4, titulo:"Eletricista Industrial", local:"Curitiba", area:"Elétrica", descricao:"Instalações e manutenção elétrica em indústrias.", link:"https://www.linkedin.com/jobs/view/3928475621" },
-    { id: 5, titulo:"Auxiliar de Logística", local:"Araucária", area:"Logística", descricao:"Controle de estoque e expedição de produtos industriais.", link:"https://www.linkedin.com/jobs/view/3929792034" },
-    { id: 6, titulo:"Vaga Indisponível", local:"Curitiba", area:"Produção", descricao:"Esta vaga foi arquivada.", link: "" } // Não será exibida
+    {
+      id: 1,
+      titulo: "Operador de Produção de CO₂",
+      local: "Araucária",
+      area: "Produção",
+      descricao: "Operação de planta industrial, controle de CO₂, análises e normas de segurança.",
+      link: "detalhes.html?vaga=1"
+    },
+    {
+      id: 2,
+      titulo: "Técnico de Manutenção Geral",
+      local: "Curitiba",
+      area: "Manutenção",
+      descricao: "Manutenção preventiva e corretiva em equipamentos e instalações da loja.",
+      link: "detalhes.html?vaga=2"
+    },
+    {
+      id: 3,
+      titulo: "Mecânico Eletricista",
+      local: "Curitiba",
+      area: "Elétrica",
+      descricao: "Diagnóstico e manutenção elétrica em veículos pesados com leitura de diagramas.",
+      link: "detalhes.html?vaga=3"
+    }
   ];
 
   const container = document.querySelector('.jobs');
