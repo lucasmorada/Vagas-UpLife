@@ -29,15 +29,23 @@
       z-index: 10;
     }
     header img.logo { height: 85px; }
-    .nav-buttons a {
-      margin: 0 15px;
-      color: #fff; text-decoration: none;
-      font-weight: 600;
-      transition: opacity .2s;
-      display: flex;             
-      align-items: center;       
-      justify-content: center;
-    }
+    
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.nav-buttons a {
+  margin: 0 15px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s;
+  /* Remova o display: flex daqui */
+}
+
     .nav-buttons a:hover { opacity: 0.8; }
     .social-icons img {
       width: 24px; margin-left: 12px;
