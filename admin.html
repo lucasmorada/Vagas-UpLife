@@ -2,70 +2,197 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel de Administração - Vagas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - Vagas</title>
   <style>
-    body { font-family: Arial; background: #f5f5f5; padding: 20px; }
-    h1 { color: #e65100; }
-    label { display: block; margin-top: 15px; }
-    input, textarea, select {
-      width: 100%; padding: 10px; margin-top: 5px;
-      border: 1px solid #ccc; border-radius: 4px;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #e65100;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
     button {
-      margin-top: 20px; padding: 10px 20px;
-      background: #e65100; color: #fff; font-weight: bold;
-      border: none; border-radius: 4px; cursor: pointer;
+      margin-top: 15px;
+      background: #e65100;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .vaga-item {
+      background: #fafafa;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    .vaga-item button {
+      margin-right: 10px;
+      background: #bf360c;
+    }
+    #loginBox {
+      max-width: 400px;
+      margin: 100px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <h1>Painel de Administração</h1>
-  <form id="formVaga">
-    <label>Título da Vaga</label>
-    <input type="text" id="titulo" required>
 
-    <label>Local</label>
-    <input type="text" id="local" required>
+<div id="loginBox">
+  <h2>Login Administrativo</h2>
+  <input type="password" id="senhaInput" placeholder="Digite a senha" />
+  <button onclick="login()">Entrar</button>
+</div>
 
-    <label>Área</label>
-    <select id="area" required>
-      <option value="">Selecione</option>
-      <option>Produção</option>
-      <option>Manutenção</option>
-      <option>Elétrica</option>
-      <option>Logística</option>
-      <option>Qualidade</option>
-    </select>
+<div class="container" id="adminPanel" style="display:none">
+  <button onclick="logout()">Logout</button>
+  <h1>Adicionar Nova Vaga</h1>
+  <label>Título da Vaga</label>
+  <input id="titulo" />
 
-    <label>Descrição</label>
-    <textarea id="descricao" rows="4" required></textarea>
+  <label>Cidade</label>
+  <input id="cidade" />
 
-    <label>Link do LinkedIn (ou detalhes)</label>
-    <input type="text" id="link" required>
+  <label>Área</label>
+  <input id="area" />
 
-    <button type="submit">Adicionar Vaga</button>
-  </form>
+  <label>Resumo da Vaga (para a listagem principal)</label>
+  <textarea id="resumo"></textarea>
 
-  <script>
-    document.getElementById('formVaga').addEventListener('submit', function(e) {
-      e.preventDefault();
+  <label>Descrição Detalhada (para a página individual)</label>
+  <textarea id="descricaoDetalhada"></textarea>
 
-      const vaga = {
-        id: Date.now(),
-        titulo: document.getElementById('titulo').value,
-        local: document.getElementById('local').value,
-        area: document.getElementById('area').value,
-        descricao: document.getElementById('descricao').value,
-        link: document.getElementById('link').value
-      };
+  <label>Link de Candidatura (irá no botão de aplicar)</label>
+  <input id="linkDireto" />
 
-      const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+  <button onclick="salvarVaga()">Salvar Vaga</button>
+
+  <h2>Vagas Cadastradas</h2>
+  <div id="vagasList"></div>
+</div>
+
+<script>
+  const senhaCorreta = "uplife123";
+  let editandoIndex = -1;
+
+  function login() {
+    const senha = document.getElementById("senhaInput").value;
+    if (senha === senhaCorreta) {
+      document.getElementById("loginBox").style.display = 'none';
+      document.getElementById("adminPanel").style.display = 'block';
+      carregarVagas();
+    } else {
+      alert("Senha incorreta!");
+    }
+  }
+
+  function logout() {
+    document.getElementById("adminPanel").style.display = 'none';
+    document.getElementById("loginBox").style.display = 'block';
+    document.getElementById("senhaInput").value = '';
+  }
+
+  function salvarVaga() {
+    const vaga = {
+      titulo: document.getElementById("titulo").value,
+      cidade: document.getElementById("cidade").value,
+      area: document.getElementById("area").value,
+      resumo: document.getElementById("resumo").value,
+      descricaoDetalhada: document.getElementById("descricaoDetalhada").value,
+      linkDireto: document.getElementById("linkDireto").value,
+    };
+
+    let vagas = JSON.parse(localStorage.getItem("vagas")) || [];
+
+    if (editandoIndex >= 0) {
+      vagas[editandoIndex] = vaga;
+      editandoIndex = -1;
+    } else {
       vagas.push(vaga);
-      localStorage.setItem('vagas', JSON.stringify(vagas));
+    }
 
-      alert('Vaga adicionada com sucesso!');
-      this.reset();
+    localStorage.setItem("vagas", JSON.stringify(vagas));
+    limparCampos();
+    carregarVagas();
+  }
+
+  function carregarVagas() {
+    const vagas = JSON.parse(localStorage.getItem("vagas")) || [];
+    const lista = document.getElementById("vagasList");
+    lista.innerHTML = '';
+
+    vagas.forEach((vaga, i) => {
+      const div = document.createElement("div");
+      div.className = "vaga-item";
+      div.innerHTML = `
+        <strong>${vaga.titulo}</strong><br>
+        ${vaga.cidade} - ${vaga.area}<br>
+        ${vaga.resumo}<br>
+        <button onclick="editarVaga(${i})">Editar</button>
+        <button onclick="excluirVaga(${i})">Excluir</button>
+      `;
+      lista.appendChild(div);
     });
-  </script>
+  }
+
+  function editarVaga(index) {
+    const vagas = JSON.parse(localStorage.getItem("vagas")) || [];
+    const v = vagas[index];
+    document.getElementById("titulo").value = v.titulo;
+    document.getElementById("cidade").value = v.cidade;
+    document.getElementById("area").value = v.area;
+    document.getElementById("resumo").value = v.resumo;
+    document.getElementById("descricaoDetalhada").value = v.descricaoDetalhada;
+    document.getElementById("linkDireto").value = v.linkDireto;
+    editandoIndex = index;
+  }
+
+  function excluirVaga(index) {
+    if (confirm("Tem certeza que deseja excluir esta vaga?")) {
+      let vagas = JSON.parse(localStorage.getItem("vagas")) || [];
+      vagas.splice(index, 1);
+      localStorage.setItem("vagas", JSON.stringify(vagas));
+      carregarVagas();
+    }
+  }
+
+  function limparCampos() {
+    document.getElementById("titulo").value = '';
+    document.getElementById("cidade").value = '';
+    document.getElementById("area").value = '';
+    document.getElementById("resumo").value = '';
+    document.getElementById("descricaoDetalhada").value = '';
+    document.getElementById("linkDireto").value = '';
+  }
+</script>
+
 </body>
 </html>
