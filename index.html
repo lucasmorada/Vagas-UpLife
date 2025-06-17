@@ -222,8 +222,17 @@
   </footer>
 
 <script>
-  const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+  let todasAsVagas = [];
 
+  async function carregarVagas() {
+    try {
+      const res = await fetch('/api/vagas');
+      todasAsVagas = await res.json();
+      renderVagas(todasAsVagas);
+    } catch (e) {
+      console.error('Erro ao carregar vagas:', e);
+    }
+  }
 
   const container = document.querySelector('.jobs');
 
@@ -240,7 +249,8 @@
       card.className = 'job-card';
       card.innerHTML = `
         <h3>${job.titulo}</h3>
-        <p><strong>Local:</strong> ${job.local}</p>
+        <p><strong>Empresa:</strong> ${job.empresa}</p>
+        <p><strong>Local:</strong> ${job.cidade}</p>
         <p>${job.descricao}</p>
         <a href="detalhes.html?vaga=${job.id}" class="apply"><button>Candidatar-se</button></a>
       `;
@@ -253,12 +263,12 @@
     const cidade = document.getElementById('cidadeFiltro').value;
     const area = document.getElementById('areaFiltro').value;
 
-    const filtradas = vagas.filter(v => {
-      const matchCidade = cidade ? v.local.includes(cidade) : true;
+    const filtradas = todasAsVagas.filter(v => {
+      const matchCidade = cidade ? v.cidade.includes(cidade) : true;
       const matchArea = area ? v.area === area : true;
       const matchTermo = termo ? (
         v.titulo.toLowerCase().includes(termo) ||
-        v.local.toLowerCase().includes(termo) ||
+        v.cidade.toLowerCase().includes(termo) ||
         v.descricao.toLowerCase().includes(termo)
       ) : true;
       return matchCidade && matchArea && matchTermo;
@@ -267,8 +277,5 @@
     renderVagas(filtradas);
   }
 
-  renderVagas(vagas);
+  carregarVagas();
 </script>
-
-</body>
-</html>
