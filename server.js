@@ -24,7 +24,7 @@ function salvarVagas(vagas) {
   fs.writeFileSync(VAGAS_PATH, JSON.stringify(vagas, null, 2), 'utf8');
 }
 
-// Rotas da API
+// Rotas da AP
 app.get('/api/vagas', (req, res) => {
   res.json(carregarVagas());
 });

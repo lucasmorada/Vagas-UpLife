@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel Administrativo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body {
       margin: 0;
       background-color: #f3f4f6;
@@ -18,23 +15,18 @@
       justify-content: center;
       min-height: 100vh;
     }
-    .login-container,
-    .container {
+    .login-container, .admin-container {
       width: 90%;
-      max-width: 800px;
+      max-width: 600px;
       background-color: #fff;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
-    h2 {
-      margin-bottom: 20px;
-      font-size: 24px;
-    }
-    input[type="text"], input[type="password"], select, textarea {
+    input, textarea, select {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 10px;
+      margin: 10px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
     }
@@ -46,167 +38,142 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
+      margin-top: 10px;
     }
     button:hover {
       background-color: #1d4ed8;
     }
     .logout-btn {
-      float: right;
       background-color: #dc2626;
+      float: right;
     }
     .logout-btn:hover {
       background-color: #b91c1c;
     }
-    .vaga {
+    .vaga-card {
       border: 1px solid #ddd;
       padding: 15px;
       margin-top: 10px;
       border-radius: 10px;
     }
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 8px 0;
-    }
-    .tag {
-      background-color: #e0f2fe;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-    }
-    .hidden { display: none; }
+    .form-title { margin-top: 20px; font-size: 20px; }
   </style>
 </head>
 <body>
-  <div class="login-container" id="loginContainer">
-    <h2>Login Administrativo</h2>
-    <input type="password" id="senha" placeholder="Digite a senha">
-    <button onclick="verificarSenha()">Entrar</button>
+  <div class="login-container" id="login-box">
+    <h2>Login do Admin</h2>
+    <input type="password" id="senha" placeholder="Digite a senha" />
+    <button onclick="fazerLogin()">Entrar</button>
   </div>
 
-  <div class="container hidden" id="painelContainer">
+  <div class="admin-container" id="admin-box" style="display: none">
     <button class="logout-btn" onclick="logout()">Logout</button>
-    <h2>Criar Nova Vaga</h2>
+    <h2>Painel Administrativo</h2>
+
+    <div class="form-title">Nova Vaga</div>
     <input type="text" id="titulo" placeholder="Título da vaga">
     <input type="text" id="empresa" placeholder="Empresa">
     <input type="text" id="cidade" placeholder="Cidade">
-    <input type="text" id="link" placeholder="Link para candidatura">
+    <input type="text" id="link" placeholder="Link de candidatura">
+
     <select id="area-select"></select>
-    <input type="text" id="nova-area" placeholder="Criar nova área">
-    <textarea id="descricao" placeholder="Descrição da vaga"></textarea>
-    <textarea id="detalhes" placeholder="Detalhes adicionais da vaga"></textarea>
+    <input type="text" id="nova-area" placeholder="Criar nova área" oninput="atualizarAreaPersonalizada(this.value)">
+
+    <textarea id="descricao" placeholder="Descrição"></textarea>
+    <textarea id="detalhes" placeholder="Detalhes da vaga"></textarea>
     <button onclick="criarVaga()">Criar Vaga</button>
 
-    <h2 style="margin-top: 40px">Vagas Criadas</h2>
+    <div class="form-title">Vagas Cadastradas</div>
     <div id="lista-vagas"></div>
   </div>
 
   <script>
-    const senhaCorreta = "1234";
-    const painel = document.getElementById("painelContainer");
-    const login = document.getElementById("loginContainer");
-    const areaSelect = document.getElementById("area-select");
-    const novaAreaInput = document.getElementById("nova-area");
-    let areas = [];
+    const SENHA_CORRETA = "admin123";
+    let selectedArea = "";
 
-    function verificarSenha() {
+    function fazerLogin() {
       const senha = document.getElementById("senha").value;
-      if (senha === senhaCorreta) {
-        login.classList.add("hidden");
-        painel.classList.remove("hidden");
+      if (senha === SENHA_CORRETA) {
+        document.getElementById("login-box").style.display = "none";
+        document.getElementById("admin-box").style.display = "block";
         carregarAreas();
-        carregarVagas();
+        listarVagas();
       } else {
         alert("Senha incorreta!");
       }
     }
 
     function logout() {
-      login.classList.remove("hidden");
-      painel.classList.add("hidden");
+      document.getElementById("admin-box").style.display = "none";
+      document.getElementById("login-box").style.display = "block";
+    }
+
+    function atualizarAreaPersonalizada(valor) {
+      if (valor) selectedArea = valor;
     }
 
     function carregarAreas() {
-      fetch('/api/areas')
+      fetch('/api/vagas')
         .then(res => res.json())
-        .then(data => {
-          areas = data;
-          atualizarAreaSelect();
+        .then(vagas => {
+          const select = document.getElementById("area-select");
+          select.innerHTML = "<option value=''>Selecione uma área</option>";
+          const areas = [...new Set(vagas.map(v => v.area))];
+          areas.forEach(area => {
+            const opt = document.createElement("option");
+            opt.value = area;
+            opt.textContent = area;
+            select.appendChild(opt);
+          });
         });
     }
 
-    function atualizarAreaSelect() {
-      areaSelect.innerHTML = "<option value=''>Selecione uma área</option>";
-      areas.forEach(area => {
-        const option = document.createElement("option");
-        option.value = area;
-        option.textContent = area;
-        areaSelect.appendChild(option);
-      });
-    }
-
-    novaAreaInput.addEventListener("change", () => {
-      const nova = novaAreaInput.value.trim();
-      if (nova && !areas.includes(nova)) {
-        areas.push(nova);
-        fetch('/api/areas', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(areas)
-        }).then(() => carregarAreas());
-      }
-    });
-
     function criarVaga() {
-      const area = novaAreaInput.value.trim() || areaSelect.value;
       const vaga = {
         titulo: document.getElementById("titulo").value,
         empresa: document.getElementById("empresa").value,
         cidade: document.getElementById("cidade").value,
         link: document.getElementById("link").value,
-        area,
+        area: selectedArea || document.getElementById("area-select").value,
         descricao: document.getElementById("descricao").value,
         detalhes: document.getElementById("detalhes").value
       };
+
       fetch('/api/vagas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(vaga)
       }).then(() => {
-        alert("Vaga criada!");
-        carregarVagas();
+        alert("Vaga criada com sucesso!");
+        location.reload();
       });
     }
 
-    function carregarVagas() {
+    function listarVagas() {
       fetch('/api/vagas')
         .then(res => res.json())
         .then(vagas => {
-          const lista = document.getElementById("lista-vagas");
-          lista.innerHTML = "";
+          const container = document.getElementById("lista-vagas");
+          container.innerHTML = "";
           vagas.forEach(v => {
             const div = document.createElement("div");
-            div.className = "vaga";
+            div.className = "vaga-card";
             div.innerHTML = `
-              <h3>${v.titulo}</h3>
-              <div class="tags">
-                <span class="tag">${v.empresa}</span>
-                <span class="tag">${v.cidade}</span>
-                <span class="tag">${v.area}</span>
-              </div>
-              <p>${v.descricao}</p>
-              <button onclick="window.open('${v.link}', '_blank')">Candidatar</button>
-              <button onclick="excluirVaga(${v.id})" style="background:#dc2626;margin-left:10px;">Excluir</button>
+              <strong>${v.titulo}</strong><br>
+              ${v.empresa} - ${v.cidade} <br>
+              Área: ${v.area}<br>
+              <button onclick="excluirVaga(${v.id})">Excluir</button>
             `;
-            lista.appendChild(div);
+            container.appendChild(div);
           });
         });
     }
 
     function excluirVaga(id) {
-      fetch(`/api/vagas/${id}`, { method: 'DELETE' })
-        .then(() => carregarVagas());
+      if (confirm("Tem certeza que deseja excluir esta vaga?")) {
+        fetch(`/api/vagas/${id}`, { method: 'DELETE' })
+          .then(() => location.reload());
+      }
     }
   </script>
 </body>
