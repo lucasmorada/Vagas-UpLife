@@ -7,7 +7,8 @@ const PORT = 3000;
 const FILE_DB = path.join(__dirname, 'vagas.json');
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// Corrigido: serve arquivos da raiz onde estão os HTMLs
+app.use(express.static(__dirname));
 
 // Função para ler vagas do arquivo JSON
 function lerVagas() {
@@ -35,7 +36,7 @@ app.post('/api/vagas', (req, res) => {
   const vagas = lerVagas();
   const novaVaga = req.body;
 
-  // Atribui ID único incremental
+  // Gera um ID incremental
   const maxId = vagas.reduce((max, v) => v.id > max ? v.id : max, 0);
   novaVaga.id = maxId + 1;
 
@@ -45,25 +46,25 @@ app.post('/api/vagas', (req, res) => {
   res.status(201).json(novaVaga);
 });
 
-// DELETE /api/vagas/:id - exclui vaga pelo id
+// DELETE /api/vagas/:id - exclui vaga
 app.delete('/api/vagas/:id', (req, res) => {
   const id = parseInt(req.params.id);
   let vagas = lerVagas();
 
-  const vagaIndex = vagas.findIndex(v => v.id === id);
-  if (vagaIndex === -1) {
+  const index = vagas.findIndex(v => v.id === id);
+  if (index === -1) {
     return res.status(404).json({ error: 'Vaga não encontrada' });
   }
 
-  vagas.splice(vagaIndex, 1);
+  vagas.splice(index, 1);
   salvarVagas(vagas);
 
   res.json({ message: 'Vaga excluída com sucesso' });
 });
 
-// Rota padrão para servir o admin.html (assumindo que está em public/admin.html)
+// Página inicial (abre o index.html)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Inicia o servidor
