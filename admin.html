@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel Administrativo</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -18,6 +18,7 @@
       justify-content: center;
       min-height: 100vh;
     }
+    .login-container,
     .container {
       width: 90%;
       max-width: 800px;
@@ -30,7 +31,7 @@
       margin-bottom: 20px;
       font-size: 24px;
     }
-    input[type="text"], select, textarea {
+    input[type="text"], input[type="password"], select, textarea {
       width: 100%;
       padding: 12px;
       margin-bottom: 12px;
@@ -51,7 +52,6 @@
     }
     .logout-btn {
       float: right;
-      margin-top: -10px;
       background-color: #dc2626;
     }
     .logout-btn:hover {
@@ -75,71 +75,138 @@
       border-radius: 20px;
       font-size: 14px;
     }
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <button class="logout-btn" onclick="logout()">Logout</button>
-    <h2>Nova Vaga</h2>
-    <div class="form-group">
-      <input type="text" id="titulo" placeholder="Título da vaga">
-      <input type="text" id="empresa" placeholder="Empresa">
-      <input type="text" id="cidade" placeholder="Cidade">
-      <input type="text" id="link" placeholder="Link para candidatura">
-      <select id="area-select"></select>
-      <input type="text" id="nova-area" placeholder="Criar nova área" oninput="atualizarAreaPersonalizada(this.value)">
-      <textarea id="descricao" placeholder="Descrição da vaga"></textarea>
-      <textarea id="detalhes" placeholder="Detalhes adicionais"></textarea>
-      <button onclick="criarVaga()">Criar Vaga</button>
-    </div>
+  <div class="login-container" id="loginContainer">
+    <h2>Login Administrativo</h2>
+    <input type="password" id="senha" placeholder="Digite a senha">
+    <button onclick="verificarSenha()">Entrar</button>
+  </div>
 
-    <div id="lista-vagas">
-      <!-- Vagas aparecem aqui -->
-    </div>
+  <div class="container hidden" id="painelContainer">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    <h2>Criar Nova Vaga</h2>
+    <input type="text" id="titulo" placeholder="Título da vaga">
+    <input type="text" id="empresa" placeholder="Empresa">
+    <input type="text" id="cidade" placeholder="Cidade">
+    <input type="text" id="link" placeholder="Link para candidatura">
+    <select id="area-select"></select>
+    <input type="text" id="nova-area" placeholder="Criar nova área">
+    <textarea id="descricao" placeholder="Descrição da vaga"></textarea>
+    <textarea id="detalhes" placeholder="Detalhes adicionais da vaga"></textarea>
+    <button onclick="criarVaga()">Criar Vaga</button>
+
+    <h2 style="margin-top: 40px">Vagas Criadas</h2>
+    <div id="lista-vagas"></div>
   </div>
 
   <script>
+    const senhaCorreta = "1234";
+    const painel = document.getElementById("painelContainer");
+    const login = document.getElementById("loginContainer");
+    const areaSelect = document.getElementById("area-select");
+    const novaAreaInput = document.getElementById("nova-area");
     let areas = [];
-    let selectedArea = "";
 
-    function atualizarAreaPersonalizada(valor) {
-      selectedArea = valor;
+    function verificarSenha() {
+      const senha = document.getElementById("senha").value;
+      if (senha === senhaCorreta) {
+        login.classList.add("hidden");
+        painel.classList.remove("hidden");
+        carregarAreas();
+        carregarVagas();
+      } else {
+        alert("Senha incorreta!");
+      }
     }
 
     function logout() {
-      alert("Logout realizado");
+      login.classList.remove("hidden");
+      painel.classList.add("hidden");
     }
 
+    function carregarAreas() {
+      fetch('/api/areas')
+        .then(res => res.json())
+        .then(data => {
+          areas = data;
+          atualizarAreaSelect();
+        });
+    }
+
+    function atualizarAreaSelect() {
+      areaSelect.innerHTML = "<option value=''>Selecione uma área</option>";
+      areas.forEach(area => {
+        const option = document.createElement("option");
+        option.value = area;
+        option.textContent = area;
+        areaSelect.appendChild(option);
+      });
+    }
+
+    novaAreaInput.addEventListener("change", () => {
+      const nova = novaAreaInput.value.trim();
+      if (nova && !areas.includes(nova)) {
+        areas.push(nova);
+        fetch('/api/areas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(areas)
+        }).then(() => carregarAreas());
+      }
+    });
+
     function criarVaga() {
+      const area = novaAreaInput.value.trim() || areaSelect.value;
       const vaga = {
         titulo: document.getElementById("titulo").value,
         empresa: document.getElementById("empresa").value,
         cidade: document.getElementById("cidade").value,
         link: document.getElementById("link").value,
-        area: selectedArea || document.getElementById("area-select").value,
+        area,
         descricao: document.getElementById("descricao").value,
         detalhes: document.getElementById("detalhes").value
       };
-      console.log("Criando vaga:", vaga);
-    }
-
-    function atualizarSelect() {
-      const select = document.getElementById("area-select");
-      select.innerHTML = "<option value=''>Selecione uma área</option>";
-      areas.forEach(area => {
-        const option = document.createElement("option");
-        option.value = area;
-        option.textContent = area;
-        select.appendChild(option);
+      fetch('/api/vagas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vaga)
+      }).then(() => {
+        alert("Vaga criada!");
+        carregarVagas();
       });
     }
 
-    window.onload = function() {
-      areas = ["Tecnologia", "RH", "Marketing"];
-      atualizarSelect();
+    function carregarVagas() {
+      fetch('/api/vagas')
+        .then(res => res.json())
+        .then(vagas => {
+          const lista = document.getElementById("lista-vagas");
+          lista.innerHTML = "";
+          vagas.forEach(v => {
+            const div = document.createElement("div");
+            div.className = "vaga";
+            div.innerHTML = `
+              <h3>${v.titulo}</h3>
+              <div class="tags">
+                <span class="tag">${v.empresa}</span>
+                <span class="tag">${v.cidade}</span>
+                <span class="tag">${v.area}</span>
+              </div>
+              <p>${v.descricao}</p>
+              <button onclick="window.open('${v.link}', '_blank')">Candidatar</button>
+              <button onclick="excluirVaga(${v.id})" style="background:#dc2626;margin-left:10px;">Excluir</button>
+            `;
+            lista.appendChild(div);
+          });
+        });
+    }
+
+    function excluirVaga(id) {
+      fetch(`/api/vagas/${id}`, { method: 'DELETE' })
+        .then(() => carregarVagas());
     }
   </script>
 </body>
