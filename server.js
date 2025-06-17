@@ -1,58 +1,72 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
-const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 3000;
-const VAGAS_PATH = path.join(__dirname, 'vagas.json');
+const FILE_DB = path.join(__dirname, 'vagas.json');
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Ajuste para servir arquivos estáticos da raiz (onde estão index.html, admin.html etc)
-app.use(express.static(__dirname));
-
-// Funções para ler e salvar vagas
-function carregarVagas() {
-  if (!fs.existsSync(VAGAS_PATH)) fs.writeFileSync(VAGAS_PATH, '[]');
-  return JSON.parse(fs.readFileSync(VAGAS_PATH, 'utf8'));
+// Função para ler vagas do arquivo JSON
+function lerVagas() {
+  try {
+    const data = fs.readFileSync(FILE_DB, 'utf8');
+    return JSON.parse(data);
+  } catch {
+    return [];
+  }
 }
 
+// Função para salvar vagas no arquivo JSON
 function salvarVagas(vagas) {
-  fs.writeFileSync(VAGAS_PATH, JSON.stringify(vagas, null, 2), 'utf8');
+  fs.writeFileSync(FILE_DB, JSON.stringify(vagas, null, 2));
 }
 
-// Rotas da AP
+// GET /api/vagas - lista todas as vagas
 app.get('/api/vagas', (req, res) => {
-  res.json(carregarVagas());
+  const vagas = lerVagas();
+  res.json(vagas);
 });
 
+// POST /api/vagas - cria nova vaga
 app.post('/api/vagas', (req, res) => {
-  const vagas = carregarVagas();
-  const novaVaga = { ...req.body, id: Date.now() };
+  const vagas = lerVagas();
+  const novaVaga = req.body;
+
+  // Atribui ID único incremental
+  const maxId = vagas.reduce((max, v) => v.id > max ? v.id : max, 0);
+  novaVaga.id = maxId + 1;
+
   vagas.push(novaVaga);
   salvarVagas(vagas);
-  res.json({ sucesso: true, vaga: novaVaga });
+
+  res.status(201).json(novaVaga);
 });
 
-app.put('/api/vagas/:id', (req, res) => {
-  let vagas = carregarVagas();
-  const id = parseInt(req.params.id);
-  vagas = vagas.map(v => (v.id === id ? { ...req.body, id } : v));
-  salvarVagas(vagas);
-  res.json({ sucesso: true });
-});
-
+// DELETE /api/vagas/:id - exclui vaga pelo id
 app.delete('/api/vagas/:id', (req, res) => {
-  let vagas = carregarVagas();
   const id = parseInt(req.params.id);
-  vagas = vagas.filter(v => v.id !== id);
+  let vagas = lerVagas();
+
+  const vagaIndex = vagas.findIndex(v => v.id === id);
+  if (vagaIndex === -1) {
+    return res.status(404).json({ error: 'Vaga não encontrada' });
+  }
+
+  vagas.splice(vagaIndex, 1);
   salvarVagas(vagas);
-  res.json({ sucesso: true });
+
+  res.json({ message: 'Vaga excluída com sucesso' });
 });
 
+// Rota padrão para servir o admin.html (assumindo que está em public/admin.html)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// Inicia o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
