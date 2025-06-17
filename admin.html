@@ -1,175 +1,219 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Administrativo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo - UpLife</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f3f3f3; margin: 0; padding: 0; }
-    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; margin-bottom: 20px; color: #333; }
-    input, select, textarea, button { display: block; width: 100%; margin-bottom: 15px; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
-    button { background: #f97316; color: #fff; font-weight: bold; cursor: pointer; }
-    button:hover { background: #e65100; }
-    .vaga { background: #f9f9f9; border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 6px; }
-    .vaga button { width: auto; display: inline-block; margin-right: 10px; margin-top: 5px; }
-    .row { display: flex; gap: 10px; }
-    .row input, .row select { flex: 1; }
-    .area-custom { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
-    .area-custom input { flex: 1; }
-    #logoutBtn { margin-top: 30px; background: #666; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #f97316;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .vagas-lista {
+      margin-top: 30px;
+    }
+    .vaga-item {
+      background: #f0f0f0;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    .vaga-item button {
+      margin-top: 10px;
+      width: auto;
+      padding: 8px 12px;
+    }
+    .nova-area {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .logout-btn {
+      margin-top: 20px;
+      background: #e53935;
+      color: #fff;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <div class="container" id="loginContainer">
-    <h2>Login Administrativo</h2>
-    <input type="password" id="senha" placeholder="Digite a senha" />
-    <button onclick="login()">Entrar</button>
-  </div>
+  <div class="container">
+    <h1>Painel Administrativo</h1>
 
-  <div class="container" id="painelContainer" style="display:none;">
-    <h2>Nova Vaga</h2>
-    <input id="titulo" placeholder="Título da vaga" />
-    <input id="empresa" placeholder="Nome da empresa" />
-    <input id="local" placeholder="Localização" />
-    <div class="area-custom">
-      <select id="area">
-        <option value="">Selecione a área</option>
-        <option value="Manutenção">Manutenção</option>
-        <option value="Logística">Logística</option>
-        <option value="Produção">Produção</option>
-        <option value="Elétrica">Elétrica</option>
-        <option value="Qualidade">Qualidade</option>
-      </select>
-      <input id="novaArea" placeholder="Nova área (opcional)" />
-      <button onclick="adicionarArea()">+ Área</button>
-    </div>
-    <textarea id="descricao" rows="4" placeholder="Resumo da vaga (exibição principal)"></textarea>
-    <textarea id="detalhes" rows="6" placeholder="Detalhes completos da vaga"></textarea>
-    <input id="link" placeholder="Link para candidatura (será o botão final)" />
-    <button onclick="salvarVaga()">Salvar Vaga</button>
+    <form id="form-vaga">
+      <label for="titulo">Título da vaga</label>
+      <input type="text" id="titulo" required>
 
-    <h2>Vagas Cadastradas</h2>
-    <div id="listaVagas"></div>
-    <button id="logoutBtn" onclick="logout()">Logout</button>
+      <label for="empresa">Nome da empresa</label>
+      <input type="text" id="empresa" required>
+
+      <label for="local">Local</label>
+      <input type="text" id="local" required>
+
+      <label for="area">Área</label>
+      <select id="area" required></select>
+
+      <div class="nova-area">
+        <input type="text" id="novaArea" placeholder="Nova área...">
+        <button type="button" onclick="adicionarArea()">Adicionar Área</button>
+      </div>
+
+      <label for="descricao">Descrição Resumida</label>
+      <textarea id="descricao" rows="3" required></textarea>
+
+      <label for="detalhes">Descrição Detalhada</label>
+      <textarea id="detalhes" rows="5" required></textarea>
+
+      <label for="link">Link para candidatura</label>
+      <input type="url" id="link" required>
+
+      <button type="submit">Salvar Vaga</button>
+    </form>
+
+    <div class="vagas-lista" id="vagas-lista"></div>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
 
   <script>
-    const SENHA_CORRETA = "uplife123"; // troque por sua senha real segura
-    let vagas = [];
-    let editandoId = null;
-
-    function login() {
-      const senha = document.getElementById('senha').value;
-      if (senha === SENHA_CORRETA) {
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('painelContainer').style.display = 'block';
-        carregarVagas();
+    const senhaCorreta = "uplife123";
+    if (!localStorage.getItem("logado")) {
+      const senha = prompt("Digite a senha para acessar o painel:");
+      if (senha !== senhaCorreta) {
+        alert("Senha incorreta");
+        window.location.href = "index.html";
       } else {
-        alert("Senha incorreta!");
+        localStorage.setItem("logado", true);
       }
     }
 
     function logout() {
-      document.getElementById('loginContainer').style.display = 'block';
-      document.getElementById('painelContainer').style.display = 'none';
+      localStorage.removeItem("logado");
+      location.reload();
+    }
+
+    const areas = ["Manutenção", "Produção", "Logística", "Elétrica", "Qualidade"];
+    const selectArea = document.getElementById("area");
+
+    function atualizarSelectAreas() {
+      selectArea.innerHTML = "";
+      areas.forEach(area => {
+        const option = document.createElement("option");
+        option.value = area;
+        option.textContent = area;
+        selectArea.appendChild(option);
+      });
     }
 
     function adicionarArea() {
-      const novaArea = document.getElementById('novaArea').value.trim();
-      if (novaArea) {
-        const select = document.getElementById('area');
-        const option = document.createElement('option');
-        option.value = novaArea;
-        option.text = novaArea;
-        select.appendChild(option);
-        select.value = novaArea;
-        document.getElementById('novaArea').value = '';
+      const nova = document.getElementById("novaArea").value.trim();
+      if (nova && !areas.includes(nova)) {
+        areas.push(nova);
+        atualizarSelectAreas();
+        document.getElementById("novaArea").value = "";
       }
     }
 
-    function salvarVaga() {
+    atualizarSelectAreas();
+
+    let vagas = JSON.parse(localStorage.getItem("vagas") || "[]");
+
+    const form = document.getElementById("form-vaga");
+    const lista = document.getElementById("vagas-lista");
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
       const vaga = {
-        id: editandoId || Date.now(),
-        titulo: document.getElementById('titulo').value,
-        empresa: document.getElementById('empresa').value,
-        local: document.getElementById('local').value,
-        area: document.getElementById('area').value,
-        descricao: document.getElementById('descricao').value,
-        detalhes: document.getElementById('detalhes').value,
-        link: document.getElementById('link').value
+        id: Date.now(),
+        titulo: titulo.value,
+        empresa: empresa.value,
+        local: local.value,
+        area: area.value,
+        descricao: descricao.value,
+        detalhes: detalhes.value,
+        link: link.value
       };
+      vagas.push(vaga);
+      salvar();
+      form.reset();
+      atualizarSelectAreas();
+    });
 
-      if (editandoId) {
-        fetch(`/api/vagas/${editandoId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(vaga)
-        }).then(() => {
-          editandoId = null;
-          limparCampos();
-          carregarVagas();
-        });
-      } else {
-        fetch('/api/vagas', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(vaga)
-        }).then(() => {
-          limparCampos();
-          carregarVagas();
-        });
+    function salvar() {
+      localStorage.setItem("vagas", JSON.stringify(vagas));
+      renderizar();
+    }
+
+    function renderizar() {
+      lista.innerHTML = "";
+      vagas.forEach(v => {
+        const item = document.createElement("div");
+        item.className = "vaga-item";
+        item.innerHTML = `
+          <strong>${v.titulo}</strong><br>
+          <em>${v.empresa}</em><br>
+          ${v.local} - ${v.area}<br>
+          <small>${v.descricao}</small><br>
+          <button onclick="editar(${v.id})">Editar</button>
+          <button onclick="excluir(${v.id})">Excluir</button>
+        `;
+        lista.appendChild(item);
+      });
+    }
+
+    function editar(id) {
+      const vaga = vagas.find(v => v.id === id);
+      if (vaga) {
+        titulo.value = vaga.titulo;
+        empresa.value = vaga.empresa;
+        local.value = vaga.local;
+        area.value = vaga.area;
+        descricao.value = vaga.descricao;
+        detalhes.value = vaga.detalhes;
+        link.value = vaga.link;
+        vagas = vagas.filter(v => v.id !== id);
+        salvar();
       }
     }
 
-    function carregarVagas() {
-      fetch('/api/vagas')
-        .then(res => res.json())
-        .then(dados => {
-          vagas = dados;
-          const lista = document.getElementById('listaVagas');
-          lista.innerHTML = '';
-          vagas.forEach(v => {
-            const el = document.createElement('div');
-            el.className = 'vaga';
-            el.innerHTML = `
-              <strong>${v.titulo}</strong><br>
-              ${v.local} - ${v.area}<br>
-              ${v.empresa || ''}
-              <div>
-                <button onclick='editarVaga(${v.id})'>Editar</button>
-                <button onclick='excluirVaga(${v.id})'>Excluir</button>
-              </div>
-            `;
-            lista.appendChild(el);
-          });
-        });
+    function excluir(id) {
+      if (confirm("Tem certeza que deseja excluir esta vaga?")) {
+        vagas = vagas.filter(v => v.id !== id);
+        salvar();
+      }
     }
 
-    function editarVaga(id) {
-      const vaga = vagas.find(v => v.id === id);
-      if (!vaga) return;
-      document.getElementById('titulo').value = vaga.titulo;
-      document.getElementById('empresa').value = vaga.empresa || '';
-      document.getElementById('local').value = vaga.local;
-      document.getElementById('area').value = vaga.area;
-      document.getElementById('descricao').value = vaga.descricao;
-      document.getElementById('detalhes').value = vaga.detalhes;
-      document.getElementById('link').value = vaga.link;
-      editandoId = id;
-    }
-
-    function excluirVaga(id) {
-      if (!confirm("Tem certeza que deseja excluir esta vaga?")) return;
-      fetch(`/api/vagas/${id}`, { method: 'DELETE' })
-        .then(() => carregarVagas());
-    }
-
-    function limparCampos() {
-      ['titulo', 'empresa', 'local', 'descricao', 'detalhes', 'link'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('area').value = '';
-    }
+    renderizar();
   </script>
 </body>
 </html>
-
