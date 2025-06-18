@@ -5,174 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vagas na Indústria – UpLife Educacional</title>
   <style>
-    :root {
-      --orange: #f97316;
-      --dark-orange: #bf360c;
-      --bg-dark: #e65100;
-    }
+    :root { --orange: #f97316; --dark-orange: #bf360c; --bg-dark: #e65100; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #fff;
-      color: #333;
-    }
-    html {
-      scroll-behavior: smooth;
-    }
-
-    header {
-      position: sticky; top: 0;
-      background: var(--bg-dark);
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      z-index: 10;
-    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #333; }
+    html { scroll-behavior: smooth; }
+    header { position: sticky; top: 0; background: var(--bg-dark); display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; z-index: 10; }
     header img.logo { height: 85px; }
-    
-.nav-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.nav-buttons a {
-  margin: 0 15px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  transition: opacity 0.2s;
-  /* Remova o display: flex daqui */
-}
-
+    .nav-buttons { display: flex; align-items: center; justify-content: center; }
+    .nav-buttons a { margin: 0 15px; color: #fff; text-decoration: none; font-weight: 600; transition: opacity 0.2s; }
     .nav-buttons a:hover { opacity: 0.8; }
-    .social-icons img {
-      width: 24px; margin-left: 12px;
-      transition: transform .2s;
-    }
+    .social-icons img { width: 24px; margin-left: 12px; transition: transform .2s; }
     .social-icons img:hover { transform: scale(2.2); }
-
-    .intro {
-    text-align: center;
-    padding: 60px 20px;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    }
-    
-    .intro h1 {
-      font-size: 3rem;
-      color: var(--orange);
-      margin-bottom: 10px;
-    }
-    .intro .lead {
-      font-size: 1.5rem;
-      font-style: italic;
-      color: #333;
-    }
-
-    .hero {
-      background: url('Banner.png') no-repeat center center/cover;
-      height: 300px;
-    }
-
-    .cta-button {
-      text-align: center;
-      padding: 30px 0;
-    }
-    .cta-button .cta {
-      padding: 14px 30px;
-      font-size: 1.2rem;
-      background: var(--orange);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .search {
-      max-width: 1000px;
-      margin: 30px auto 10px;
-      padding: 0 20px;
-    }
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-    .filters select, .filters input {
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      flex: 1 1 200px;
-    }
-    .filters button {
-      background: #cba44c;
-      color: white;
-      padding: 10px 20px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .jobs {
-      display: grid;
-      gap: 20px;
-      max-width: 1000px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    .job-card {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-    }
-    .job-card h3 {
-      color: var(--orange);
-      margin-bottom: 6px;
-    }
+    .intro { text-align: center; padding: 60px 20px; display: flex; flex-direction: column; align-content: center; justify-content: center; }
+    .intro h1 { font-size: 3rem; color: var(--orange); margin-bottom: 10px; }
+    .intro .lead { font-size: 1.5rem; font-style: italic; color: #333; }
+    .hero { background: url('Banner.png') no-repeat center center/cover; height: 300px; }
+    .cta-button { text-align: center; padding: 30px 0; }
+    .cta-button .cta { padding: 14px 30px; font-size: 1.2rem; background: var(--orange); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .search { max-width: 1000px; margin: 30px auto 10px; padding: 0 20px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 10px; }
+    .filters select, .filters input { padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px; flex: 1 1 200px; }
+    .filters button { background: #cba44c; color: white; padding: 10px 20px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
+    .jobs { display: grid; gap: 20px; max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+    .job-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; box-shadow: 0 3px 8px rgba(0,0,0,0.05); }
+    .job-card h3 { color: var(--orange); margin-bottom: 6px; }
     .job-card p { margin-bottom: 6px; }
-    .job-card a.apply button {
-      margin-top: 10px;
-      padding: 8px 16px;
-      background: var(--orange);
-      border: none;
-      color: #fff;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    footer {
-      background: var(--bg-dark);
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-      font-size: 0.9rem;
-    }
-    @media(max-width:768px) {
-      .intro h1 { font-size: 2rem; }
-      .intro .lead { font-size: 1.2rem; }
-      .cta-button .cta { font-size: 1rem; }
-    }
+    .job-card a.apply button { margin-top: 10px; padding: 8px 16px; background: var(--orange); border: none; color: #fff; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    footer { background: var(--bg-dark); color: #fff; text-align: center; padding: 20px; margin-top: 60px; font-size: 0.9rem; }
+    @media(max-width:768px) { .intro h1 { font-size: 2rem; } .intro .lead { font-size: 1.2rem; } .cta-button .cta { font-size: 1rem; } }
   </style>
 </head>
 <body>
+
   <header>
     <img src="logo.png" class="logo" alt="UpLife Educacional Logo" />
     <nav class="nav-buttons">
-      <a href="#conta"><p style="font-size: 25px;">Conta</a></p>
-      <a href="#sobre"><p style="font-size: 25px;">Sobre Nós</a></p>
-      <a href="https://uplifecursosetreinamentos.com.br/" target="_blank"><p style="font-size: 25px;">Acessar Site</a></p>
+      <a href="#conta"><p style="font-size: 25px;">Conta</p></a>
+      <a href="#sobre"><p style="font-size: 25px;">Sobre Nós</p></a>
+      <a href="https://uplifecursosetreinamentos.com.br/" target="_blank"><p style="font-size: 25px;">Acessar Site</p></a>
     </nav>
     <div class="social-icons">
       <a href="https://instagram.com" target="_blank"><img src="instagram.png" alt="Instagram"></a>
@@ -189,9 +59,7 @@
   <section class="hero"></section>
 
   <section class="cta-button">
-    <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
-      Ver Vagas
-    </button>
+    <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">Ver Vagas</button>
   </section>
 
   <section class="search">
@@ -223,8 +91,6 @@
 
 <script>
   const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
-
-
   const container = document.querySelector('.jobs');
 
   function renderVagas(lista) {
@@ -233,23 +99,22 @@
     if (vagasDisponiveis.length === 0) {
       container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
       return;
-    }}
-
-   vagasDisponiveis.forEach(job => {
-    const card = document.createElement('div');
-    card.className = 'job-card';
-    card.innerHTML = `
-      <div>
-        <h3>${job.titulo}</h3>
-        <p><strong>Empresa:</strong> ${job.empresa}</p>
-        <p><strong>Local:</strong> ${job.cidade}</p>
-        <p>${job.descricao}</p>
-        <a href="${job.link}" target="_blank" class="apply"><button>Candidatar-se</button></a>
-      </div>
-    `;
-    container.appendChild(card);
-});
- 
+    }
+    vagasDisponiveis.forEach(job => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.innerHTML = `
+        <div>
+          <h3>${job.titulo}</h3>
+          <p><strong>Local:</strong> ${job.local}</p>
+          <p><strong>Área:</strong> ${job.area}</p>
+          <p>${job.descricao}</p>
+          <a href="${job.link}" target="_blank" class="apply"><button>Candidatar-se</button></a>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
 
   function filtrarVagas() {
     const termo = document.getElementById('searchInput').value.toLowerCase();
