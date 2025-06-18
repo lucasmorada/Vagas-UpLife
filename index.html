@@ -7,8 +7,8 @@
   <style>
     :root {
       --orange: #f97316;
-      --dark-orange: #bf360c;
-      --bg-dark: #e65100;
+      --dark-orange: #e65100;
+      --light-orange: #ff9a50;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -21,61 +21,62 @@
     }
 
     header {
-      position: sticky; top: 0;
-      background: var(--bg-dark);
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      z-index: 10;
+      background: var(--orange);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px;
     }
-    header img.logo { height: 85px; }
+    header img.logo { height: 130px; }
     
-.nav-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.nav-buttons a {
-  margin: 0 15px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  transition: opacity 0.2s;
-  /* Remova o display: flex daqui */
-}
-
-    .nav-buttons a:hover { opacity: 0.8; }
-    .social-icons img {
-      width: 24px; margin-left: 12px;
-      transition: transform .2s;
+    .nav-buttons {
+      display: flex; align-items: center;
     }
-    .social-icons img:hover { transform: scale(2.2); }
+
+    .nav-buttons a {
+      margin: 0 20px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 24px;
+    }
+
+    .social-icons {
+      display: flex; align-items: center;
+    }
+    .social-icons img {
+      width: 36px;
+      margin-left: 20px;
+      transition: transform 0.2s;
+    }
+    .social-icons img:hover { transform: scale(1.5); }
 
     .intro {
-    text-align: center;
-    padding: 60px 20px;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
+      text-align: center;
+      padding: 60px 20px 30px;
     }
-    
     .intro h1 {
       font-size: 3rem;
       color: var(--orange);
       margin-bottom: 10px;
     }
     .intro .lead {
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-style: italic;
-      color: #333;
+      color: #000;
     }
 
     .hero {
-      background: url('Banner.png') no-repeat center center/cover;
+      background: var(--orange);
       height: 300px;
+      margin: 0 20px 30px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #fff;
+      font-weight: bold;
     }
 
     .cta-button {
@@ -152,27 +153,22 @@
     }
 
     footer {
-      background: var(--bg-dark);
+      background: var(--dark-orange);
       color: #fff;
       text-align: center;
       padding: 20px;
       margin-top: 60px;
       font-size: 0.9rem;
     }
-    @media(max-width:768px) {
-      .intro h1 { font-size: 2rem; }
-      .intro .lead { font-size: 1.2rem; }
-      .cta-button .cta { font-size: 1rem; }
-    }
   </style>
 </head>
 <body>
   <header>
-    <img src="logo.png" class="logo" alt="UpLife Educacional Logo" />
+    <img src="LOGO (1).png" class="logo" alt="UpLife Educacional Logo" />
     <nav class="nav-buttons">
-      <a href="#conta"><p style="font-size: 25px;">Conta</a></p>
-      <a href="#sobre"><p style="font-size: 25px;">Sobre Nós</a></p>
-      <a href="https://uplifecursosetreinamentos.com.br/" target="_blank"><p style="font-size: 25px;">Acessar Site</a></p>
+      <a href="#conta">CONTA</a>
+      <a href="#sobre">SOBRE NÓS</a>
+      <a href="https://uplifecursosetreinamentos.com.br/" target="_blank">ACESSAR SITE</a>
     </nav>
     <div class="social-icons">
       <a href="https://instagram.com" target="_blank"><img src="instagram.png" alt="Instagram"></a>
@@ -182,11 +178,13 @@
   </header>
 
   <section class="intro">
-    <h1>Vagas na Indústria</h1>
-    <p class="lead">"Tão importante quanto a oportunidade é estar sempre preparado para ela."</p>
+    <h1>VAGAS NA INDUSTRIA</h1>
+    <p class="lead">“TÃO IMPORTANTE...”</p>
   </section>
 
-  <section class="hero"></section>
+  <section class="hero">
+    BANNER
+  </section>
 
   <section class="cta-button">
     <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">
@@ -237,26 +235,26 @@
   const container = document.querySelector('.jobs');
 
   function renderVagas(lista) {
-  container.innerHTML = '';
-  const vagasDisponiveis = lista.filter(v => v.link && v.link.trim() !== '');
-  if (vagasDisponiveis.length === 0) {
-    container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
-    return;
-  }
+    container.innerHTML = '';
+    const vagasDisponiveis = lista.filter(v => v.link && v.link.trim() !== '');
+    if (vagasDisponiveis.length === 0) {
+      container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
+      return;
+    }
 
-  vagasDisponiveis.forEach(job => {
-    const card = document.createElement('div');
-    card.className = 'job-card';
-    card.innerHTML = `
-      <h3>${job.titulo}</h3>
-      <p><strong>Empresa:</strong> ${job.empresa}</p>
-      <p><strong>Local:</strong> ${job.cidade}</p>
-      <p>${job.descricao}</p>
-      <a href="${job.link}" target="_blank" class="apply"><button>Candidatar-se</button></a>
-    `;
-    container.appendChild(card);
-  });
-}
+    vagasDisponiveis.forEach(job => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.innerHTML = `
+        <h3>${job.titulo}</h3>
+        <p><strong>Empresa:</strong> ${job.empresa}</p>
+        <p><strong>Local:</strong> ${job.cidade}</p>
+        <p>${job.descricao}</p>
+        <a href="${job.link}" target="_blank" class="apply"><button>Candidatar-se</button></a>
+      `;
+      container.appendChild(card);
+    });
+  }
 
   function filtrarVagas() {
     const termo = document.getElementById('searchInput').value.toLowerCase();
@@ -279,3 +277,6 @@
 
   carregarVagas();
 </script>
+
+</body>
+</html>
