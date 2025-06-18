@@ -237,26 +237,26 @@
   const container = document.querySelector('.jobs');
 
   function renderVagas(lista) {
-    container.innerHTML = '';
-    const vagasDisponiveis = lista.filter(v => v.link && v.link.trim() !== '');
-    if (vagasDisponiveis.length === 0) {
-      container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
-      return;
-    }
-
-    vagasDisponiveis.forEach(job => {
-      const card = document.createElement('div');
-      card.className = 'job-card';
-      card.innerHTML = `
-        <h3>${job.titulo}</h3>
-        <p><strong>Empresa:</strong> ${job.empresa}</p>
-        <p><strong>Local:</strong> ${job.cidade}</p>
-        <p>${job.descricao}</p>
-        <a href="detalhes.html?vaga=${job.id}" class="apply"><button>Candidatar-se</button></a>
-      `;
-      container.appendChild(card);
-    });
+  container.innerHTML = '';
+  const vagasDisponiveis = lista.filter(v => v.link && v.link.trim() !== '');
+  if (vagasDisponiveis.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
+    return;
   }
+
+  vagasDisponiveis.forEach(job => {
+    const card = document.createElement('div');
+    card.className = 'job-card';
+    card.innerHTML = `
+      <h3>${job.titulo}</h3>
+      <p><strong>Empresa:</strong> ${job.empresa}</p>
+      <p><strong>Local:</strong> ${job.cidade}</p>
+      <p>${job.descricao}</p>
+      <a href="${job.link}" target="_blank" class="apply"><button>Candidatar-se</button></a>
+    `;
+    container.appendChild(card);
+  });
+}
 
   function filtrarVagas() {
     const termo = document.getElementById('searchInput').value.toLowerCase();

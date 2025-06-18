@@ -24,8 +24,11 @@
     <label>Título da Vaga</label>
     <input type="text" id="titulo" required>
 
-    <label>Local</label>
-    <input type="text" id="local" required>
+    <label>Empresa</label>
+    <input type="text" id="empresa" required>
+
+    <label>Local (Cidade)</label>
+    <input type="text" id="cidade" required>
 
     <label>Área</label>
     <select id="area" required>
@@ -47,24 +50,35 @@
   </form>
 
   <script>
-    document.getElementById('formVaga').addEventListener('submit', function(e) {
+    document.getElementById('formVaga').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      const vaga = {
-        id: Date.now(),
+      const novaVaga = {
         titulo: document.getElementById('titulo').value,
-        local: document.getElementById('local').value,
+        empresa: document.getElementById('empresa').value,
+        cidade: document.getElementById('cidade').value,
         area: document.getElementById('area').value,
         descricao: document.getElementById('descricao').value,
         link: document.getElementById('link').value
       };
 
-      const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
-      vagas.push(vaga);
-      localStorage.setItem('vagas', JSON.stringify(vagas));
+      try {
+        const res = await fetch('/api/vagas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(novaVaga)
+        });
 
-      alert('Vaga adicionada com sucesso!');
-      this.reset();
+        if (res.ok) {
+          alert('Vaga adicionada com sucesso!');
+          this.reset();
+        } else {
+          alert('Erro ao adicionar vaga');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Erro na conexão com o servidor.');
+      }
     });
   </script>
 </body>
