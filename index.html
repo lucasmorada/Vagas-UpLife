@@ -222,29 +222,20 @@
   </footer>
 
 <script>
-  let todasAsVagas = [];
+  const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
 
-  async function carregarVagas() {
-    try {
-      const res = await fetch('/api/vagas');
-      todasAsVagas = await res.json();
-      renderVagas(todasAsVagas);
-    } catch (e) {
-      console.error('Erro ao carregar vagas:', e);
-    }
-  }
 
   const container = document.querySelector('.jobs');
 
   function renderVagas(lista) {
-  container.innerHTML = '';
-  const vagasDisponiveis = lista.filter(v => v.link && v.link.trim() !== '');
-  if (vagasDisponiveis.length === 0) {
-    container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
-    return;
-  }
+    container.innerHTML = '';
+    const vagasDisponiveis = lista.filter(v => v.link && v.link.trim() !== '');
+    if (vagasDisponiveis.length === 0) {
+      container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada com os filtros selecionados.</p>';
+      return;
+    }}
 
-  vagasDisponiveis.forEach(job => {
+   vagasDisponiveis.forEach(job => {
     const card = document.createElement('div');
     card.className = 'job-card';
     card.innerHTML = `
@@ -258,20 +249,19 @@
     `;
     container.appendChild(card);
 });
-  }
-
+ 
 
   function filtrarVagas() {
     const termo = document.getElementById('searchInput').value.toLowerCase();
     const cidade = document.getElementById('cidadeFiltro').value;
     const area = document.getElementById('areaFiltro').value;
 
-    const filtradas = todasAsVagas.filter(v => {
-      const matchCidade = cidade ? v.cidade.includes(cidade) : true;
+    const filtradas = vagas.filter(v => {
+      const matchCidade = cidade ? v.local.includes(cidade) : true;
       const matchArea = area ? v.area === area : true;
       const matchTermo = termo ? (
         v.titulo.toLowerCase().includes(termo) ||
-        v.cidade.toLowerCase().includes(termo) ||
+        v.local.toLowerCase().includes(termo) ||
         v.descricao.toLowerCase().includes(termo)
       ) : true;
       return matchCidade && matchArea && matchTermo;
@@ -280,5 +270,8 @@
     renderVagas(filtradas);
   }
 
-  carregarVagas();
+  renderVagas(vagas);
 </script>
+
+</body>
+</html>
