@@ -1,148 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detalhes da Vaga – UpLife Educacional</title>
+  <meta charset="UTF-8">
+  <title>Detalhes da Vaga</title>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5650c; margin: 0; padding: 0; }
-    .container { max-width: 800px; margin: 40px auto; background: #fff; border-radius: 8px;
-                 box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 30px; }
-    .back { color: #f97316; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
-    h1 { color: #f97316; margin-bottom: 10px; }
-    .badge { display: inline-block; margin: 5px 5px 15px 0; padding: 6px 12px;
-             background: #e65100; color: #fff; border-radius: 4px; font-size: 0.9rem; }
-    .section { margin: 20px 0; }
-    .section h2 { margin-bottom: 8px; color: #bf360c; }
-    ul { margin-left: 20px; }
-    .btn { display: inline-block; background: #f97316; color: #fff; padding: 14px 28px;
-           border: none; border-radius: 6px; text-decoration: none; font-size: 1rem; font-weight: bold; margin-top: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      padding: 30px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #e65100;
+    }
+    p {
+      margin: 15px 0;
+    }
+    .btn-candidatar {
+      display: block;
+      margin-top: 30px;
+      background: #f97316;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <a href="index.html" class="back">⬅ Voltar</a>
-    <div id="vaga-detalhes">Carregando...</div>
+    <h1 id="titulo"></h1>
+    <p><strong>Empresa:</strong> <span id="empresa"></span></p>
+    <p><strong>Função:</strong> <span id="funcao"></span></p>
+    <p><strong>Local:</strong> <span id="local"></span></p>
+    <p><strong>Área:</strong> <span id="area"></span></p>
+    <p><strong>Descrição:</strong></p>
+    <p id="descricao"></p>
+
+    <a id="btnCandidatar" class="btn-candidatar" target="_blank">Candidatar-se</a>
   </div>
-  
+
   <script>
-    const vagas = [
-      {
-        id: 1,
-        titulo: "Operador de Produção de CO₂",
-        empresa: "White Martins",
-        local: "Araucária, PR",
-        nivel: "Pleno",
-        regime: "CLT",
-        responsabilidades: [
-          "Operar a planta de CO₂ garantindo funcionamento contínuo, seguro e eficiente",
-          "Realizar carregamento e recebimento de carretas com LCO₂ a granel",
-          "Executar análises laboratoriais e emitir certificados de qualidade",
-          "Registrar operações de enchimento/descarregamento",
-          "Cumprir procedimentos de Segurança, Meio Ambiente e Qualidade",
-          "Participar de auditorias internas/externas",
-          "Comunicar-se com fornecedores e apoiar manutenção básica"
-        ],
-        requisitos: [
-          "Ensino médio ou técnico completo",
-          "Experiência em indústria química/petroquímica com automação",
-          "Conhecimentos em Química, Mecânica, Segurança do Trabalho e Meio Ambiente",
-          "Disponibilidade para escala 4x1 (6h diárias, 36h semanais)"
-        ],
-        beneficios: [
-          "Assistência médica",
-          "Assistência odontológica",
-          "PLR",
-          "Previdência privada",
-          "Seguro de vida",
-          "Vale-refeição/alimentação"
-        ],
-        link: "https://trabalheconosco.vagas.com.br/white-martins/oportunidade/operador-de-producao-de-co2-araucaria-pr/2735822"
-      },
-      {
-        id: 2,
-        titulo: "Técnico de Manutenção Geral",
-        empresa: "C&A Brasil",
-        local: "Curitiba, PR",
-        nivel: "Assistente",
-        regime: "CLT (Efetivo)",
-        responsabilidades: [
-          "Realizar manutenções preventivas e corretivas em equipamentos e instalações da loja",
-          "Garantir segurança e bom funcionamento dos equipamentos",
-          "Manter registros precisos de todas as atividades de manutenção"
-        ],
-        requisitos: [
-          "Ensino médio completo",
-          "Experiência em manutenção de varejo",
-          "Conhecimento em orçar e operar manutenções",
-          "Disponibilidade para atuar na região central de Curitiba"
-        ],
-        beneficios: [
-          "Vale Refeição/Alimentação",
-          "Vale Transporte",
-          "PLR",
-          "Desconto em compras",
-          "Day off",
-          "Assistência médica/odontológica",
-          "Férias semestrais"
-        ],
-        link: "https://ceabrasil.pandape.infojobs.com.br/Detail/2193303?ov=6&xtor=AL-366332662&utm_source=linkedin&utm_medium=referral&utm_campaign=feed&utm_term=organic&utm_content=ats"
-      },
-      {
-        id: 3,
-        titulo: "Mecânico Eletricista",
-        empresa: "Grupo Partner",
-        local: "Curitiba, PR",
-        nivel: "Especialista",
-        regime: "CLT (Tempo integral)",
-        responsabilidades: [
-          "Realizar diagnóstico eletrônico em veículos pesados",
-          "Identificar e corrigir falhas elétricas em chicotes e módulos",
-          "Executar manutenção preventiva e corretiva em sistemas elétricos veiculares",
-          "Interpretar esquemas elétricos e usar multímetro",
-          "Preencher ordens de serviço e registros técnicos"
-        ],
-        requisitos: [
-          "Ensino médio completo",
-          "Experiência comprovada como eletricista automotivo na linha pesada",
-          "Domínio em leitura de diagramas elétricos e uso de scanner automotivo",
-          "Habilidade com solda e testes de continuidade"
-        ],
-        beneficios: [
-          "Salário R$2.500–8.000/mês",
-          "Vale-refeição R$23,10/dia",
-          "Vale-Transporte",
-          "Plano de Saúde (Clinipam)",
-          "Plano Dental (Amil)",
-          "Convênio Farmácia",
-          "Adiantamento salarial"
-        ],
-        link: "https://br.linkedin.com/jobs/view/mec%C3%A2nico-eletricista-at-grupo-partner-4228505492"
-      }
-    ];
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+    const vaga = vagas.find(v => v.id == id);
 
-    const id = parseInt(new URLSearchParams(window.location.search).get("vaga"));
-    const vaga = vagas.find(v => v.id === id);
-    const c = document.getElementById("vaga-detalhes");
-
-    if (!vaga) {
-      c.innerHTML = "<p>Vaga não encontrada.</p>";
+    if (vaga) {
+      document.getElementById('titulo').innerText = vaga.titulo;
+      document.getElementById('empresa').innerText = vaga.empresa;
+      document.getElementById('funcao').innerText = vaga.funcao;
+      document.getElementById('local').innerText = vaga.local;
+      document.getElementById('area').innerText = vaga.area;
+      document.getElementById('descricao').innerText = vaga.descricao;
+      document.getElementById('btnCandidatar').href = vaga.link;
     } else {
-      c.innerHTML = `
-        <h1>${vaga.titulo}</h1>
-        <div class="badge">${vaga.empresa}</div>
-        <div class="badge">${vaga.local}</div>
-        <div class="badge">${vaga.nivel}</div>
-        <div class="badge">${vaga.regime}</div>
-
-        <div class="section"><h2>Responsabilidades</h2><ul>${vaga.responsabilidades.map(r=>`<li>${r}</li>`).join("")}</ul></div>
-
-        <div class="section"><h2>Requisitos</h2><ul>${vaga.requisitos.map(r=>`<li>${r}</li>`).join("")}</ul></div>
-
-        <div class="section"><h2>Benefícios</h2><ul>${vaga.beneficios.map(b=>`<li>${b}</li>`).join("")}</ul></div>
-
-        <a href="${vaga.link}" class="btn" target="_blank">Candidatar-se na ${vaga.empresa}</a>
-      `;
+      document.querySelector('.container').innerHTML = '<p>Vaga não encontrada.</p>';
     }
   </script>
 </body>

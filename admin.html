@@ -24,6 +24,12 @@
     <label>Título da Vaga</label>
     <input type="text" id="titulo" required>
 
+    <label>Empresa</label>
+    <input type="text" id="empresa" required>
+
+    <label>Função / Cargo</label>
+    <input type="text" id="funcao" required>
+
     <label>Local</label>
     <input type="text" id="local" required>
 
@@ -37,10 +43,10 @@
       <option>Qualidade</option>
     </select>
 
-    <label>Descrição</label>
+    <label>Descrição Detalhada</label>
     <textarea id="descricao" rows="4" required></textarea>
 
-    <label>Link do LinkedIn (ou detalhes)</label>
+    <label>Link da Vaga (LinkedIn, etc)</label>
     <input type="text" id="link" required>
 
     <button type="submit">Adicionar Vaga</button>
@@ -53,6 +59,8 @@
       const vaga = {
         id: Date.now(),
         titulo: document.getElementById('titulo').value,
+        empresa: document.getElementById('empresa').value,
+        funcao: document.getElementById('funcao').value,
         local: document.getElementById('local').value,
         area: document.getElementById('area').value,
         descricao: document.getElementById('descricao').value,
