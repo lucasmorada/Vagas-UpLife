@@ -2,78 +2,130 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel de Administração - Vagas</title>
+  <title>Administração de Vagas - UpLife</title>
   <style>
-    body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
     h1 { color: #e65100; }
     label { display: block; margin-top: 15px; }
-    input, textarea, select {
-      width: 100%; padding: 10px; margin-top: 5px;
-      border: 1px solid #ccc; border-radius: 4px;
-    }
-    button {
-      margin-top: 20px; padding: 10px 20px;
-      background: #e65100; color: #fff; font-weight: bold;
-      border: none; border-radius: 4px; cursor: pointer;
-    }
+    input, textarea, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; }
+    button { margin-top: 20px; padding: 10px 20px; background: #e65100; color: #fff; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
+    .vaga-item { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); margin-top: 20px; }
+    .vaga-item button { margin-right: 10px; }
   </style>
 </head>
 <body>
-  <h1>Painel de Administração</h1>
-  <form id="formVaga">
-    <label>Título da Vaga</label>
-    <input type="text" id="titulo" required>
 
-    <label>Empresa</label>
-    <input type="text" id="empresa" required>
+<h1>Painel de Administração</h1>
 
-    <label>Função / Cargo</label>
-    <input type="text" id="funcao" required>
+<form id="formVaga">
+  <input type="hidden" id="vagaId" value="">
+  <label>Título da Vaga</label>
+  <input type="text" id="titulo" required>
 
-    <label>Local</label>
-    <input type="text" id="local" required>
+  <label>Empresa</label>
+  <input type="text" id="empresa" required>
 
-    <label>Área</label>
-    <select id="area" required>
-      <option value="">Selecione</option>
-      <option>Produção</option>
-      <option>Manutenção</option>
-      <option>Elétrica</option>
-      <option>Logística</option>
-      <option>Qualidade</option>
-    </select>
+  <label>Função</label>
+  <input type="text" id="funcao" required>
 
-    <label>Descrição Detalhada</label>
-    <textarea id="descricao" rows="4" required></textarea>
+  <label>Local</label>
+  <input type="text" id="local" required>
 
-    <label>Link da Vaga (LinkedIn, etc)</label>
-    <input type="text" id="link" required>
+  <label>Área</label>
+  <select id="area" required>
+    <option value="">Selecione</option>
+    <option>Produção</option>
+    <option>Manutenção</option>
+    <option>Elétrica</option>
+    <option>Logística</option>
+    <option>Qualidade</option>
+  </select>
 
-    <button type="submit">Adicionar Vaga</button>
-  </form>
+  <label>Descrição</label>
+  <textarea id="descricao" rows="4" required></textarea>
 
-  <script>
-    document.getElementById('formVaga').addEventListener('submit', function(e) {
-      e.preventDefault();
+  <label>Link para candidatura (LinkedIn ou site)</label>
+  <input type="url" id="link" required>
 
-      const vaga = {
-        id: Date.now(),
-        titulo: document.getElementById('titulo').value,
-        empresa: document.getElementById('empresa').value,
-        funcao: document.getElementById('funcao').value,
-        local: document.getElementById('local').value,
-        area: document.getElementById('area').value,
-        descricao: document.getElementById('descricao').value,
-        link: document.getElementById('link').value
-      };
+  <button type="submit">Salvar Vaga</button>
+</form>
 
-      const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
-      vagas.push(vaga);
-      localStorage.setItem('vagas', JSON.stringify(vagas));
+<h2>Vagas Cadastradas</h2>
+<div id="listaVagas"></div>
 
-      alert('Vaga adicionada com sucesso!');
-      this.reset();
+<script>
+  const form = document.getElementById('formVaga');
+  const lista = document.getElementById('listaVagas');
+
+  function carregarVagas() {
+    const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+    lista.innerHTML = '';
+    vagas.forEach(vaga => {
+      const div = document.createElement('div');
+      div.className = 'vaga-item';
+      div.innerHTML = `
+        <strong>${vaga.titulo}</strong> - ${vaga.local} <br>
+        <button onclick="editar(${vaga.id})">Editar</button>
+        <button onclick="excluir(${vaga.id})">Excluir</button>
+      `;
+      lista.appendChild(div);
     });
-  </script>
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+    const id = document.getElementById('vagaId').value || Date.now();
+
+    const novaVaga = {
+      id: parseInt(id),
+      titulo: document.getElementById('titulo').value,
+      empresa: document.getElementById('empresa').value,
+      funcao: document.getElementById('funcao').value,
+      local: document.getElementById('local').value,
+      area: document.getElementById('area').value,
+      descricao: document.getElementById('descricao').value,
+      link: document.getElementById('link').value
+    };
+
+    const index = vagas.findIndex(v => v.id == id);
+    if (index > -1) {
+      vagas[index] = novaVaga;
+    } else {
+      vagas.push(novaVaga);
+    }
+
+    localStorage.setItem('vagas', JSON.stringify(vagas));
+    form.reset();
+    carregarVagas();
+  });
+
+  function editar(id) {
+    const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+    const vaga = vagas.find(v => v.id == id);
+    if (vaga) {
+      document.getElementById('vagaId').value = vaga.id;
+      document.getElementById('titulo').value = vaga.titulo;
+      document.getElementById('empresa').value = vaga.empresa;
+      document.getElementById('funcao').value = vaga.funcao;
+      document.getElementById('local').value = vaga.local;
+      document.getElementById('area').value = vaga.area;
+      document.getElementById('descricao').value = vaga.descricao;
+      document.getElementById('link').value = vaga.link;
+    }
+  }
+
+  function excluir(id) {
+    if (confirm('Tem certeza que deseja excluir esta vaga?')) {
+      let vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+      vagas = vagas.filter(v => v.id != id);
+      localStorage.setItem('vagas', JSON.stringify(vagas));
+      carregarVagas();
+    }
+  }
+
+  carregarVagas();
+</script>
+
 </body>
 </html>

@@ -1,73 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Detalhes da Vaga</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes da Vaga – UpLife Educacional</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      padding: 30px;
-    }
-    .container {
-      max-width: 700px;
-      margin: auto;
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #e65100;
-    }
-    p {
-      margin: 15px 0;
-    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; margin: 0; color: #333; }
+    header { background: #e65100; color: #fff; padding: 20px; text-align: center; }
+    .container { max-width: 800px; margin: 30px auto; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { color: #e65100; }
+    p { margin: 10px 0; }
     .btn-candidatar {
-      display: block;
-      margin-top: 30px;
-      background: #f97316;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px;
+      display: inline-block; padding: 12px 30px; margin-top: 20px;
+      background: #f97316; color: #fff; border-radius: 6px;
+      text-decoration: none; font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 id="titulo"></h1>
-    <p><strong>Empresa:</strong> <span id="empresa"></span></p>
-    <p><strong>Função:</strong> <span id="funcao"></span></p>
-    <p><strong>Local:</strong> <span id="local"></span></p>
-    <p><strong>Área:</strong> <span id="area"></span></p>
-    <p><strong>Descrição:</strong></p>
-    <p id="descricao"></p>
 
-    <a id="btnCandidatar" class="btn-candidatar" target="_blank">Candidatar-se</a>
-  </div>
+<header>
+  <h1>Detalhes da Vaga</h1>
+</header>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
-    const vaga = vagas.find(v => v.id == id);
+<div class="container" id="vagaDetalhe"></div>
 
-    if (vaga) {
-      document.getElementById('titulo').innerText = vaga.titulo;
-      document.getElementById('empresa').innerText = vaga.empresa;
-      document.getElementById('funcao').innerText = vaga.funcao;
-      document.getElementById('local').innerText = vaga.local;
-      document.getElementById('area').innerText = vaga.area;
-      document.getElementById('descricao').innerText = vaga.descricao;
-      document.getElementById('btnCandidatar').href = vaga.link;
-    } else {
-      document.querySelector('.container').innerHTML = '<p>Vaga não encontrada.</p>';
-    }
-  </script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+  const vaga = vagas.find(v => v.id == id);
+
+  const container = document.getElementById('vagaDetalhe');
+  if (!vaga) {
+    container.innerHTML = "<p>Vaga não encontrada.</p>";
+  } else {
+    container.innerHTML = `
+      <h2>${vaga.titulo}</h2>
+      <p><strong>Empresa:</strong> ${vaga.empresa || '-'}</p>
+      <p><strong>Função:</strong> ${vaga.funcao || '-'}</p>
+      <p><strong>Local:</strong> ${vaga.local}</p>
+      <p><strong>Área:</strong> ${vaga.area}</p>
+      <p><strong>Descrição:</strong><br>${vaga.descricao}</p>
+      <a href="${vaga.link}" target="_blank" class="btn-candidatar">Candidatar-se</a>
+    `;
+  }
+</script>
+
 </body>
 </html>
