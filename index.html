@@ -83,6 +83,26 @@
     font-size: 3rem;
     color: var(--orange);
     margin-bottom: 12px;
+    @keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  }
+
+  .intro h1 {
+    font-size: 3rem;
+    color: var(--orange);
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+  }
+
+  .intro h1:hover {
+    animation: bounce 0.5s ease;
+  }
+  
   }
 
   .intro .lead {
