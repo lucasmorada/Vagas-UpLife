@@ -68,8 +68,8 @@
     vagasSalvas.push(novaVaga);
     localStorage.setItem("vagasPersonalizadas", JSON.stringify(vagasSalvas));
 
-    alert("Obrigado! Vamos procurar uma vaga que se encaixe no seu perfil e entraremos em contato em breve.");
-    e.target.reset();
+    window.location.href = "confirmacao.html";
+
   }
 </script>
 

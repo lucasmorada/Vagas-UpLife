@@ -61,19 +61,19 @@
   const lista = document.getElementById('listaVagas');
 
   function carregarVagas() {
-    const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
-    lista.innerHTML = '';
-    vagas.forEach(vaga => {
-      const div = document.createElement('div');
-      div.className = 'vaga-item';
-      div.innerHTML = `
-        <strong>${vaga.titulo}</strong> - ${vaga.local} <br>
-        <button onclick="editar(${vaga.id})">Editar</button>
-        <button onclick="excluir(${vaga.id})">Excluir</button>
-      `;
-      lista.appendChild(div);
-    });
-  }
+  const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+  lista.innerHTML = '';
+  vagas.forEach(vaga => {
+    const div = document.createElement('div');
+    div.className = "vaga-item";
+    div.innerHTML = `
+  <strong>${vaga.titulo}</strong> - ${vaga.local} <br>
+  <button onclick="editar(${vaga.id})">Editar</button>
+  <button onclick="excluir(${vaga.id})">Excluir</button>
+`;
+    lista.appendChild(div);
+  });
+}
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -140,11 +140,18 @@ function carregarVagasPersonalizadas() {
     vagas.forEach((vaga, i) => {
       const div = document.createElement("div");
       div.className = "vaga-item";
+      div.style.borderLeft = "5px solid #ff9800";
+      div.style.backgroundColor = "#fffaf3";
+      div.style.marginTop = "20px";
+      div.style.padding = "15px";
+      div.style.borderRadius = "8px";
+      div.style.boxShadow = "0 0 8px rgba(0,0,0,0.05)";
       div.innerHTML = `
-        <strong>${vaga.nome}</strong> (${vaga.telefone})<br>
-        <strong>Área:</strong> ${vaga.area} <br>
-        <strong>Local:</strong> ${vaga.local} <br>
-        <small>Enviado em: ${vaga.data}</small>
+        <h3 style="margin: 0 0 10px 0; color: #e65100;">${vaga.nome}</h3>
+        <p><strong>📱 Telefone:</strong> ${vaga.telefone}</p>
+        <p><strong>📍 Local:</strong> ${vaga.local}</p>
+        <p><strong>📂 Área de Interesse:</strong> ${vaga.area}</p>
+        <p style="font-size: 12px; color: gray;"><em>🕒 Enviado em: ${vaga.data}</em></p>
       `;
       container.appendChild(div);
     });
