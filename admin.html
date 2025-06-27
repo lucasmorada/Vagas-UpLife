@@ -53,6 +53,9 @@
 <h2>Vagas Cadastradas</h2>
 <div id="listaVagas"></div>
 
+<h2>Solicitações de Vagas Personalizadas</h2>
+<div id="vagasPersonalizadas"></div>
+
 <script>
   const form = document.getElementById('formVaga');
   const lista = document.getElementById('listaVagas');
@@ -125,6 +128,32 @@
   }
 
   carregarVagas();
+
+function carregarVagasPersonalizadas() {
+  const container = document.getElementById('vagasPersonalizadas');
+  const vagas = JSON.parse(localStorage.getItem('vagasPersonalizadas')) || [];
+
+  if (vagas.length === 0) {
+    container.innerHTML = "<p>Nenhuma solicitação personalizada recebida.</p>";
+  } else {
+    container.innerHTML = '';
+    vagas.forEach((vaga, i) => {
+      const div = document.createElement("div");
+      div.className = "vaga-item";
+      div.innerHTML = `
+        <strong>${vaga.nome}</strong> (${vaga.telefone})<br>
+        <strong>Área:</strong> ${vaga.area} <br>
+        <strong>Local:</strong> ${vaga.local} <br>
+        <small>Enviado em: ${vaga.data}</small>
+      `;
+      container.appendChild(div);
+    });
+  }
+}
+
+// Chama também ao carregar a página
+carregarVagasPersonalizadas();
+
 </script>
 
 </body>

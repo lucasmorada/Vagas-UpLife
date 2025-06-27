@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Solicitação de Vaga Personalizada – UpLife</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+    h1 { color: #e65100; }
+    label { display: block; margin-top: 15px; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #e65100;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #cf4c00;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Solicite uma Vaga Personalizada</h1>
+<p>
+  Não encontrou a vaga ideal? Preencha os campos abaixo com suas preferências e informações de contato.
+  Nossa equipe buscará oportunidades que se encaixem no seu perfil e retornará o mais breve possível.
+</p>
+
+<form onsubmit="enviarFormulario(event)">
+  <label>Área de Interesse</label>
+  <input type="text" id="area" required placeholder="Ex: Logística, Produção, Administrativo..." />
+
+  <label>Local de Interesse</label>
+  <input type="text" id="local" required placeholder="Ex: Araucária, Curitiba..." />
+
+  <label>Seu Nome</label>
+  <input type="text" id="nome" required />
+
+  <label>Telefone para Contato (WhatsApp)</label>
+  <input type="tel" id="telefone" required placeholder="(xx) xxxxx-xxxx" />
+
+  <button type="submit">Enviar Solicitação</button>
+</form>
+
+<script>
+  function enviarFormulario(e) {
+    e.preventDefault();
+
+    const area = document.getElementById('area').value.trim();
+    const local = document.getElementById('local').value.trim();
+    const nome = document.getElementById('nome').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+
+    const novaVaga = {
+      area,
+      local,
+      nome,
+      telefone,
+      data: new Date().toLocaleString()
+    };
+
+    let vagasSalvas = JSON.parse(localStorage.getItem("vagasPersonalizadas") || "[]");
+    vagasSalvas.push(novaVaga);
+    localStorage.setItem("vagasPersonalizadas", JSON.stringify(vagasSalvas));
+
+    alert("Obrigado! Vamos procurar uma vaga que se encaixe no seu perfil e entraremos em contato em breve.");
+    e.target.reset();
+  }
+</script>
+
+</body>
+</html>
