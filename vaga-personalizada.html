@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Solicitação de Vaga Personalizada – UpLife</title>
   <style>
-    /* Reset básico */
     * {
       box-sizing: border-box;
     }
@@ -130,7 +129,15 @@
       <input type="text" id="nome" name="nome" required placeholder="Seu nome completo" />
 
       <label for="telefone">Telefone para Contato (WhatsApp)</label>
-      <input type="tel" id="telefone" name="telefone" required placeholder="(xx) xxxxx-xxxx" pattern="^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$" />
+      <input 
+        type="tel" 
+        id="telefone" 
+        name="telefone" 
+        required 
+        placeholder="(41) 91234-5678"
+        pattern="\(?\d{2}\)?\s?\d{4,5}-?\d{4}"
+        title="Digite um telefone válido no formato (41) 91234-5678."
+      />
 
       <button type="submit">Enviar Solicitação</button>
     </form>
@@ -140,23 +147,28 @@
     function enviarFormulario(e) {
       e.preventDefault();
 
-      const area = document.getElementById('area').value.trim();
-      const local = document.getElementById('local').value.trim();
-      const nome = document.getElementById('nome').value.trim();
-      const telefone = document.getElementById('telefone').value.trim();
+      const area = document.getElementById('area');
+      const local = document.getElementById('local');
+      const nome = document.getElementById('nome');
+      const telefone = document.getElementById('telefone');
 
-      // Validação simples telefone (pode aprimorar)
+      // Limpa qualquer erro anterior
+      telefone.setCustomValidity('');
+
       const telRegex = /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/;
-      if (!telRegex.test(telefone)) {
-        alert('Por favor, insira um telefone válido no formato (xx) xxxxx-xxxx.');
+
+      if (!telRegex.test(telefone.value.trim())) {
+        telefone.setCustomValidity('Digite um telefone válido no formato (41) 91234-5678.');
+        telefone.reportValidity();
+        telefone.focus();
         return;
       }
 
       const novaVaga = {
-        area,
-        local,
-        nome,
-        telefone,
+        area: area.value.trim(),
+        local: local.value.trim(),
+        nome: nome.value.trim(),
+        telefone: telefone.value.trim(),
         data: new Date().toLocaleString()
       };
 
