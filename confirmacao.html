@@ -48,39 +48,44 @@
       background: #cf4c00;
     }
 
-   .botao-voltar {
+    .botao-voltar {
       position: fixed;
       top: 20px;
       left: 20px;
       background-color: #ffffff;
-      color: rgb(248, 96, 8);
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       z-index: 1000;
-      line-height: 1;
+      transition: transform 0.2s ease;
       padding: 0;
     }
 
-
     .botao-voltar:hover {
       background-color: #f0bf91;
+      transform: scale(1.05);
     }
-    
+
+    .botao-voltar svg {
+      width: 22px;
+      height: 22px;
+      stroke: #e65100;
+    }
   </style>
 </head>
 <body>
- 
-  <a href="index.html" class="botao-voltar">&#8592;</a>
+
+  <a href="index.html" class="botao-voltar" title="Voltar ao Início">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  </a>
 
   <div class="card">
     <h1>Solicitação Enviada!</h1>
