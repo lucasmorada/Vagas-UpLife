@@ -14,20 +14,24 @@
       height: 100vh;
       text-align: center;
     }
+
     .card {
       background: white;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
+
     h1 {
       color: #e65100;
     }
+
     p {
       margin: 20px 0;
       font-size: 18px;
       color: #333;
     }
+
     a {
       display: inline-block;
       padding: 12px 24px;
@@ -38,12 +42,40 @@
       text-decoration: none;
       transition: background 0.3s;
     }
+
     a:hover {
       background: #cf4c00;
+    }
+
+    .botao-voltar {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #f78c2b;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    .botao-voltar:hover {
+      background-color: #e07b1f;
     }
   </style>
 </head>
 <body>
+
+  <a href="index.html" class="botao-voltar">&#8592;</a>
+
   <div class="card">
     <h1>Solicitação Enviada!</h1>
     <p>
@@ -52,5 +84,6 @@
     </p>
     <a href="index.html">Voltar para o início</a>
   </div>
+
 </body>
 </html>
