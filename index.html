@@ -150,7 +150,7 @@
   }
 
   .filters button {
-    background: #cba44c;
+    background: #fa8705;
     color: white;
     padding: 12px 24px;
     font-weight: bold;
@@ -161,7 +161,7 @@
   }
 
   .filters button:hover {
-    background: #b88f35;
+    background: #e39e38;
   }
 
   .jobs {
@@ -252,6 +252,63 @@
   }
   </style>
 </head>
+
+<style>
+  .whatsapp-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: Arial, sans-serif;
+  }
+
+  .whatsapp-link {
+    display: flex;
+    align-items: center;
+    background-color: #25d366;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    animation: vibrar 1.2s infinite;
+    transition: background 0.3s;
+  }
+
+  .whatsapp-link:hover {
+    background-color: #1ebc57;
+  }
+
+  .whatsapp-link img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+
+  @keyframes vibrar {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(15deg); }
+    40% { transform: rotate(-15deg); }
+    60% { transform: rotate(10deg); }
+    80% { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
+  }
+</style>
+
+<div class="whatsapp-container">
+  <a href="https://wa.me/554196924779" target="_blank" class="whatsapp-link" title="Fale com o Suporte">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+    Suporte
+  </a>
+  <a href="https://wa.me/554198505518" target="_blank" class="whatsapp-link" title="Fale com o Coordenador">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+    Coordenação
+  </a>
+</div>
+
 <body>
 
   <header>
