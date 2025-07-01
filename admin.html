@@ -27,10 +27,6 @@
 
 <h1>Painel de Administração</h1>
 
-<!-- CÓDIGO JÁ INCLUINDO TODAS AS ALTERAÇÕES -->
-<!-- ... mantive o começo igual ... -->
-<!-- TROCAR do <form id="formVaga"> pra baixo -->
-
 <form id="formVaga">
   <input type="hidden" id="vagaId" value="">
   <label>Título da Vaga</label>
@@ -164,7 +160,6 @@
       document.getElementById('descricao').value = vaga.descricao;
       document.getElementById('link').value = vaga.link;
 
-      // Curso
       if (vaga.curso) {
         document.getElementById('cursoNome').value = vaga.curso.nome || '';
         document.getElementById('cursoImagem').value = vaga.curso.imagem || '';
@@ -185,7 +180,6 @@
 
   carregarVagas();
 
-  // SOLICITAÇÕES PERSONALIZADAS -------------------------
   function carregarVagasPersonalizadas() {
     const container = document.getElementById('vagasPersonalizadas');
     const vagas = JSON.parse(localStorage.getItem('vagasPersonalizadas')) || [];

@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirmação – UpLife</title>
   <style>
     body {
@@ -14,6 +15,7 @@
       justify-content: center;
       height: 100vh;
       text-align: center;
+      margin: 0;
     }
 
     .card {
@@ -21,6 +23,7 @@
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      max-width: 500px;
     }
 
     h1 {
@@ -33,7 +36,7 @@
       color: #333;
     }
 
-    a {
+    a.botao-inicio {
       display: inline-block;
       padding: 12px 24px;
       background: #e65100;
@@ -44,10 +47,54 @@
       transition: background 0.3s;
     }
 
-    a:hover {
+    a.botao-inicio:hover {
       background: #cf4c00;
     }
 
+  
+    .botao-voltar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: none;
+      padding: 0;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .botao-voltar svg {
+      width: 32px;
+      height: 32px;
+      stroke: white;
+      transition: stroke 0.3s;
+    }
+
+    .botao-voltar:hover svg {
+      stroke: #ffe5d0;
+    }
+
+    .botao-voltar::after {
+      content: attr(title);
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(-5px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    .botao-voltar:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -64,7 +111,7 @@
       Obrigado por confiar na UpLife.<br />
       Vamos procurar uma vaga que melhor se encaixe no seu perfil e entraremos em contato em breve.
     </p>
-    <a href="index.html">Voltar para o início</a>
+    <a href="index.html" class="botao-inicio">Voltar para o início</a>
   </div>
 
 </body>
