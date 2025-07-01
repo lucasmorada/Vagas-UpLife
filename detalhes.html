@@ -8,12 +8,50 @@
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; margin: 0; color: #333; }
     header { background: #e65100; color: #fff; padding: 20px; text-align: center; }
     .container { max-width: 800px; margin: 30px auto; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h1 { color: #e65100; }
+    h1, h2 { color: #e65100; }
     p { margin: 10px 0; }
     .btn-candidatar {
       display: inline-block; padding: 12px 30px; margin-top: 20px;
       background: #f97316; color: #fff; border-radius: 6px;
       text-decoration: none; font-weight: bold;
+    }
+
+    /* Cursos */
+    .curso-recomendado {
+      margin-top: 40px;
+    }
+
+    .curso {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    .curso img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .curso a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .curso h3 {
+      margin-top: 10px;
+      color: #e65100;
+    }
+
+    .curso p {
+      font-size: 14px;
+      color: #444;
     }
   </style>
 </head>
@@ -32,6 +70,7 @@
   const vaga = vagas.find(v => v.id == id);
 
   const container = document.getElementById('vagaDetalhe');
+
   if (!vaga) {
     container.innerHTML = "<p>Vaga não encontrada.</p>";
   } else {
@@ -44,6 +83,30 @@
       <p><strong>Descrição:</strong><br>${vaga.descricao}</p>
       <a href="${vaga.link}" target="_blank" class="btn-candidatar">Candidatar-se</a>
     `;
+
+    // Adiciona Cursos Recomendados
+    const cursos = JSON.parse(localStorage.getItem('cursos')) || [];
+
+    if (cursos.length > 0) {
+      const cursosSection = document.createElement('div');
+      cursosSection.className = 'curso-recomendado';
+      cursosSection.innerHTML = `<h2>Cursos Recomendados</h2>`;
+
+      cursos.forEach(curso => {
+        const cursoDiv = document.createElement('div');
+        cursoDiv.className = 'curso';
+        cursoDiv.innerHTML = `
+          <a href="${curso.link}" target="_blank">
+            <img src="${curso.imagem}" alt="Curso">
+            <h3>${curso.nome}</h3>
+            <p>${curso.descricao}</p>
+          </a>
+        `;
+        cursosSection.appendChild(cursoDiv);
+      });
+
+      container.appendChild(cursosSection);
+    }
   }
 </script>
 

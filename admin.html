@@ -5,18 +5,29 @@
   <title>Administração de Vagas - UpLife</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
-    h1 { color: #e65100; }
+    h1, h2 { color: #e65100; }
     label { display: block; margin-top: 15px; }
     input, textarea, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; }
     button { margin-top: 20px; padding: 10px 20px; background: #e65100; color: #fff; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
-    .vaga-item { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); margin-top: 20px; }
-    .vaga-item button { margin-right: 10px; }
+    .vaga-item, .curso-item {
+      background: #fff; padding: 15px; border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1); margin-top: 20px;
+    }
+    .vaga-item button, .curso-item button { margin-right: 10px; }
+
+    img.curso-imagem {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
 
 <h1>Painel de Administração</h1>
 
+<!-- Formulário de Vagas -->
 <form id="formVaga">
   <input type="hidden" id="vagaId" value="">
   <label>Título da Vaga</label>
@@ -56,24 +67,46 @@
 <h2>Solicitações de Vagas Personalizadas</h2>
 <div id="vagasPersonalizadas"></div>
 
+<!-- NOVA SEÇÃO DE CURSOS -->
+<h2>Cadastro de Curso</h2>
+<form id="formCurso">
+  <label>Nome do Curso</label>
+  <input type="text" id="cursoNome" required>
+
+  <label>URL da Imagem do Curso</label>
+  <input type="url" id="cursoImagem" required>
+
+  <label>Descrição do Curso</label>
+  <textarea id="cursoDescricao" rows="3" required></textarea>
+
+  <label>Link para o Curso</label>
+  <input type="url" id="cursoLink" required>
+
+  <button type="submit">Salvar Curso</button>
+</form>
+
+<h2>Cursos Cadastrados</h2>
+<div id="listaCursos"></div>
+
 <script>
+  // VAGAS -------------------------------
   const form = document.getElementById('formVaga');
   const lista = document.getElementById('listaVagas');
 
   function carregarVagas() {
-  const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
-  lista.innerHTML = '';
-  vagas.forEach(vaga => {
-    const div = document.createElement('div');
-    div.className = "vaga-item";
-    div.innerHTML = `
-  <strong>${vaga.titulo}</strong> - ${vaga.local} <br>
-  <button onclick="editar(${vaga.id})">Editar</button>
-  <button onclick="excluir(${vaga.id})">Excluir</button>
-`;
-    lista.appendChild(div);
-  });
-}
+    const vagas = JSON.parse(localStorage.getItem('vagas')) || [];
+    lista.innerHTML = '';
+    vagas.forEach(vaga => {
+      const div = document.createElement('div');
+      div.className = "vaga-item";
+      div.innerHTML = `
+        <strong>${vaga.titulo}</strong> - ${vaga.local} <br>
+        <button onclick="editar(${vaga.id})">Editar</button>
+        <button onclick="excluir(${vaga.id})">Excluir</button>
+      `;
+      lista.appendChild(div);
+    });
+  }
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -129,38 +162,85 @@
 
   carregarVagas();
 
-function carregarVagasPersonalizadas() {
-  const container = document.getElementById('vagasPersonalizadas');
-  const vagas = JSON.parse(localStorage.getItem('vagasPersonalizadas')) || [];
+  // VAGAS PERSONALIZADAS -------------------------------
+  function carregarVagasPersonalizadas() {
+    const container = document.getElementById('vagasPersonalizadas');
+    const vagas = JSON.parse(localStorage.getItem('vagasPersonalizadas')) || [];
 
-  if (vagas.length === 0) {
-    container.innerHTML = "<p>Nenhuma solicitação personalizada recebida.</p>";
-  } else {
-    container.innerHTML = '';
-    vagas.forEach((vaga, i) => {
-      const div = document.createElement("div");
-      div.className = "vaga-item";
-      div.style.borderLeft = "5px solid #ff9800";
-      div.style.backgroundColor = "#fffaf3";
-      div.style.marginTop = "20px";
-      div.style.padding = "15px";
-      div.style.borderRadius = "8px";
-      div.style.boxShadow = "0 0 8px rgba(0,0,0,0.05)";
+    if (vagas.length === 0) {
+      container.innerHTML = "<p>Nenhuma solicitação personalizada recebida.</p>";
+    } else {
+      container.innerHTML = '';
+      vagas.forEach(vaga => {
+        const div = document.createElement("div");
+        div.className = "vaga-item";
+        div.style.borderLeft = "5px solid #ff9800";
+        div.style.backgroundColor = "#fffaf3";
+        div.style.marginTop = "20px";
+        div.style.padding = "15px";
+        div.style.borderRadius = "8px";
+        div.style.boxShadow = "0 0 8px rgba(0,0,0,0.05)";
+        div.innerHTML = `
+          <h3 style="margin: 0 0 10px 0; color: #e65100;">${vaga.nome}</h3>
+          <p><strong>📱 Telefone:</strong> ${vaga.telefone}</p>
+          <p><strong>📍 Local:</strong> ${vaga.local}</p>
+          <p><strong>📂 Área de Interesse:</strong> ${vaga.area}</p>
+          <p style="font-size: 12px; color: gray;"><em>🕒 Enviado em: ${vaga.data}</em></p>
+        `;
+        container.appendChild(div);
+      });
+    }
+  }
+
+  carregarVagasPersonalizadas();
+
+  // CURSOS -------------------------------
+  const formCurso = document.getElementById('formCurso');
+  const listaCursos = document.getElementById('listaCursos');
+
+  function carregarCursos() {
+    const cursos = JSON.parse(localStorage.getItem('cursos')) || [];
+    listaCursos.innerHTML = '';
+
+    cursos.forEach((curso, index) => {
+      const div = document.createElement('div');
+      div.className = "curso-item";
       div.innerHTML = `
-        <h3 style="margin: 0 0 10px 0; color: #e65100;">${vaga.nome}</h3>
-        <p><strong>📱 Telefone:</strong> ${vaga.telefone}</p>
-        <p><strong>📍 Local:</strong> ${vaga.local}</p>
-        <p><strong>📂 Área de Interesse:</strong> ${vaga.area}</p>
-        <p style="font-size: 12px; color: gray;"><em>🕒 Enviado em: ${vaga.data}</em></p>
+        <img src="${curso.imagem}" class="curso-imagem" alt="Curso">
+        <h3>${curso.nome}</h3>
+        <p>${curso.descricao}</p>
+        <a href="${curso.link}" target="_blank">${curso.link}</a><br>
+        <button onclick="excluirCurso(${index})">Excluir</button>
       `;
-      container.appendChild(div);
+      listaCursos.appendChild(div);
     });
   }
-}
 
-// Chama também ao carregar a página
-carregarVagasPersonalizadas();
+  formCurso.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const cursos = JSON.parse(localStorage.getItem('cursos')) || [];
 
+    const novoCurso = {
+      nome: document.getElementById('cursoNome').value,
+      imagem: document.getElementById('cursoImagem').value,
+      descricao: document.getElementById('cursoDescricao').value,
+      link: document.getElementById('cursoLink').value
+    };
+
+    cursos.push(novoCurso);
+    localStorage.setItem('cursos', JSON.stringify(cursos));
+    formCurso.reset();
+    carregarCursos();
+  });
+
+  function excluirCurso(index) {
+    let cursos = JSON.parse(localStorage.getItem('cursos')) || [];
+    cursos.splice(index, 1);
+    localStorage.setItem('cursos', JSON.stringify(cursos));
+    carregarCursos();
+  }
+
+  carregarCursos();
 </script>
 
 </body>
