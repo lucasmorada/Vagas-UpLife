@@ -84,31 +84,27 @@
       <a href="${vaga.link}" target="_blank" class="btn-candidatar">Candidatar-se</a>
     `;
 
-    // Adiciona Cursos Recomendados
-    const cursos = JSON.parse(localStorage.getItem('cursos')) || [];
+    // Adiciona curso relacionado à vaga
+    if (vaga.curso && vaga.curso.nome) {
+      const curso = vaga.curso;
 
-    if (cursos.length > 0) {
-      const cursosSection = document.createElement('div');
-      cursosSection.className = 'curso-recomendado';
-      cursosSection.innerHTML = `<h2>Qualifique-se</h2>`;
+      const cursoSection = document.createElement('div');
+      cursoSection.className = 'curso-recomendado';
+      cursoSection.innerHTML = `<h2>Curso Recomendado</h2>`;
 
-      cursos.forEach(curso => {
-        const cursoDiv = document.createElement('div');
-        cursoDiv.className = 'curso';
-        cursoDiv.innerHTML = `
-          <a href="${curso.link}" target="_blank">
-            <img src="${curso.imagem}" alt="Curso">
-            <h3>${curso.nome}</h3>
-            <p>${curso.descricao}</p>
-          </a>
-        `;
-        cursosSection.appendChild(cursoDiv);
-      });
+      const cursoDiv = document.createElement('div');
+      cursoDiv.className = 'curso';
+      cursoDiv.innerHTML = `
+        <a href="${curso.link}" target="_blank">
+          <img src="${curso.imagem}" alt="Curso">
+          <h3>${curso.nome}</h3>
+          <p>${curso.descricao}</p>
+        </a>
+      `;
 
-      container.appendChild(cursosSection);
+      cursoSection.appendChild(cursoDiv);
+      container.appendChild(cursoSection);
     }
   }
 </script>
 
-</body>
-</html>
