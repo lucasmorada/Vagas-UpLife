@@ -27,7 +27,10 @@
 
 <h1>Painel de Administração</h1>
 
-<!-- Formulário de Vagas -->
+<!-- CÓDIGO JÁ INCLUINDO TODAS AS ALTERAÇÕES -->
+<!-- ... mantive o começo igual ... -->
+<!-- TROCAR do <form id="formVaga"> pra baixo -->
+
 <form id="formVaga">
   <input type="hidden" id="vagaId" value="">
   <label>Título da Vaga</label>
@@ -58,7 +61,23 @@
   <label>Link para candidatura (LinkedIn ou site)</label>
   <input type="url" id="link" required>
 
-  <button type="submit">Salvar Vaga</button>
+  <hr style="margin: 30px 0;">
+
+  <h3>Curso relacionado à vaga (opcional)</h3>
+
+  <label>Nome do Curso</label>
+  <input type="text" id="cursoNome">
+
+  <label>URL da Imagem do Curso</label>
+  <input type="url" id="cursoImagem">
+
+  <label>Descrição do Curso</label>
+  <textarea id="cursoDescricao" rows="3"></textarea>
+
+  <label>Link para o Curso</label>
+  <input type="url" id="cursoLink">
+
+  <button type="submit">Salvar Vaga (com Curso)</button>
 </form>
 
 <h2>Vagas Cadastradas</h2>
@@ -67,29 +86,7 @@
 <h2>Solicitações de Vagas Personalizadas</h2>
 <div id="vagasPersonalizadas"></div>
 
-<!-- NOVA SEÇÃO DE CURSOS -->
-<h2>Cadastro de Curso</h2>
-<form id="formCurso">
-  <label>Nome do Curso</label>
-  <input type="text" id="cursoNome" required>
-
-  <label>URL da Imagem do Curso</label>
-  <input type="url" id="cursoImagem" required>
-
-  <label>Descrição do Curso</label>
-  <textarea id="cursoDescricao" rows="3" required></textarea>
-
-  <label>Link para o Curso</label>
-  <input type="url" id="cursoLink" required>
-
-  <button type="submit">Salvar Curso</button>
-</form>
-
-<h2>Cursos Cadastrados</h2>
-<div id="listaCursos"></div>
-
 <script>
-  // VAGAS -------------------------------
   const form = document.getElementById('formVaga');
   const lista = document.getElementById('listaVagas');
 
@@ -99,10 +96,22 @@
     vagas.forEach(vaga => {
       const div = document.createElement('div');
       div.className = "vaga-item";
+
+      let cursoHTML = '';
+      if (vaga.curso && vaga.curso.nome) {
+        cursoHTML = `
+          <hr><strong>📘 Curso:</strong> ${vaga.curso.nome}<br>
+          <img src="${vaga.curso.imagem}" class="curso-imagem" alt="Imagem do curso">
+          <p>${vaga.curso.descricao}</p>
+          <a href="${vaga.curso.link}" target="_blank">${vaga.curso.link}</a>
+        `;
+      }
+
       div.innerHTML = `
-        <strong>${vaga.titulo}</strong> - ${vaga.local} <br>
+        <strong>${vaga.titulo}</strong> - ${vaga.local}<br>
         <button onclick="editar(${vaga.id})">Editar</button>
         <button onclick="excluir(${vaga.id})">Excluir</button>
+        ${cursoHTML}
       `;
       lista.appendChild(div);
     });
@@ -121,7 +130,13 @@
       local: document.getElementById('local').value,
       area: document.getElementById('area').value,
       descricao: document.getElementById('descricao').value,
-      link: document.getElementById('link').value
+      link: document.getElementById('link').value,
+      curso: {
+        nome: document.getElementById('cursoNome').value,
+        imagem: document.getElementById('cursoImagem').value,
+        descricao: document.getElementById('cursoDescricao').value,
+        link: document.getElementById('cursoLink').value
+      }
     };
 
     const index = vagas.findIndex(v => v.id == id);
@@ -148,6 +163,14 @@
       document.getElementById('area').value = vaga.area;
       document.getElementById('descricao').value = vaga.descricao;
       document.getElementById('link').value = vaga.link;
+
+      // Curso
+      if (vaga.curso) {
+        document.getElementById('cursoNome').value = vaga.curso.nome || '';
+        document.getElementById('cursoImagem').value = vaga.curso.imagem || '';
+        document.getElementById('cursoDescricao').value = vaga.curso.descricao || '';
+        document.getElementById('cursoLink').value = vaga.curso.link || '';
+      }
     }
   }
 
@@ -162,7 +185,7 @@
 
   carregarVagas();
 
-  // VAGAS PERSONALIZADAS -------------------------------
+  // SOLICITAÇÕES PERSONALIZADAS -------------------------
   function carregarVagasPersonalizadas() {
     const container = document.getElementById('vagasPersonalizadas');
     const vagas = JSON.parse(localStorage.getItem('vagasPersonalizadas')) || [];
@@ -171,7 +194,7 @@
       container.innerHTML = "<p>Nenhuma solicitação personalizada recebida.</p>";
     } else {
       container.innerHTML = '';
-      vagas.forEach(vaga => {
+      vagas.forEach((vaga, index) => {
         const div = document.createElement("div");
         div.className = "vaga-item";
         div.style.borderLeft = "5px solid #ff9800";
@@ -186,62 +209,22 @@
           <p><strong>📍 Local:</strong> ${vaga.local}</p>
           <p><strong>📂 Área de Interesse:</strong> ${vaga.area}</p>
           <p style="font-size: 12px; color: gray;"><em>🕒 Enviado em: ${vaga.data}</em></p>
+          <button onclick="excluirSolicitacao(${index})">Excluir</button>
         `;
         container.appendChild(div);
       });
     }
   }
 
+  function excluirSolicitacao(index) {
+    if (confirm('Deseja realmente excluir essa solicitação?')) {
+      const vagas = JSON.parse(localStorage.getItem('vagasPersonalizadas')) || [];
+      vagas.splice(index, 1);
+      localStorage.setItem('vagasPersonalizadas', JSON.stringify(vagas));
+      carregarVagasPersonalizadas();
+    }
+  }
+
   carregarVagasPersonalizadas();
-
-  // CURSOS -------------------------------
-  const formCurso = document.getElementById('formCurso');
-  const listaCursos = document.getElementById('listaCursos');
-
-  function carregarCursos() {
-    const cursos = JSON.parse(localStorage.getItem('cursos')) || [];
-    listaCursos.innerHTML = '';
-
-    cursos.forEach((curso, index) => {
-      const div = document.createElement('div');
-      div.className = "curso-item";
-      div.innerHTML = `
-        <img src="${curso.imagem}" class="curso-imagem" alt="Curso">
-        <h3>${curso.nome}</h3>
-        <p>${curso.descricao}</p>
-        <a href="${curso.link}" target="_blank">${curso.link}</a><br>
-        <button onclick="excluirCurso(${index})">Excluir</button>
-      `;
-      listaCursos.appendChild(div);
-    });
-  }
-
-  formCurso.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const cursos = JSON.parse(localStorage.getItem('cursos')) || [];
-
-    const novoCurso = {
-      nome: document.getElementById('cursoNome').value,
-      imagem: document.getElementById('cursoImagem').value,
-      descricao: document.getElementById('cursoDescricao').value,
-      link: document.getElementById('cursoLink').value
-    };
-
-    cursos.push(novoCurso);
-    localStorage.setItem('cursos', JSON.stringify(cursos));
-    formCurso.reset();
-    carregarCursos();
-  });
-
-  function excluirCurso(index) {
-    let cursos = JSON.parse(localStorage.getItem('cursos')) || [];
-    cursos.splice(index, 1);
-    localStorage.setItem('cursos', JSON.stringify(cursos));
-    carregarCursos();
-  }
-
-  carregarCursos();
 </script>
 
-</body>
-</html>
