@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Confirmação – UpLife</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f78c1e, #e65100);
+      transition: background 0.35s ease, box-shadow 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+
+    h1 {
+      color: #e65100;
+    }
+
+    p {
+      margin: 20px 0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    a.botao-inicio {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #e65100;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    a.botao-inicio:hover {
+      background: #cf4c00;
+    }
+
+  
+    .botao-voltar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: none;
+      padding: 0;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .botao-voltar svg {
+      width: 32px;
+      height: 32px;
+      stroke: white;
+      transition: stroke 0.3s;
+    }
+
+    .botao-voltar:hover svg {
+      stroke: #ffe5d0;
+    }
+
+    .botao-voltar::after {
+      content: attr(title);
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(-5px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    .botao-voltar:hover::after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="botao-voltar" title="Voltar ao Início">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  </a>
+
+  <div class="card">
+    <h1>Solicitação Enviada!</h1>
+    <p>
+      Obrigado por confiar na UpLife.<br />
+      Vamos procurar uma vaga que melhor se encaixe no seu perfil e entraremos em contato em breve.
+    </p>
+    <a href="index.html" class="botao-inicio">Voltar para o início</a>
+  </div>
+
+</body>
+</html>
