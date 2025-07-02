@@ -1,101 +1,79 @@
 const express = require('express');
-const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-
 const app = express();
+
 const PORT = 3000;
 
-// Middleware para aceitar JSON no body
+// Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(express.static(path.join(__dirname, '../public')));
 
-// Servir os arquivos estáticos do front-end
-app.use(express.static(path.join(__dirname, 'vagas-uplife', 'public')));
+// Caminhos para os arquivos JSON
+const vagasFile = path.join(__dirname, '../data/vagas.json');
+const cursosFile = path.join(__dirname, '../data/cursos.json');
+const solicitacoesFile = path.join(__dirname, '../data/solicitacoes.json');
 
-// Rota raiz para servir index.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'vagas-uplife', 'public', 'index.html'));
-});
-
-// --- Exemplo de rotas para as vagas, usando arquivos JSON na pasta data ---
-
-const vagasFile = path.join(__dirname, 'data', 'vagas.json');
-const vagasPersonalizadasFile = path.join(__dirname, 'data', 'vagasPersonalizadas.json');
-
-// Ler JSON
-function lerArquivo(filePath) {
-  if (!fs.existsSync(filePath)) return [];
-  const dados = fs.readFileSync(filePath, 'utf8');
-  return JSON.parse(dados || '[]');
-}
-
-// Escrever JSON
-function escreverArquivo(filePath, dados) {
-  fs.writeFileSync(filePath, JSON.stringify(dados, null, 2), 'utf8');
-}
-
-// Rotas para Vagas
+// ---------------- ROTAS VAGAS ---------------- //
 app.get('/api/vagas', (req, res) => {
-  const vagas = lerArquivo(vagasFile);
+  const vagas = JSON.parse(fs.readFileSync(vagasFile));
   res.json(vagas);
 });
 
-app.post('/api/vagas', (req, res) => {
-  const vagas = lerArquivo(vagasFile);
-  const novaVaga = req.body;
+app.get('/api/vagas/:id', (req, res) => {
+  const vagas = JSON.parse(fs.readFileSync(vagasFile));
+  const vaga = vagas.find(v => v.id == req.params.id);
+  res.json(vaga || {});
+});
 
-  // Gera um id simples (timestamp)
-  novaVaga.id = Date.now();
+app.post('/api/vagas', (req, res) => {
+  const vagas = JSON.parse(fs.readFileSync(vagasFile));
+  const novaVaga = { id: Date.now(), ...req.body };
   vagas.push(novaVaga);
-  escreverArquivo(vagasFile, vagas);
+  fs.writeFileSync(vagasFile, JSON.stringify(vagas, null, 2));
   res.status(201).json(novaVaga);
 });
 
 app.put('/api/vagas/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const vagas = lerArquivo(vagasFile);
-  const vagaIndex = vagas.findIndex(v => v.id === id);
-
-  if (vagaIndex < 0) return res.status(404).json({ error: 'Vaga não encontrada' });
-
-  vagas[vagaIndex] = { ...vagas[vagaIndex], ...req.body, id };
-  escreverArquivo(vagasFile, vagas);
-  res.json(vagas[vagaIndex]);
+  let vagas = JSON.parse(fs.readFileSync(vagasFile));
+  const index = vagas.findIndex(v => v.id == req.params.id);
+  if (index !== -1) {
+    vagas[index] = { ...vagas[index], ...req.body };
+    fs.writeFileSync(vagasFile, JSON.stringify(vagas, null, 2));
+    res.json(vagas[index]);
+  } else {
+    res.status(404).json({ error: "Vaga não encontrada" });
+  }
 });
 
 app.delete('/api/vagas/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  let vagas = lerArquivo(vagasFile);
-  vagas = vagas.filter(v => v.id !== id);
-  escreverArquivo(vagasFile, vagas);
-  res.status(204).send();
+  let vagas = JSON.parse(fs.readFileSync(vagasFile));
+  vagas = vagas.filter(v => v.id != req.params.id);
+  fs.writeFileSync(vagasFile, JSON.stringify(vagas, null, 2));
+  res.status(204).end();
 });
 
-// Rotas para Vagas Personalizadas
-app.get('/api/vagas-personalizadas', (req, res) => {
-  const vagas = lerArquivo(vagasPersonalizadasFile);
-  res.json(vagas);
-});
- 
-app.post('/api/vagas-personalizadas', (req, res) => {
-  const vagas = lerArquivo(vagasPersonalizadasFile);
-  const novaVaga = req.body;
-  novaVaga.id = Date.now();
-  vagas.push(novaVaga);
-  escreverArquivo(vagasPersonalizadasFile, vagas);
-  res.status(201).json(novaVaga);
+// ------------- ROTAS SOLICITAÇÕES PERSONALIZADAS ------------- //
+app.get('/api/vagasPersonalizadas', (req, res) => {
+  const dados = JSON.parse(fs.readFileSync(solicitacoesFile));
+  res.json(dados);
 });
 
-app.delete('/api/vagas-personalizadas/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  let vagas = lerArquivo(vagasPersonalizadasFile);
-  vagas = vagas.filter(v => v.id !== id);
-  escreverArquivo(vagasPersonalizadasFile, vagas);
-  res.status(204).send();
+app.post('/api/vagasPersonalizadas', (req, res) => {
+  const dados = JSON.parse(fs.readFileSync(solicitacoesFile));
+  dados.push(req.body);
+  fs.writeFileSync(solicitacoesFile, JSON.stringify(dados, null, 2));
+  res.status(201).json(req.body);
 });
 
-// Inicia o servidor
+app.delete('/api/vagasPersonalizadas/:index', (req, res) => {
+  const dados = JSON.parse(fs.readFileSync(solicitacoesFile));
+  dados.splice(req.params.index, 1);
+  fs.writeFileSync(solicitacoesFile, JSON.stringify(dados, null, 2));
+  res.status(204).end();
+});
+
+// ---------------- INICIAR SERVIDOR ---------------- //
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando em: http://localhost:${PORT}`);
 });
