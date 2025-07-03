@@ -18,9 +18,16 @@ const vagasPath = path.join(__dirname, '..', 'data', 'vagas.json');
 // Função para ler vagas do arquivo
 function lerVagas() {
   if (!fs.existsSync(vagasPath)) return [];
-  const data = fs.readFileSync(vagasPath);
-  return JSON.parse(data);
+  try {
+    const data = fs.readFileSync(vagasPath, 'utf8').trim();
+    if (!data) return [];
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Erro ao ler vagas.json:', err);
+    return [];
+  }
 }
+
 
 // Função para salvar vagas
 function salvarVagas(vagas) {
@@ -43,13 +50,20 @@ app.get('/api/vagas/:id', (req, res) => {
 
 // ➤ POST /api/vagas - Criar nova vaga
 app.post('/api/vagas', (req, res) => {
-  const vagas = lerVagas();
-  const novaVaga = req.body;
-  novaVaga.id = Date.now();
-  vagas.push(novaVaga);
-  salvarVagas(vagas);
-  res.status(201).json({ mensagem: 'Vaga criada com sucesso' });
+  try {
+    console.log("REQUISIÇÃO RECEBIDA: ", req.body); // <-- debug
+    const vagas = lerVagas(); // pode dar erro aqui
+    const novaVaga = req.body;
+    novaVaga.id = Date.now();
+    vagas.push(novaVaga);
+    salvarVagas(vagas); // ou aqui
+    res.status(201).json({ mensagem: 'Vaga criada com sucesso' });
+  } catch (erro) {
+    console.error("ERRO AO SALVAR VAGA:", erro); // <-- Mostra erro no terminal
+    res.status(500).json({ erro: "Erro interno ao salvar vaga." });
+  }
 });
+
 
 // ➤ PUT /api/vagas/:id - Atualizar vaga
 app.put('/api/vagas/:id', (req, res) => {
