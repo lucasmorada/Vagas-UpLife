@@ -1,47 +1,79 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
+
 const app = express();
 const PORT = 3000;
 
-// Caminho para o arquivo de vagas
-const vagasPath = path.join(__dirname, '../data/vagas.json');
+// Pasta onde estão os arquivos HTML e JS do frontend
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Middleware para ler JSON
+// Permitir JSON no corpo das requisições
 app.use(express.json());
+app.use(cors());
 
-// Liberar acesso ao frontend
-app.use(express.static(path.join(__dirname, '../public')));
+const vagasPath = path.join(__dirname, '..', 'data', 'vagas.json');
 
-// Rota GET para retornar todas as vagas
+// Função para ler vagas do arquivo
+function lerVagas() {
+  if (!fs.existsSync(vagasPath)) return [];
+  const data = fs.readFileSync(vagasPath);
+  return JSON.parse(data);
+}
+
+// Função para salvar vagas
+function salvarVagas(vagas) {
+  fs.writeFileSync(vagasPath, JSON.stringify(vagas, null, 2));
+}
+
+// ➤ GET /api/vagas - Listar todas as vagas
 app.get('/api/vagas', (req, res) => {
-  fs.readFile(vagasPath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Erro ao ler vagas:', err);
-      return res.status(500).json({ error: 'Erro ao ler vagas' });
-    }
-    res.json(JSON.parse(data));
-  });
+  const vagas = lerVagas();
+  res.json(vagas);
 });
 
-// Rota POST para adicionar uma nova vaga
+// ➤ GET /api/vagas/:id - Buscar uma vaga específica
+app.get('/api/vagas/:id', (req, res) => {
+  const vagas = lerVagas();
+  const vaga = vagas.find(v => v.id == req.params.id);
+  if (vaga) res.json(vaga);
+  else res.status(404).json({ erro: 'Vaga não encontrada' });
+});
+
+// ➤ POST /api/vagas - Criar nova vaga
 app.post('/api/vagas', (req, res) => {
+  const vagas = lerVagas();
   const novaVaga = req.body;
-
-  fs.readFile(vagasPath, 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Erro ao ler vagas' });
-
-    const vagas = JSON.parse(data);
-    vagas.push(novaVaga);
-
-    fs.writeFile(vagasPath, JSON.stringify(vagas, null, 2), err => {
-      if (err) return res.status(500).json({ error: 'Erro ao salvar vaga' });
-      res.status(201).json({ message: 'Vaga adicionada com sucesso' });
-    });
-  });
+  novaVaga.id = Date.now();
+  vagas.push(novaVaga);
+  salvarVagas(vagas);
+  res.status(201).json({ mensagem: 'Vaga criada com sucesso' });
 });
 
-// Inicia o servidor
+// ➤ PUT /api/vagas/:id - Atualizar vaga
+app.put('/api/vagas/:id', (req, res) => {
+  const vagas = lerVagas();
+  const index = vagas.findIndex(v => v.id == req.params.id);
+  if (index !== -1) {
+    vagas[index] = { ...req.body, id: parseInt(req.params.id) };
+    salvarVagas(vagas);
+    res.json({ mensagem: 'Vaga atualizada com sucesso' });
+  } else {
+    res.status(404).json({ erro: 'Vaga não encontrada' });
+  }
+});
+
+// ➤ DELETE /api/vagas/:id - Excluir vaga
+app.delete('/api/vagas/:id', (req, res) => {
+  let vagas = lerVagas();
+  const id = parseInt(req.params.id);
+  vagas = vagas.filter(v => v.id !== id);
+  salvarVagas(vagas);
+  res.json({ mensagem: 'Vaga excluída com sucesso' });
+});
+
+// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
