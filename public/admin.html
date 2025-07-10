@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel Administrativo – UpLife</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fafafa, #f5c6a9);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #e65100;
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #e65100;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    form {
+      background: #fff;
+      width: 100%;
+      max-width: 700px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.2s;
+    }
+
+    textarea {
+      overflow: hidden;
+      resize: none;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #e65100;
+      outline: none;
+    }
+
+    button {
+      margin-top: 30px;
+      background: #e65100;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #cf4c00;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .vaga, .solicitacao {
+      background: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+
+    .vaga:hover, .solicitacao:hover {
+      transform: scale(1.01);
+    }
+
+    .btn-excluir {
+      background: #e65100;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .btn-excluir:hover {
+      background: #cf4c00;
+    }
+
+    .btn-editar {
+      background: #e65100;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+   }
+
+    .btn-editar:hover {
+      background: #cf4c00;
+   }
+
+    a {
+      color: #e65100;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    small {
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Painel Administrativo</h1>
+
+  <div class="container">
+    <h2>Cadastrar Nova Vaga</h2>
+    <form id="formVaga">
+      <label for="titulo">Título da Vaga</label>
+      <input type="text" id="titulo" name="titulo" required>
+
+      <label for="empresa">Empresa</label>
+      <input type="text" id="empresa" name="empresa">
+
+      <label for="funcao">Salário</label>
+      <input type="text" id="funcao" name="funcao">
+
+      <label for="local">Local</label>
+      <input type="text" id="local" name="local" required>
+
+      <label for="area">Área</label>
+      <select id="area" name="area" required>
+        <option value="">Selecione uma área</option>
+        <option value="Manutenção">Manutenção</option>
+        <option value="Logística">Logística</option>
+        <option value="Produção">Produção</option>
+        <option value="Elétrica">Elétrica</option>
+        <option value="Segurança do Trabalho">Segurança do Trabalho</option>
+        <option value="Administrativo">Administrativo</option>
+        <option value="Outras">Outras</option>
+      </select>
+
+      <label for="descricao">Descrição</label>
+      <textarea id="descricao" name="descricao" rows="4" required></textarea>
+
+      <label for="link">Link de Candidatura</label>
+      <input type="url" id="link" name="link" required>
+
+      <h3 style="margin-top:30px;">Curso Relacionado (opcional)</h3>
+
+      <label for="cursoNome">Nome do Curso</label>
+      <input type="text" id="cursoNome" name="cursoNome">
+
+      <label for="cursoDescricao">Descrição do Curso</label>
+      <textarea id="cursoDescricao" name="cursoDescricao" rows="3"></textarea>
+
+      <label for="cursoImagem">URL da Imagem do Curso</label>
+      <input type="url" id="cursoImagem" name="cursoImagem">
+
+      <label for="cursoLink">Link do Curso</label>
+      <input type="url" id="cursoLink" name="cursoLink">
+
+      <button type="submit">Cadastrar Vaga</button>
+    </form>
+
+    <h2>Vagas Cadastradas</h2>
+    <div id="listaVagas"></div>
+
+    <h2>Solicitações de Vagas Personalizadas</h2>
+    <div id="listaSolicitacoes"></div>
+  </div>
+
+  <script>
+  let vagaEditando = null;
+
+  async function carregarVagas() {
+    const res = await fetch('/api/vagas');
+    const vagas = await res.json();
+
+    const lista = document.getElementById('listaVagas');
+    lista.innerHTML = '';
+
+    vagas.forEach(v => {
+      const div = document.createElement('div');
+      div.className = 'vaga';
+      const descricaoFormatada = v.descricao;
+
+      div.innerHTML = `
+        <strong>${v.titulo}</strong><br>
+        Empresa: ${v.empresa || '-'}<br>
+        Função: ${v.funcao || '-'}<br>
+        Local: ${v.local}<br>
+        Área: ${v.area}<br>
+        Descrição: ${v.descricao.length > 100 ? v.descricao.substring(0, 100) + '...' : v.descricao}<br>
+        <a href="${v.link}" target="_blank">Ver Link</a><br>
+        <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
+        <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v).replace(/'/g, "\\'")})'>Editar</button>
+      `;
+      lista.appendChild(div);
+    });
+  }
+
+  async function excluirVaga(id) {
+    const confirmar = confirm('Tem certeza que deseja excluir esta vaga?');
+    if (!confirmar) return;
+
+    const res = await fetch(`/api/vagas/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      alert('Vaga excluída com sucesso.');
+      carregarVagas();
+    } else {
+      alert('Erro ao excluir a vaga.');
+    }
+  }
+
+  function editarVaga(vaga) {
+    const form = document.getElementById('formVaga');
+    form.titulo.value = vaga.titulo;
+    form.empresa.value = vaga.empresa;
+    form.funcao.value = vaga.funcao;
+    form.local.value = vaga.local;
+    form.area.value = vaga.area;
+    form.descricao.value = vaga.descricao;
+    form.link.value = vaga.link;
+
+    if (vaga.curso) {
+      form.cursoNome.value = vaga.curso.nome || '';
+      form.cursoDescricao.value = vaga.curso.descricao || '';
+      form.cursoImagem.value = vaga.curso.imagem || '';
+      form.cursoLink.value = vaga.curso.link || '';
+    }
+
+    vagaEditando = vaga.id;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  const form = document.getElementById('formVaga');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const vaga = {
+      titulo: form.titulo.value,
+      empresa: form.empresa.value,
+      funcao: form.funcao.value,
+      local: form.local.value,
+      area: form.area.value,
+      descricao: form.descricao.value,
+      link: form.link.value,
+      curso: {
+        nome: form.cursoNome.value,
+        descricao: form.cursoDescricao.value,
+        imagem: form.cursoImagem.value,
+        link: form.cursoLink.value
+      }
+    };
+
+    if (vagaEditando) {
+      const res = await fetch(`/api/vagas/${vagaEditando}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vaga)
+      });
+
+      if (res.ok) {
+        alert('Vaga atualizada com sucesso!');
+        form.reset();
+        vagaEditando = null;
+        carregarVagas();
+      } else {
+        alert('Erro ao atualizar a vaga.');
+      }
+    } else {
+      const res = await fetch('/api/vagas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(vaga)
+      });
+
+      if (res.ok) {
+        alert('Vaga cadastrada com sucesso!');
+        form.reset();
+        carregarVagas();
+      } else {
+        alert('Erro ao cadastrar vaga.');
+      }
+    }
+  });
+
+  async function carregarSolicitacoes() {
+    try {
+      const res = await fetch('/api/vagasPersonalizadas');
+      const solicitacoes = await res.json();
+
+      const lista = document.getElementById('listaSolicitacoes');
+      lista.innerHTML = '';
+
+      if (!solicitacoes.length) {
+        lista.innerHTML = '<p>Nenhuma solicitação registrada.</p>';
+        return;
+      }
+
+      solicitacoes.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'solicitacao';
+        div.innerHTML = `
+          <strong>${s.nome}</strong> – ${s.telefone}<br>
+          <strong>Área:</strong> ${s.area}<br>
+          <strong>Local:</strong> ${s.local}<br>
+          <small>Data: ${s.data}</small><br>
+          <button onclick="excluirSolicitacao('${s.data}')" class="btn-excluir">Excluir</button>
+        `;
+        lista.appendChild(div);
+      });
+    } catch (erro) {
+      console.error('Erro ao carregar solicitações:', erro);
+    }
+  }
+
+  async function excluirSolicitacao(data) {
+    const confirmar = confirm('Tem certeza que deseja excluir esta solicitação?');
+    if (!confirmar) return;
+
+    try {
+      const res = await fetch('/api/vagasPersonalizadas', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data })
+      });
+
+      if (res.ok) {
+        alert('Solicitação excluída com sucesso.');
+        carregarSolicitacoes();
+      } else {
+        alert('Erro ao excluir. Tente novamente.');
+      }
+    } catch (erro) {
+      console.error('Erro ao excluir:', erro);
+      alert('Erro na conexão. Tente novamente.');
+    }
+  }
+
+  function autoResize(e) {
+    const el = e.target;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
+
+  document.querySelectorAll("textarea").forEach(textarea => {
+    textarea.addEventListener("input", autoResize);
+    autoResize({ target: textarea });
+  });
+
+  carregarVagas();
+  carregarSolicitacoes();
+  </script>
+</body>
+</html>

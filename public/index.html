@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vagas UpLife Educacional</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+  :root {
+    --orange: #fe6402;
+    --dark-orange: #e9540a;
+    --bg-dark: #e65100;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #fff;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  header {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(90deg, #f78c1e 0%, #f26500 50%, #e65100 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  z-index: 10;
+  position: relative;
+  overflow: hidden;
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  animation: brilho-luz 3s infinite;
+}
+
+@keyframes brilho-luz {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+
+  header img.logo {
+    height: 150px;
+  }
+  .nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .nav-buttons a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .nav-buttons a:hover {
+    opacity: 0.8;
+  }
+  .social-icons img {
+    width: 36px;
+    margin-left: 14px;
+    transition: transform 0.2s ease;
+  }
+  .social-icons img:hover {
+    transform: scale(1.4);
+  }
+  .intro {
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+  .intro h1 {
+    font-size: 3rem;
+    color: var(--orange);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out forwards;
+    animation-delay: 0.2s;
+    font-weight: 700;
+  }
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .intro .lead {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #555;
+  }
+  .hero {
+    background: url('Banner.png') no-repeat center center/cover;
+    height: 330px;
+    border-radius: 12px;
+    margin: 0 20px;
+  }
+  .cta-button {
+    text-align: center;
+    padding: 40px 0 20px;
+  }
+  .cta-button .cta {
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .cta-button .cta:hover {
+    background: var(--dark-orange);
+    transform: scale(1.05);
+  }
+  .search {
+    max-width: 1000px;
+    margin: 30px auto 10px;
+    padding: 0 20px;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .filters select,
+  .filters input {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    flex: 1 1 220px;
+  }
+  .filters button {
+    background: #fe6402;
+    color: white;
+    padding: 12px 24px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .filters button:hover {
+    background: var(--bg-dark);
+  }
+
+  .spinner-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 6px solid #eee;
+    border-top: 6px solid var(--orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .jobs {
+    display: grid;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+  }
+  .job-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .job-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  }
+  .job-card h3 {
+    color: var(--orange);
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+  }
+  .job-card p {
+    margin-bottom: 6px;
+    color: #444;
+  }
+  .job-card a.apply button {
+    margin-top: 12px;
+    padding: 10px 20px;
+    background: #fe6402;
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .job-card a.apply button:hover {
+    background: var(--dark-orange);
+  }
+
+  footer {
+    background: #fe6402;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 60px;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: shine 2.5s linear infinite;
+  }
+
+  @keyframes shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  @media(max-width:768px) {
+    .intro h1 { font-size: 2rem; }
+    .intro .lead { font-size: 1rem; }
+    .cta-button .cta { font-size: 1rem; }
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    header img.logo {
+      height: 90px;
+    }
+    .nav-buttons {
+      flex-direction: column;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .social-icons {
+      margin-top: 10px;
+    }
+    .filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+  </style>
+</head>
+
+<body>
+  <header>
+    <a href="index.html">
+      <img src="Logo (2).png" class="logo" alt="UpLife Educacional Logo" />
+    </a>
+    <nav class="nav-buttons">
+      <a href="sobre.html"><p style="font-size: 25px;">Sobre Nós</p></a>
+      <a href="vaga-personalizada.html"><p style="font-size: 25px;">Vaga Personalizada</p></a>
+      <a href="https://uplifecursosetreinamentos.com.br/" target="_blank"><p style="font-size: 25px;">Nossos Cursos</p></a>
+    </nav>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/uplifeeducacional_/" target="_blank"><img src="instagram.png" alt="Instagram"></a>
+      <a href="https://facebook.com" target="_blank"><img src="facebook.png" alt="Facebook"></a>
+      <a href="https://wa.me/554198505518" target="_blank"><img src="whats.png" alt="WhatsApp"></a>
+    </div>
+  </header>
+
+  <section class="intro">
+    <h1>Seu Próximo Emprego na Indústria Está Aqui!</h1>
+    <p class="lead">"Tão importante quanto a oportunidade, é estar sempre preparado para ela."</p>
+  </section>
+
+  <section class="hero"></section>
+
+  <section class="cta-button">
+    <button class="cta" onclick="document.getElementById('jobs').scrollIntoView({behavior:'smooth'})">Ver Vagas</button>
+  </section>
+
+  <section class="search">
+    <div class="filters">
+      <select id="cidadeFiltro">
+        <option value="">Selecione uma cidade</option>
+        <option value="Araucária">Araucária</option>
+        <option value="Curitiba">Curitiba</option>
+        <option value="São José dos Pinhais">São José dos Pinhais</option>
+      </select>
+      <select id="areaFiltro">
+        <option value="">Selecione a área</option>
+        <option value="Manutenção">Manutenção</option>
+        <option value="Logística">Logística</option>
+        <option value="Produção">Produção</option>
+        <option value="Elétrica">Elétrica</option>
+        <option value="Segurança do Trabalho">Segurança do Trabalho</option>
+        <option value="Administrativo">Administrativo</option>
+        <option value="Outras">Outras</option>
+
+      </select>
+      <input type="text" id="searchInput" placeholder="Digite uma palavra-chave..." />
+      <button onclick="filtrarVagas()">Buscar Vagas →</button>
+    </div>
+  </section>
+
+  <div id="spinner" class="spinner-container">
+    <div class="spinner"></div>
+  </div>
+
+  <section id="jobs" class="jobs"></section>
+
+  <footer>
+    2025 © UP LIFE EDUCACIONAL - CNPJ: 47.854.761/0001-74.
+  </footer>
+
+  <script>
+    let vagasGlobal = [];
+
+    async function carregarVagas() {
+      const container = document.querySelector('.jobs');
+      const spinner = document.getElementById('spinner');
+
+      spinner.style.display = 'flex';
+      container.innerHTML = '';
+
+      try {
+        const resposta = await fetch('/api/vagas');
+        if (!resposta.ok) throw new Error('Erro ao carregar vagas');
+        const vagas = await resposta.json();
+        vagasGlobal = vagas;
+        localStorage.setItem('vagas', JSON.stringify(vagas));
+        renderVagas(vagas);
+      } catch (erro) {
+        console.error('Erro ao buscar vagas:', erro);
+        const vagasLocais = JSON.parse(localStorage.getItem('vagas')) || [];
+        vagasGlobal = vagasLocais;
+        renderVagas(vagasLocais);
+      }
+
+      spinner.style.display = 'none';
+    }
+
+    function renderVagas(lista) {
+      const container = document.querySelector('.jobs');
+      container.innerHTML = '';
+      if (!lista.length) {
+        container.innerHTML = '<p style="text-align:center; color:#888">Nenhuma vaga encontrada.</p>';
+        return;
+      }
+
+      lista.forEach(job => {
+        const card = document.createElement('div');
+        card.className = 'job-card';
+        card.innerHTML = `
+          <div>
+            <h3>${job.titulo}</h3>
+            <p><strong>Empresa:</strong> ${job.empresa || '-'}</p>
+            <p><strong>Local:</strong> ${job.local}</p>
+            <a href="detalhes.html?id=${job.id}" class="apply"><button>Ver Detalhes</button></a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filtrarVagas() {
+      const termo = document.getElementById('searchInput').value.toLowerCase();
+      const cidade = document.getElementById('cidadeFiltro').value;
+      const area = document.getElementById('areaFiltro').value;
+
+      const filtradas = vagasGlobal.filter(v => {
+        const matchCidade = cidade ? v.local.includes(cidade) : true;
+        const matchArea = area ? v.area === area : true;
+        const matchTermo = termo ? (
+          v.titulo.toLowerCase().includes(termo) ||
+          v.local.toLowerCase().includes(termo) ||
+          (v.descricao && v.descricao.toLowerCase().includes(termo))
+        ) : true;
+        return matchCidade && matchArea && matchTermo;
+      });
+
+      renderVagas(filtradas);
+    }
+
+    carregarVagas();
+  </script>
+</body>
+</html>
