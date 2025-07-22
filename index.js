@@ -28,7 +28,6 @@ function lerVagas() {
   }
 }
 
-
 // Função para salvar vagas
 function salvarVagas(vagas) {
   fs.writeFileSync(vagasPath, JSON.stringify(vagas, null, 2));
