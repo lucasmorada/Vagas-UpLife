@@ -299,13 +299,13 @@ header::before {
       <img src="Logo (2).png" class="logo" alt="UpLife Educacional Logo" />
     </a>
     <nav class="nav-buttons">
-      <a href="sobre.html"><p style="font-size: 25px;">Sobre Nós</p></a>
-      <a href="vaga-personalizada.html"><p style="font-size: 25px;">Vaga Personalizada</p></a>
+      <a href="sobre.html" target="_blank"><p style="font-size: 25px;">Sobre Nós</p></a>
+      <a href="vaga-personalizada.html" target="_blank"><p style="font-size: 25px;">Vaga Personalizada</p></a>
       <a href="https://uplifecursosetreinamentos.com.br/" target="_blank"><p style="font-size: 25px;">Nossos Cursos</p></a>
     </nav>
     <div class="social-icons">
       <a href="https://www.instagram.com/uplifeeducacional_/" target="_blank"><img src="instagram.png" alt="Instagram"></a>
-      <a href="https://facebook.com" target="_blank"><img src="facebook.png" alt="Facebook"></a>
+      <a href="https://www.facebook.com/profile.php?id=61564648928257&mibextid=LQQJ4d" target="_blank"><img src="facebook.png" alt="Facebook"></a>
       <a href="https://wa.me/554198505518" target="_blank"><img src="whats.png" alt="WhatsApp"></a>
     </div>
   </header>
@@ -332,11 +332,12 @@ header::before {
       <select id="areaFiltro">
         <option value="">Selecione a área</option>
         <option value="Manutenção">Manutenção</option>
-        <option value="Logística">Logística</option>
+        <option value="Logística">Mecânica</option>
         <option value="Produção">Produção</option>
         <option value="Elétrica">Elétrica</option>
         <option value="Segurança do Trabalho">Segurança do Trabalho</option>
-        <option value="Administrativo">Administrativo</option>
+        <option value="Administrativo">Planejamento</option>
+        <option value="Administrativo">Automação</option>
         <option value="Outras">Outras</option>
 
       </select>
@@ -398,7 +399,7 @@ header::before {
             <h3>${job.titulo}</h3>
             <p><strong>Empresa:</strong> ${job.empresa || '-'}</p>
             <p><strong>Local:</strong> ${job.local}</p>
-            <a href="detalhes.html?id=${job.id}" class="apply"><button>Ver Detalhes</button></a>
+            <a href="detalhes.html?id=${job.id}" class="apply" target="_blank"><button>Ver Detalhes</button></a>
           </div>
         `;
         container.appendChild(card);

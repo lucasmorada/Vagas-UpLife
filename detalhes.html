@@ -12,14 +12,14 @@
 
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #fff8f0 ;
+      background: #fff8f0;
       margin: 0;
       color: #333;
       min-height: 100vh;
     }
 
     header {
-      background: linear-gradient(90deg, #f78c1e 0%, #f26500 50%, #e65100 100%);;
+      background: linear-gradient(90deg, #f78c1e 0%, #f26500 50%, #e65100 100%);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -34,7 +34,6 @@
     .nav-buttons {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 20px;
     }
 
@@ -42,22 +41,12 @@
       color: #fff;
       text-decoration: none;
       font-weight: 600;
-      font-size: 18px;
-      transition: opacity 0.2s ease;
-    }
-
-    .nav-buttons a:hover {
-      opacity: 0.8;
+      font-size: 25px;
     }
 
     .social-icons img {
       width: 36px;
       margin-left: 14px;
-      transition: transform 0.2s ease;
-    }
-
-    .social-icons img:hover {
-      transform: scale(1.4);
     }
 
     .container {
@@ -67,7 +56,6 @@
       border-radius: 12px;
       background: white;
       box-shadow: 0 30px 40px rgba(0, 0, 0, 0.3);
-      color: #242323;
     }
 
     h2 {
@@ -92,13 +80,6 @@
       text-decoration: none;
       font-weight: 700;
       font-size: 1.1rem;
-      box-shadow: 0 5px 15px rgba(249,115,22,0.5);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .btn-candidatar:hover {
-      background: #e65100;
-      box-shadow: 0 6px 20px rgba(230,81,0,0.7);
     }
 
     .curso-recomendado {
@@ -106,46 +87,50 @@
     }
 
     .curso {
-      border: 1px solid #ddd;
+      border: 3px solid var(--dark-orange);
       border-radius: 12px;
       padding: 20px;
       margin-top: 25px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       text-align: center;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.06);
       background: #fff;
-      transition: box-shadow 0.3s ease;
-    }
-
-    .curso:hover {
-      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
     }
 
     .curso img {
       max-width: 100%;
-      height: auto;
       border-radius: 12px;
     }
 
-    .curso a {
-      text-decoration: none;
-      color: inherit;
-    }
-
     .curso h3 {
-      margin-top: 15px;
       color: #e65100;
-      font-weight: 700;
-      font-size: 1.3rem;
+      margin-top: 15px;
+      font-size: 24px;
     }
 
-    .curso p {
-      font-size: 15px;
-      color: #555;
-      margin-top: 8px;
-      line-height: 1.4;
+    h3 {
+      font-size: 30px;
+    }
+
+    .bloco-tecnico {
+      margin-top: 40px;
+      background: #ffffff;
+      padding: 25px;
+      border: 3px solid var(--dark-orange);
+      border-radius: 12px;
+    }
+
+    .bloco-tecnico h3 {
+      color: #e65100;
+    }
+
+    .bloco-tecnico a {
+      display: inline-block;
+      margin-top: 12px;
+      background: #25d366;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
     }
 
     .botao-voltar {
@@ -158,7 +143,7 @@
       font-size: 23px;
       margin-top: 20px;
       margin-left: 20px;
-   }
+    }
 
     .botao-voltar svg {
       width: 31px;
@@ -167,149 +152,166 @@
       stroke-width: 3;
       stroke-linecap: round;
       stroke-linejoin: round;
-      transition: stroke 0.3s;
-   }
+    }
 
     .botao-voltar:hover {
       color: var(--dark-orange);
-   }
+    }
 
-    .botao-voltar:hover svg {
-      stroke: var(--dark-orange);
-   }
+    .whatsapp-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
+    .whatsapp-link {
+      display: flex;
+      align-items: center;
+      background-color: #25d366;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .whatsapp-link img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+
+    .whatsapp-link:hover {
+      background-color: #1ebc57;
+    }
   </style>
 </head>
 <body>
-  <style>
-  .whatsapp-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    font-family: Arial, sans-serif;
-  }
-
-  .whatsapp-link {
-    display: flex;
-    align-items: center;
-    background-color: #25d366;
-    color: white;
-    padding: 10px 16px;
-    border-radius: 30px;
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    animation: vibrar 1.2s infinite;
-    transition: background 0.3s;
-  }
-
-  .whatsapp-link:hover {
-    background-color: #1ebc57;
-  }
-
-  .whatsapp-link img {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-  }
-
-  @keyframes vibrar {
-    0% { transform: rotate(0deg); }
-    20% { transform: rotate(15deg); }
-    40% { transform: rotate(-15deg); }
-    60% { transform: rotate(10deg); }
-    80% { transform: rotate(-10deg); }
-    100% { transform: rotate(0deg); }
-  }
-</style>
-
-<div class="whatsapp-container">
-  <a href="https://wa.me/554196924779" target="_blank" class="whatsapp-link" title="Fale com o Suporte">
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-    Suporte
-  </a>
-  <a href="https://wa.me/554198505518" target="_blank" class="whatsapp-link" title="Fale com o Coordenador">
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-    Coordenação
-  </a>
-</div>
 
   <header>
     <a href="index.html">
       <img src="Logo (2).png" class="logo" alt="UpLife Educacional Logo" />
     </a>
     <nav class="nav-buttons">
-      <a href="sobre.html"><p style="font-size: 27px;">Sobre Nós</p></a>
-      <a href="vaga-personalizada.html"><p style="font-size: 27px;">Vaga Personalizada</p></a>
-      <a href="https://uplifecursosetreinamentos.com.br/" target="_blank"><p style="font-size: 27px;">Nossos Cursos</p></a>
+      <a href="sobre.html">Sobre Nós</a>
+      <a href="vaga-personalizada.html">Vaga Personalizada</a>
+      <a href="https://uplifecursosetreinamentos.com.br/" target="_blank">Nossos Cursos</a>
     </nav>
     <div class="social-icons">
       <a href="https://www.instagram.com/uplifeeducacional_/" target="_blank"><img src="instagram.png" alt="Instagram"></a>
-      <a href="https://facebook.com/uplifeeducacional_" target="_blank"><img src="facebook.png" alt="Facebook"></a>
-      <a href="https://wa.me/4198505518?text=Ol%C3%A1%2C%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20os%20cursos!" target="_blank"><img src="whats.png" alt="WhatsApp"></a>
+      <a href="https://www.facebook.com/profile.php?id=61564648928257&mibextid=LQQJ4d" target="_blank"><img src="facebook.png" alt="Facebook"></a>
+      <a href="https://wa.me/4198505518" target="_blank"><img src="whats.png" alt="WhatsApp"></a>
     </div>
   </header>
 
   <a href="index.html" class="botao-voltar" title="Voltar ao Início">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-   <polyline points="15 18 9 12 15 6" />
-  </svg>
-  Voltar
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+    Voltar
   </a>
 
   <div class="container" id="vagaDetalhe"></div>
 
   <script>
-    async function carregarDetalhes() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
+  async function carregarDetalhes() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
 
-      const res = await fetch(`/api/vagas/${id}`);
-      const vaga = await res.json();
+    const res = await fetch(`/api/vagas/${id}`);
+    const vaga = await res.json();
 
-      const container = document.getElementById('vagaDetalhe');
+    const container = document.getElementById('vagaDetalhe');
 
-      if (!vaga || !vaga.id) {
-        container.innerHTML = "<p>Vaga não encontrada.</p>";
-        return;
-      }
-
-      container.innerHTML = `
-        <h2>${vaga.titulo}</h2>
-        <p><strong>Empresa:</strong> ${vaga.empresa || '-'}</p>
-        <p><strong>Função:</strong> ${vaga.funcao || '-'}</p>
-        <p><strong>Local:</strong> ${vaga.local}</p>
-        <p><strong>Área:</strong> ${vaga.area}</p>
-        <p><strong>Descrição:</strong><br>${vaga.descricao.replace(/\n/g, '<br>')}</p>
-        <a href="${vaga.link}" target="_blank" class="btn-candidatar">Candidatar-se</a>
-      `;
-
-      if (vaga.curso && vaga.curso.nome) {
-        const curso = vaga.curso;
-
-        const cursoSection = document.createElement('div');
-        cursoSection.className = 'curso-recomendado';
-        cursoSection.innerHTML = `<h2>Curso Recomendado</h2>`;
-
-        const cursoDiv = document.createElement('div');
-        cursoDiv.className = 'curso';
-        cursoDiv.innerHTML = `
-          <a href="${curso.link}" target="_blank">
-            <img src="${curso.imagem}" alt="Curso">
-            <h3>${curso.nome}</h3>
-            <p>${curso.descricao}</p>
-          </a>
-        `;
-
-        cursoSection.appendChild(cursoDiv);
-        container.appendChild(cursoSection);
-      }
+    if (!vaga || !vaga.id) {
+      container.innerHTML = "<p>Vaga não encontrada.</p>";
+      return;
     }
 
-    carregarDetalhes();
-  </script>
+    container.innerHTML = `
+      <h2>${vaga.titulo}</h2>
+      <p><strong>Empresa:</strong> ${vaga.empresa || '-'}</p>
+      <p><strong>Função:</strong> ${vaga.funcao || '-'}</p>
+      <p><strong>Local:</strong> ${vaga.local}</p>
+      <p><strong>Área:</strong> ${vaga.area}</p>
+      <p><strong>Descrição:</strong><br>${vaga.descricao.replace(/\n/g, '<br>')}</p>
+      <a href="${vaga.link}" target="_blank" class="btn-candidatar">Candidatar-se</a>
+    `;
+
+    const blocosContainer = document.createElement('div');
+    container.appendChild(blocosContainer);
+
+    if (vaga.curso && vaga.curso.nome) {
+      const cursoSection = document.createElement('div');
+      cursoSection.className = 'curso-recomendado';
+      cursoSection.innerHTML = `<h2>Não Está Preparado para essa vaga? Nós Temos a Solução</h2>`;
+      blocosContainer.appendChild(cursoSection);
+
+      if (vaga.tecnicoCompetencia) {
+        const blocoTecnico = document.createElement('div');
+        blocoTecnico.className = 'bloco-tecnico';
+        blocoTecnico.innerHTML = `
+          <h3>Técnico por Competência</h3>
+          <p>Conquiste seu diploma técnico de forma mais rápida, reconhecendo suas experiências e habilidades. Clique abaixo e entenda como funciona o Técnico por Competência!</p>
+          <a href="https://wa.me/554198505518?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20saber%20mais%20sobre%20o%20T%C3%A9cnico%20por%20Compet%C3%AAncia." 
+            target="_blank" 
+            class="whatsapp-link" 
+            style="margin-top: 15px; display: inline-flex;">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+            Falar com Jeverson
+          </a>
+        `;
+        cursoSection.appendChild(blocoTecnico);
+      }
+
+      const cursoDiv = document.createElement('div');
+      cursoDiv.className = 'curso';
+      cursoDiv.innerHTML = `
+        <a href="${vaga.curso.link}" target="_blank">
+          <img src="${vaga.curso.imagem}" alt="Curso">
+          <h3>${vaga.curso.nome}</h3>
+          <p>${vaga.curso.descricao}</p>
+        </a>
+      `;
+      cursoSection.appendChild(cursoDiv);
+    } else {
+      
+      if (vaga.tecnicoCompetencia) {
+        const blocoTecnico = document.createElement('div');
+        blocoTecnico.className = 'bloco-tecnico';
+        blocoTecnico.innerHTML = `
+          <h3>Técnico por Competência</h3>
+          <p>Conquiste seu diploma técnico de forma mais rápida, reconhecendo suas experiências e habilidades. Clique abaixo e entenda como funciona o Técnico por Competência!</p>
+          <a href="https://wa.me/554198505518?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20saber%20mais%20sobre%20o%20T%C3%A9cnico%20por%20Compet%C3%AAncia." 
+            target="_blank" 
+            class="whatsapp-link" 
+            style="margin-top: 15px; display: inline-flex;">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+            Falar com Jeverson
+          </a>
+        `;
+        blocosContainer.appendChild(blocoTecnico);
+      }
+    }
+  }
+
+  carregarDetalhes();
+</script>
+
+
+  <div class="whatsapp-container">
+    <a href="https://wa.me/554196924779" target="_blank" class="whatsapp-link">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+      Suporte
+    <a href="https://wa.me/554198505518" target="_blank" class="whatsapp-link">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+      Coordenação
+    </a>
+  </div>
 </body>
 </html>
