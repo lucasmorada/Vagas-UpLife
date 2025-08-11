@@ -310,6 +310,12 @@ header::before {
     </div>
   </header>
 
+    <!-- CONTADOR DE VISITAS -->
+  <div style="text-align:center; margin-top:10px; font-family:'Poppins',sans-serif; font-size:18px; color:#f68104;">
+    Esta página já foi visitada <span id="contador">0</span> vezes.
+  </div>
+
+
   <section class="intro">
     <h1>Seu Próximo Emprego na Indústria Está Aqui!</h1>
     <p class="lead">"Tão importante quanto a oportunidade, é estar sempre preparado para ela."</p>
@@ -357,6 +363,18 @@ header::before {
   </footer>
 
   <script>
+
+    // ======== CONTADOR DE VISITAS ========
+    const contadorID = 'uplife-vagas-2025'; // ID único
+    fetch(`https://api.countapi.xyz/hit/${contadorID}/visitas`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('contador').innerText = data.value;
+      })
+      .catch(err => {
+        console.error('Erro ao buscar contador:', err);
+      });
+
     let vagasGlobal = [];
 
     async function carregarVagas() {
