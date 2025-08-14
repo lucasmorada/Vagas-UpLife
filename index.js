@@ -4,89 +4,91 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Render precisa disso
 
-// Pasta onde estão os arquivos HTML e JS do frontend
-app.use(express.static(path.join(__dirname, '..', 'public')));
+// Pastas corretas no Render
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Permitir JSON no corpo das requisições
+// Middleware
 app.use(express.json());
 app.use(cors());
 
-const vagasPath = path.join(__dirname, '..', 'data', 'vagas.json');
+// Arquivos JSON dentro de /data
+const vagasPath = path.join(__dirname, 'data', 'vagas.json');
+const solicitacoesPath = path.join(__dirname, 'data', 'solicitacoes.json');
 
-// Função para ler vagas do arquivo
-function lerVagas() {
-  if (!fs.existsSync(vagasPath)) return [];
+// Função para ler JSON
+function lerArquivo(caminho) {
+  if (!fs.existsSync(caminho)) return [];
   try {
-    const data = fs.readFileSync(vagasPath, 'utf8').trim();
+    const data = fs.readFileSync(caminho, 'utf8').trim();
     if (!data) return [];
     return JSON.parse(data);
   } catch (err) {
-    console.error('Erro ao ler vagas.json:', err);
+    console.error(`Erro ao ler ${caminho}:`, err);
     return [];
   }
 }
 
-// Função para salvar vagas
-function salvarVagas(vagas) {
-  fs.writeFileSync(vagasPath, JSON.stringify(vagas, null, 2));
+// Função para salvar JSON
+function salvarArquivo(caminho, conteudo) {
+  fs.writeFileSync(caminho, JSON.stringify(conteudo, null, 2));
 }
 
-// ➤ GET /api/vagas - Listar todas as vagas
+// Rotas de vagas
 app.get('/api/vagas', (req, res) => {
-  const vagas = lerVagas();
-  res.json(vagas);
+  res.json(lerArquivo(vagasPath));
 });
 
-// ➤ GET /api/vagas/:id - Buscar uma vaga específica
 app.get('/api/vagas/:id', (req, res) => {
-  const vagas = lerVagas();
+  const vagas = lerArquivo(vagasPath);
   const vaga = vagas.find(v => v.id == req.params.id);
   if (vaga) res.json(vaga);
   else res.status(404).json({ erro: 'Vaga não encontrada' });
 });
 
-// ➤ POST /api/vagas - Criar nova vaga
 app.post('/api/vagas', (req, res) => {
-  try {
-    console.log("REQUISIÇÃO RECEBIDA: ", req.body); // <-- debug
-    const vagas = lerVagas(); // pode dar erro aqui
-    const novaVaga = req.body;
-    novaVaga.id = Date.now();
-    vagas.push(novaVaga);
-    salvarVagas(vagas); // ou aqui
-    res.status(201).json({ mensagem: 'Vaga criada com sucesso' });
-  } catch (erro) {
-    console.error("ERRO AO SALVAR VAGA:", erro); // <-- Mostra erro no terminal
-    res.status(500).json({ erro: "Erro interno ao salvar vaga." });
-  }
+  const vagas = lerArquivo(vagasPath);
+  const novaVaga = req.body;
+  novaVaga.id = Date.now();
+  vagas.push(novaVaga);
+  salvarArquivo(vagasPath, vagas);
+  res.status(201).json({ mensagem: 'Vaga criada com sucesso' });
 });
 
-
-// ➤ PUT /api/vagas/:id - Atualizar vaga
 app.put('/api/vagas/:id', (req, res) => {
-  const vagas = lerVagas();
+  const vagas = lerArquivo(vagasPath);
   const index = vagas.findIndex(v => v.id == req.params.id);
   if (index !== -1) {
     vagas[index] = { ...req.body, id: parseInt(req.params.id) };
-    salvarVagas(vagas);
+    salvarArquivo(vagasPath, vagas);
     res.json({ mensagem: 'Vaga atualizada com sucesso' });
   } else {
     res.status(404).json({ erro: 'Vaga não encontrada' });
   }
 });
 
-// ➤ DELETE /api/vagas/:id - Excluir vaga
 app.delete('/api/vagas/:id', (req, res) => {
-  let vagas = lerVagas();
-  const id = parseInt(req.params.id);
-  vagas = vagas.filter(v => v.id !== id);
-  salvarVagas(vagas);
+  let vagas = lerArquivo(vagasPath);
+  vagas = vagas.filter(v => v.id != req.params.id);
+  salvarArquivo(vagasPath, vagas);
   res.json({ mensagem: 'Vaga excluída com sucesso' });
 });
 
-// Iniciar servidor
+// Rotas para solicitações
+app.get('/api/solicitacoes', (req, res) => {
+  res.json(lerArquivo(solicitacoesPath));
+});
+
+app.post('/api/solicitacoes', (req, res) => {
+  const solicitacoes = lerArquivo(solicitacoesPath);
+  const nova = { id: Date.now(), ...req.body };
+  solicitacoes.push(nova);
+  salvarArquivo(solicitacoesPath, solicitacoes);
+  res.status(201).json({ mensagem: 'Solicitação criada com sucesso' });
+});
+
+// Inicia servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
