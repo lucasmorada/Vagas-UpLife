@@ -6,12 +6,12 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000; // Render precisa disso
 
-// Pastas corretas no Render
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// Servir arquivos estáticos do frontend
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Arquivos JSON dentro de /data
 const vagasPath = path.join(__dirname, 'data', 'vagas.json');
