@@ -163,175 +163,142 @@
 <script>
 let vagaEditando = null;
 
+// --- FUNÇÃO PARA CARREGAR VAGAS ---
 async function carregarVagas() {
-  const res = await fetch('/api/vagas');
-  const vagas = await res.json();
-
-  const lista = document.getElementById('listaVagas');
-  lista.innerHTML = '';
-
-  vagas.forEach(v => {
-    const div = document.createElement('div');
-    div.className = 'vaga';
-    div.innerHTML = `
-      <strong>${v.titulo}</strong><br>
-      Empresa: ${v.empresa || '-'}<br>
-      Função: ${v.funcao || '-'}<br>
-      Local: ${v.local}<br>
-      Área: ${v.area}<br>
-      Descrição: ${v.descricao.length > 100 ? v.descricao.substring(0, 100) + '...' : v.descricao}<br>
-      <a href="${v.link}" target="_blank">Ver Link</a><br>
-      <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
-      <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v).replace(/'/g, "\\'")})'>Editar</button>
-    `;
-    lista.appendChild(div);
-  });
+  try {
+    const res = await fetch('/api/vagas');
+    if(!res.ok) throw new Error('Erro ao buscar vagas');
+    const vagas = await res.json();
+    const lista = document.getElementById('listaVagas');
+    lista.innerHTML = '';
+    vagas.forEach(v => {
+      const div = document.createElement('div');
+      div.className = 'vaga';
+      div.innerHTML = `
+        <strong>${v.titulo}</strong><br>
+        Empresa: ${v.empresa||'-'}<br>
+        Função: ${v.funcao||'-'}<br>
+        Local: ${v.local}<br>
+        Área: ${v.area}<br>
+        Descrição: ${v.descricao.length>100?v.descricao.substring(0,100)+'...':v.descricao}<br>
+        <a href="${v.link}" target="_blank">Ver Link</a><br>
+        <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
+        <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v).replace(/'/g,"\\'")})'>Editar</button>
+      `;
+      lista.appendChild(div);
+    });
+  } catch(e) { console.error(e); }
 }
 
-async function excluirVaga(id) {
-  if (!confirm('Tem certeza que deseja excluir esta vaga?')) return;
-  const res = await fetch(`/api/vagas/${id}`, { method: 'DELETE' });
-  if (res.ok) {
-    alert('Vaga excluída com sucesso.');
-    carregarVagas();
-  } else {
-    alert('Erro ao excluir a vaga.');
+// --- FUNÇÃO PARA EXCLUIR VAGA ---
+async function excluirVaga(id){
+  if(!confirm('Tem certeza que deseja excluir esta vaga?')) return;
+  try {
+    const res = await fetch(`/api/vagas/${id}`, { method:'DELETE' });
+    if(res.ok) carregarVagas();
+    else alert('Erro ao excluir vaga');
+  } catch(e){ alert('Erro ao conectar com servidor'); }
+}
+
+// --- FUNÇÃO EDITAR VAGA ---
+function editarVaga(vaga){
+  const f=document.getElementById('formVaga');
+  f.titulo.value=vaga.titulo;
+  f.empresa.value=vaga.empresa;
+  f.funcao.value=vaga.funcao;
+  f.local.value=vaga.local;
+  f.area.value=vaga.area;
+  f.descricao.value=vaga.descricao;
+  f.link.value=vaga.link;
+  f.tecnicoCompetencia.checked=vaga.tecnicoCompetencia||false;
+  if(vaga.curso){
+    f.cursoNome.value=vaga.curso.nome||'';
+    f.cursoDescricao.value=vaga.curso.descricao||'';
+    f.cursoImagem.value=vaga.curso.imagem||'';
+    f.cursoLink.value=vaga.curso.link||'';
   }
+  vagaEditando=vaga.id;
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function editarVaga(vaga) {
-  const form = document.getElementById('formVaga');
-  form.titulo.value = vaga.titulo;
-  form.empresa.value = vaga.empresa;
-  form.funcao.value = vaga.funcao;
-  form.local.value = vaga.local;
-  form.area.value = vaga.area;
-  form.descricao.value = vaga.descricao;
-  form.link.value = vaga.link;
-  form.tecnicoCompetencia.checked = vaga.tecnicoCompetencia || false;
-
-  if (vaga.curso) {
-    form.cursoNome.value = vaga.curso.nome || '';
-    form.cursoDescricao.value = vaga.curso.descricao || '';
-    form.cursoImagem.value = vaga.curso.imagem || '';
-    form.cursoLink.value = vaga.curso.link || '';
-  }
-
-  vagaEditando = vaga.id;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-const form = document.getElementById('formVaga');
-form.addEventListener('submit', async (e) => {
+// --- FORM SUBMIT ---
+document.getElementById('formVaga').addEventListener('submit', async e=>{
   e.preventDefault();
-
-  const vaga = {
-    titulo: form.titulo.value,
-    empresa: form.empresa.value,
-    funcao: form.funcao.value,
-    local: form.local.value,
-    area: form.area.value,
-    descricao: form.descricao.value,
-    link: form.link.value,
-    tecnicoCompetencia: form.tecnicoCompetencia.checked,
-    curso: {
-      nome: form.cursoNome.value,
-      descricao: form.cursoDescricao.value,
-      imagem: form.cursoImagem.value,
-      link: form.cursoLink.value
+  const f=e.target;
+  const vaga={
+    titulo:f.titulo.value,
+    empresa:f.empresa.value,
+    funcao:f.funcao.value,
+    local:f.local.value,
+    area:f.area.value,
+    descricao:f.descricao.value,
+    link:f.link.value,
+    tecnicoCompetencia:f.tecnicoCompetencia.checked,
+    curso:{
+      nome:f.cursoNome.value,
+      descricao:f.cursoDescricao.value,
+      imagem:f.cursoImagem.value,
+      link:f.cursoLink.value
     }
   };
-
-  if (vagaEditando) {
-    const res = await fetch(`/api/vagas/${vagaEditando}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(vaga)
-    });
-    if (res.ok) {
-      alert('Vaga atualizada com sucesso!');
-      form.reset();
-      vagaEditando = null;
-      carregarVagas();
+  try {
+    if(vagaEditando){
+      const res=await fetch(`/api/vagas/${vagaEditando}`, {
+        method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(vaga)
+      });
+      if(res.ok){ vagaEditando=null; f.reset(); carregarVagas(); }
+      else alert('Erro ao atualizar vaga');
     } else {
-      alert('Erro ao atualizar a vaga.');
+      const res=await fetch('/api/vagas', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(vaga)
+      });
+      if(res.ok){ f.reset(); carregarVagas(); }
+      else alert('Erro ao cadastrar vaga');
     }
-  } else {
-    const res = await fetch('/api/vagas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(vaga)
-    });
-    if (res.ok) {
-      alert('Vaga cadastrada com sucesso!');
-      form.reset();
-      carregarVagas();
-    } else {
-      alert('Erro ao cadastrar vaga.');
-    }
-  }
+  } catch(e){ alert('Erro na conexão'); }
 });
 
-async function carregarSolicitacoes() {
+// --- FUNÇÃO CARREGAR SOLICITAÇÕES ---
+async function carregarSolicitacoes(){
   try {
-    const res = await fetch('/api/vagasPersonalizadas');
-    const solicitacoes = await res.json();
-    const lista = document.getElementById('listaSolicitacoes');
-    lista.innerHTML = '';
-    if (!solicitacoes.length) {
-      lista.innerHTML = '<p>Nenhuma solicitação registrada.</p>';
-      return;
-    }
-    solicitacoes.forEach(s => {
-      const div = document.createElement('div');
-      div.className = 'solicitacao';
-      div.innerHTML = `
+    const res=await fetch('/api/vagasPersonalizadas');
+    if(!res.ok) throw new Error('Erro ao buscar solicitações');
+    const solicitacoes=await res.json();
+    const lista=document.getElementById('listaSolicitacoes');
+    lista.innerHTML='';
+    if(!solicitacoes.length){ lista.innerHTML='<p>Nenhuma solicitação registrada.</p>'; return; }
+    solicitacoes.forEach(s=>{
+      const div=document.createElement('div');
+      div.className='solicitacao';
+      div.innerHTML=`
         <strong>${s.nome}</strong> – ${s.telefone}<br>
         <strong>Área:</strong> ${s.area}<br>
         <strong>Local:</strong> ${s.local}<br>
         <small>Data: ${s.data}</small><br>
-        <button onclick="excluirSolicitacao('${s.data}')" class="btn-excluir">Excluir</button>
+        <button class="btn-excluir" onclick="excluirSolicitacao('${s.data}')">Excluir</button>
       `;
       lista.appendChild(div);
     });
-  } catch (erro) {
-    console.error('Erro ao carregar solicitações:', erro);
-  }
+  } catch(e){ console.error(e); }
 }
 
-async function excluirSolicitacao(data) {
-  if (!confirm('Tem certeza que deseja excluir esta solicitação?')) return;
+// --- EXCLUIR SOLICITAÇÃO ---
+async function excluirSolicitacao(data){
+  if(!confirm('Tem certeza que deseja excluir esta solicitação?')) return;
   try {
-    const res = await fetch('/api/vagasPersonalizadas', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data })
-    });
-    if (res.ok) {
-      alert('Solicitação excluída com sucesso.');
-      carregarSolicitacoes();
-    } else {
-      alert('Erro ao excluir. Tente novamente.');
-    }
-  } catch (erro) {
-    alert('Erro na conexão. Tente novamente.');
-  }
+    const res=await fetch('/api/vagasPersonalizadas',{ method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({data}) });
+    if(res.ok) carregarSolicitacoes();
+    else alert('Erro ao excluir solicitação');
+  } catch(e){ alert('Erro na conexão'); }
 }
 
-// Função imi para ajustar altura dos textareas
-function imi(e) {
-  const el = e.target;
-  el.style.height = 'auto';
-  el.style.height = el.scrollHeight + 'px';
-}
-
-// Aplica imi a todos os textareas
-document.querySelectorAll("textarea").forEach(textarea => {
-  textarea.addEventListener("input", imi);
-  imi({ target: textarea });
+// --- AUTO AJUSTE TEXTAREA ---
+document.querySelectorAll("textarea").forEach(t=>{
+  t.addEventListener("input", e=>{ e.target.style.height='auto'; e.target.style.height=e.target.scrollHeight+'px'; });
+  t.dispatchEvent(new Event('input'));
 });
 
-// Carrega vagas e solicitações ao abrir o painel
+// --- CARREGAR AO ABRIR ---
 carregarVagas();
 carregarSolicitacoes();
 </script>
