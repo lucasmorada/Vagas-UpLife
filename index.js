@@ -93,11 +93,8 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-// Servir index.html para todas as rotas de frontend que não começam com /api
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-  } else {
-    res.status(404).json({ erro: 'Rota API não encontrada' });
-  }
+// Rotas curinga para frontend (evita erro no Render)
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api')) return next(); // passa para 404 API
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
