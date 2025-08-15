@@ -242,52 +242,52 @@
       />
 
       <button type="submit">Enviar Solicitação</button>
-    </form>
+  </form>
 
-    <div class="msg-sucesso" id="msgSucesso">Solicitação enviada com sucesso! Obrigado.</div>
-    <div class="msg-erro" id="msgErro">Erro ao enviar solicitação. Tente novamente mais tarde.</div>
-  </main>
+  <div class="msg-sucesso" id="msgSucesso">Solicitação enviada com sucesso! Obrigado.</div>
+  <div class="msg-erro" id="msgErro">Erro ao enviar solicitação. Tente novamente.</div>
+</main>
 
 <script>
-  const form = document.getElementById('formSolicitacao');
-  const msgErro = document.getElementById('msgErro');
+const form = document.getElementById('formSolicitacao');
+const msgErro = document.getElementById('msgErro');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msgErro.style.display = 'none';
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msgErro.style.display = 'none';
 
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
 
-    const dados = {
-      area: form.area.value.trim(),
-      local: form.local.value.trim(),
-      nome: form.nome.value.trim(),
-      telefone: form.telefone.value.trim(),
-      data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-    };
+  const dados = {
+    area: form.area.value.trim(),
+    local: form.local.value.trim(),
+    nome: form.nome.value.trim(),
+    telefone: form.telefone.value.trim(),
+    data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+  };
 
-    try {
-      const res = await fetch('/api/vagasPersonalizadas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dados)
-      });
+  try {
+    const res = await fetch('/api/solicitacoes', {  // <-- rota corrigida
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados)
+    });
 
-      if (res.ok) {
-        window.location.href = 'confirmacao.html';
-      } else {
-        msgErro.textContent = 'Erro ao enviar solicitação. Por favor, tente novamente mais tarde.';
-        msgErro.style.display = 'block';
-      }
-    } catch (error) {
-      console.error('Erro ao enviar solicitação:', error);
-      msgErro.textContent = 'Erro ao enviar solicitação. Verifique sua conexão e tente novamente.';
+    if (res.ok) {
+      window.location.href = 'confirmacao.html';
+    } else {
+      msgErro.textContent = 'Erro ao enviar solicitação. Por favor, tente novamente mais tarde.';
       msgErro.style.display = 'block';
     }
-  });
+  } catch (error) {
+    console.error('Erro ao enviar solicitação:', error);
+    msgErro.textContent = 'Erro ao enviar solicitação. Verifique sua conexão e tente novamente.';
+    msgErro.style.display = 'block';
+  }
+});
 </script>
 
 </body>

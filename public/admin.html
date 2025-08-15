@@ -318,16 +318,20 @@ async function excluirSolicitacao(data) {
   }
 }
 
-function autoResize(e) {
+// Função imi para ajustar altura dos textareas
+function imi(e) {
   const el = e.target;
   el.style.height = 'auto';
   el.style.height = el.scrollHeight + 'px';
 }
+
+// Aplica imi a todos os textareas
 document.querySelectorAll("textarea").forEach(textarea => {
-  textarea.addEventListener("input", autoResize);
-  autoResize({ target: textarea });
+  textarea.addEventListener("input", imi);
+  imi({ target: textarea });
 });
 
+// Carrega vagas e solicitações ao abrir o painel
 carregarVagas();
 carregarSolicitacoes();
 </script>
