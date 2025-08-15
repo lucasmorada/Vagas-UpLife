@@ -88,12 +88,21 @@ app.post('/api/solicitacoes', (req, res) => {
   res.status(201).json({ mensagem: 'Solicitação criada com sucesso' });
 });
 
-// Inicia servidor
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+// Nova rota para vagas personalizadas (igual à de solicitações)
+app.post('/api/vagasPersonalizadas', (req, res) => {
+  const solicitacoes = lerArquivo(solicitacoesPath);
+  const nova = { id: Date.now(), ...req.body };
+  solicitacoes.push(nova);
+  salvarArquivo(solicitacoesPath, solicitacoes);
+  res.status(201).json({ mensagem: 'Vaga personalizada criada com sucesso' });
 });
 
 // Para qualquer rota desconhecida, servir index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Inicia servidor
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
