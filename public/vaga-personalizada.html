@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <title>Solicitação de Vaga Personalizada – UpLife</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #f78c1e, #d84e03);
@@ -21,36 +19,31 @@
     }
 
     .botao-voltar {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-  font-size: 23px;
-  z-index: 100;
-}
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 23px;
+      z-index: 100;
+    }
 
-.botao-voltar svg {
-  width: 31px;
-  height: 31px;
-  stroke: white;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: stroke 0.3s;
-}
+    .botao-voltar svg {
+      width: 31px;
+      height: 31px;
+      stroke: white;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.3s;
+    }
 
-.botao-voltar:hover {
-  color: #ffe5d0;
-}
-
-.botao-voltar:hover svg {
-  stroke: #ffe5d0;
-}
+    .botao-voltar:hover { color: #ffe5d0; }
+    .botao-voltar:hover svg { stroke: #ffe5d0; }
 
     .container {
       background: #fff;
@@ -62,9 +55,7 @@
       transition: box-shadow 0.3s ease;
     }
 
-    .container:hover {
-      box-shadow: 0 12px 28px rgb(230 81 0 / 0.3);
-    }
+    .container:hover { box-shadow: 0 12px 28px rgb(230 81 0 / 0.3); }
 
     h1 {
       color: #e65100;
@@ -137,15 +128,8 @@
       display: none;
     }
 
-    .msg-sucesso {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .msg-erro {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
+    .msg-sucesso { background-color: #d4edda; color: #155724; }
+    .msg-erro { background-color: #f8d7da; color: #721c24; }
   </style>
 </head>
 
@@ -160,7 +144,6 @@
     gap: 15px;
     font-family: Arial, sans-serif;
   }
-
   .whatsapp-link {
     display: flex;
     align-items: center;
@@ -173,17 +156,8 @@
     animation: vibrar 1.2s infinite;
     transition: background 0.3s;
   }
-
-  .whatsapp-link:hover {
-    background-color: #1ebc57;
-  }
-
-  .whatsapp-link img {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-  }
-
+  .whatsapp-link:hover { background-color: #1ebc57; }
+  .whatsapp-link img { width: 24px; height: 24px; margin-right: 10px; }
   @keyframes vibrar {
     0% { transform: rotate(0deg); }
     20% { transform: rotate(15deg); }
@@ -196,12 +170,10 @@
 
 <div class="whatsapp-container">
   <a href="https://wa.me/554196924779" target="_blank" class="whatsapp-link" title="Fale com o Suporte">
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-    Suporte
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"> Suporte
   </a>
   <a href="https://wa.me/554198505518" target="_blank" class="whatsapp-link" title="Fale com o Coordenador">
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-    Coordenação
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"> Coordenação
   </a>
 </div>
 
@@ -211,37 +183,38 @@
     <polyline points="15 18 9 12 15 6" />
   </svg>
   Voltar
-  </a>
+</a>
 
-  <main class="container">
-    <h1>Solicite uma Vaga Personalizada</h1>
-    <p>
-      Não encontrou a vaga ideal? Preencha os campos abaixo com suas preferências e informações de contato.<br>
-      Nossa equipe buscará oportunidades que se encaixem no seu perfil e retornará o mais breve possível.
-    </p>
+<main class="container">
+  <h1>Solicite uma Vaga Personalizada</h1>
+  <p>
+    Não encontrou a vaga ideal? Preencha os campos abaixo com suas preferências e informações de contato.<br>
+    Nossa equipe buscará oportunidades que se encaixem no seu perfil e retornará o mais breve possível.
+  </p>
 
-    <form id="formSolicitacao" novalidate>
-      <label for="area">Área de Interesse</label>
-      <input type="text" id="area" name="area" required placeholder="Ex: Logística, Produção, Administrativo..." />
+  <!-- FORMULARIO FORMEE -->
+  <form id="formSolicitacao" action="https://formspree.io/f/xyznabcd" method="POST">
+    <label for="area">Área de Interesse</label>
+    <input type="text" id="area" name="Área de Interesse" required placeholder="Ex: Logística, Produção, Administrativo..." />
 
-      <label for="local">Local de Interesse</label>
-      <input type="text" id="local" name="local" required placeholder="Ex: Araucária, Curitiba..." />
+    <label for="local">Local de Interesse</label>
+    <input type="text" id="local" name="Local de Interesse" required placeholder="Ex: Araucária, Curitiba..." />
 
-      <label for="nome">Seu Nome</label>
-      <input type="text" id="nome" name="nome" required placeholder="Seu nome completo" />
+    <label for="nome">Seu Nome</label>
+    <input type="text" id="nome" name="Nome" required placeholder="Seu nome completo" />
 
-      <label for="telefone">Telefone para Contato (WhatsApp)</label>
-      <input 
-        type="tel" 
-        id="telefone" 
-        name="telefone" 
-        required 
-        placeholder="Ex: (41) 99999-9999"
-        pattern="^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$"
-        title="Digite um telefone válido com DDD. Ex: (41) 99999-9999"
-      />
+    <label for="telefone">Telefone para Contato (WhatsApp)</label>
+    <input 
+      type="tel" 
+      id="telefone" 
+      name="Telefone" 
+      required 
+      placeholder="Ex: (41) 99999-9999"
+      pattern="^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$"
+      title="Digite um telefone válido com DDD. Ex: (41) 99999-9999"
+    />
 
-      <button type="submit">Enviar Solicitação</button>
+    <button type="submit">Enviar Solicitação</button>
   </form>
 
   <div class="msg-sucesso" id="msgSucesso">Solicitação enviada com sucesso! Obrigado.</div>
@@ -250,41 +223,26 @@
 
 <script>
 const form = document.getElementById('formSolicitacao');
+const msgSucesso = document.getElementById('msgSucesso');
 const msgErro = document.getElementById('msgErro');
 
-form.addEventListener('submit', async (e) => {
+form.addEventListener("submit", async function(e) {
   e.preventDefault();
-  msgErro.style.display = 'none';
-
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
-
-  const dados = {
-    area: form.area.value.trim(),
-    local: form.local.value.trim(),
-    nome: form.nome.value.trim(),
-    telefone: form.telefone.value.trim(),
-    data: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-  };
-
+  const data = new FormData(form);
   try {
-    const res = await fetch('/api/solicitacoes', {  // <-- rota corrigida
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dados)
+    const res = await fetch(form.action, {
+      method: form.method,
+      body: data,
+      headers: { 'Accept': 'application/json' }
     });
 
     if (res.ok) {
-      window.location.href = 'confirmacao.html';
+      msgSucesso.style.display = 'block';
+      form.reset();
     } else {
-      msgErro.textContent = 'Erro ao enviar solicitação. Por favor, tente novamente mais tarde.';
       msgErro.style.display = 'block';
     }
-  } catch (error) {
-    console.error('Erro ao enviar solicitação:', error);
-    msgErro.textContent = 'Erro ao enviar solicitação. Verifique sua conexão e tente novamente.';
+  } catch (err) {
     msgErro.style.display = 'block';
   }
 });
