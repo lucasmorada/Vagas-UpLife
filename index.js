@@ -88,13 +88,13 @@ app.post('/api/solicitacoes', (req, res) => {
   res.status(201).json({ mensagem: 'Solicitação criada com sucesso' });
 });
 
-// Inicia servidor
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-
-// Rotas curinga para frontend (evita erro no Render)
+// Rota curinga para frontend (deve vir ANTES do app.listen)
 app.use((req, res, next) => {
   if (req.path.startsWith('/api')) return next(); // passa para 404 API
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Inicia servidor
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
