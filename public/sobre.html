@@ -204,12 +204,13 @@
 
     /* --- AJUSTES PARA CELULAR --- */
     @media(max-width: 768px) {
-  /* Header */
+  /* Header menor */
   header {
     flex-direction: column;
     align-items: center;
-    padding: 8px 10px; /* reduzido */
+    padding: 8px 10px; /* ainda menor */
     text-align: center;
+    height: 50px; /* define altura fixa menor */
   }
 
   header img.logo {
@@ -218,25 +219,33 @@
 
   .nav-buttons {
     flex-direction: column;
-    gap: 6px;
-    margin: 8px 0;
+    gap: 4px;
+    margin: 4px 0;
   }
 
   .nav-buttons a p {
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
 
   .social-icons {
-    margin-top: 6px;
+    margin-top: 4px;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
   }
 
   .social-icons img {
-    width: 26px;
+    width: 22px;
     margin: 0;
   }
+}
+
+/* Faz o header sumir totalmente abaixo de 500px */
+@media(max-width: 500px) {
+  header {
+    display: none;
+  }
+}
 
       .content {
         padding: 30px 20px;
@@ -274,7 +283,7 @@
         font-size: 0.9rem;
         padding: 8px 12px;
       }
-    }
+    
   </style>
 </head>
 <body>
