@@ -132,19 +132,23 @@
     .msg-erro { background-color: #f8d7da; color: #721c24; }
 
     /* --- AJUSTES PARA CELULAR --- */
+/* --- AJUSTES PARA CELULAR --- */
 @media(max-width: 768px) {
   body {
-    padding: 0; /* remove espaços externos */
-    background: #fff; /* fundo branco pra não ter borda laranja lateral */
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    display: block; /* remove o flex que estava centralizando */
+    min-height: auto; /* não força altura mínima */
   }
 
   .container {
     width: 100%;
-    max-width: none;
-    min-height: 100vh; /* ocupa altura total da tela */
+    max-width: 100%;
+    min-height: 100vh;
     padding: 20px 15px;
-    border-radius: 0; /* remove arredondamento no mobile */
-    box-shadow: none; /* sem sombra pra não parecer "cartão solto" */
+    border-radius: 0;
+    box-shadow: none;
   }
 
   h1 {
@@ -178,7 +182,6 @@
   }
 
   .botao-voltar {
-    position: absolute;
     top: 12px;
     left: 12px;
     font-size: 16px;
