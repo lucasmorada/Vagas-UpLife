@@ -137,46 +137,49 @@
   body {
     margin: 0;
     padding: 0;
-    background: #fff;
-    display: block; /* remove o flex que estava centralizando */
-    min-height: auto; /* não força altura mínima */
+    background: linear-gradient(135deg, #f78c1e, #d84e03); /* mantém o fundo degradê */
+    min-height: 100vh;
+    display: block;
   }
 
   .container {
     width: 100%;
     max-width: 100%;
-    min-height: 100vh;
-    padding: 20px 15px;
+    height: 100vh; /* força ocupar toda a tela */
+    padding: 30px 20px;
     border-radius: 0;
     box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* centraliza verticalmente */
   }
 
   h1 {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
     text-align: center;
   }
 
   p {
-    font-size: 0.9rem;
-    margin-bottom: 15px;
+    font-size: 1rem;
+    margin-bottom: 20px;
     text-align: center;
     line-height: 1.4;
   }
 
   label {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-top: 14px;
   }
 
   input, textarea {
     font-size: 1rem;
-    padding: 10px;
+    padding: 12px;
   }
 
   button {
     font-size: 1rem;
-    padding: 12px;
+    padding: 14px;
     margin-top: 22px;
     width: 100%;
   }
@@ -191,6 +194,7 @@
     width: 22px;
     height: 22px;
   }
+}
 
   /* WhatsApp flutuante */
   .whatsapp-container {
@@ -209,7 +213,7 @@
     height: 20px;
     margin-right: 8px;
   }
-}
+
 
   </style>
 </head>
