@@ -135,67 +135,70 @@
 @media(max-width: 768px) {
   body {
     padding: 10px;
-    padding-top: 60px; /* mais espaço por causa do botão voltar */
-  }
-
-  .botao-voltar {
-    font-size: 18px;
-    top: 12px;
-    left: 12px;
-  }
-
-  .botao-voltar svg {
-    width: 24px;
-    height: 24px;
+    padding-top: 70px; /* espaço pro botão voltar */
   }
 
   .container {
-    padding: 20px;
-    border-radius: 10px;
+    width: 95%;          /* ocupa quase toda a tela */
+    max-width: none;     /* remove limite de 480px */
+    padding: 18px;       /* menos espaço interno */
+    border-radius: 8px;
+  }
+
+  .botao-voltar {
+    font-size: 16px;
+    top: 15px;
+    left: 15px;
+  }
+
+  .botao-voltar svg {
+    width: 22px;
+    height: 22px;
   }
 
   h1 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
+    font-size: 1.3rem;
+    margin-bottom: 8px;
   }
 
   p {
-    font-size: 0.9rem;
-    margin-bottom: 18px;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
   }
 
   label {
-    font-size: 0.9rem;
-    margin-top: 14px;
+    font-size: 0.85rem;
+    margin-top: 12px;
   }
 
   input, textarea {
-    font-size: 0.95rem;
-    padding: 10px;
+    font-size: 0.9rem;
+    padding: 9px;
   }
 
   button {
-    font-size: 1rem;
-    padding: 12px;
-    margin-top: 22px;
+    font-size: 0.95rem;
+    padding: 10px;
+    margin-top: 18px;
   }
 
   /* WhatsApp flutuante */
   .whatsapp-container {
-    bottom: 15px;
-    right: 15px;
-    gap: 10px;
+    bottom: 12px;
+    right: 12px;
+    gap: 8px;
   }
 
   .whatsapp-link {
-    padding: 8px 14px;
-    font-size: 0.9rem;
+    padding: 7px 12px;
+    font-size: 0.85rem;
   }
 
   .whatsapp-link img {
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
   }
 }
 
