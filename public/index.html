@@ -290,6 +290,112 @@ header::before {
       align-items: stretch;
     }
   }
+
+  /* --- AJUSTES GERAIS PARA CELULAR --- */
+@media(max-width: 768px) {
+  /* Header */
+  header {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    text-align: center;
+  }
+
+  header img.logo {
+    height: 70px;
+    margin-bottom: 10px;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .nav-buttons a p {
+    font-size: 18px !important;
+  }
+
+  .social-icons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .social-icons img {
+    width: 28px;
+    margin: 0;
+  }
+
+  /* Intro */
+  .intro {
+    padding: 40px 15px 20px;
+  }
+  .intro h1 {
+    font-size: 1.6rem;
+    line-height: 1.3;
+  }
+  .intro .lead {
+    font-size: 0.95rem;
+  }
+
+  /* Hero (banner) */
+  .hero {
+    height: 200px;
+    margin: 0 10px;
+    border-radius: 8px;
+  }
+
+  /* Botão CTA */
+  .cta-button {
+    padding: 20px 0 10px;
+  }
+  .cta-button .cta {
+    font-size: 0.95rem;
+    padding: 12px 24px;
+  }
+
+  /* Filtros */
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .filters select,
+  .filters input,
+  .filters button {
+    font-size: 0.95rem;
+    padding: 10px;
+    flex: 1 1 auto;
+  }
+
+  /* Cards de vagas */
+  .jobs {
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+  }
+  .job-card {
+    padding: 16px;
+  }
+  .job-card h3 {
+    font-size: 1.1rem;
+  }
+  .job-card p {
+    font-size: 0.9rem;
+  }
+  .job-card a.apply button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  /* Footer */
+  footer {
+    font-size: 0.8rem;
+    padding: 15px 10px;
+  }
+}
+
   </style>
 </head>
 
