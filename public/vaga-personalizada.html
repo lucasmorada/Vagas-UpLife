@@ -134,33 +134,26 @@
     /* --- AJUSTES PARA CELULAR --- */
 /* --- AJUSTES PARA CELULAR --- */
 @media(max-width: 768px) {
-      body {
-        margin: 0;
-        padding: 0;
-        background: #fff; /* remove fundo laranja */
-      }
+  body {
+    margin: 0;
+    padding: 10px; /* só um respiro nas bordas */
+    background: linear-gradient(135deg, #f78c1e, #d84e03); /* mantém o laranja */
+  }
 
-      .container {
-        width: 100vw;
-        height: 100vh; /* ocupa toda tela */
-        max-width: 100%;
-        padding: 20px;
-        border-radius: 0;
-        box-shadow: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: center; /* centraliza verticalmente */
-      }
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 12px; /* mantém cantos arredondados */
+    box-shadow: 0 4px 14px rgb(230 81 0 / 0.2);
+    height: auto; /* remove ocupação forçada */
+  }
 
-      h1, p, label, input, textarea, button {
-        width: 100%; /* ocupa 100% da largura */
-      }
+  h1 { font-size: 1.5rem; }
+  p { font-size: 0.95rem; }
+  input, textarea, button { font-size: 1rem; }
+}
 
-      h1 { font-size: 1.5rem; margin-bottom: 12px; text-align: center; }
-      p { font-size: 1rem; margin-bottom: 20px; line-height: 1.4; text-align: center; }
-      label { font-size: 0.95rem; margin-top: 14px; }
-      input, textarea { font-size: 1rem; padding: 12px; }
-      button { font-size: 1rem; padding: 14px; margin-top: 22px; }
 
       .botao-voltar {
         top: 12px;
@@ -185,7 +178,6 @@
         height: 20px;
         margin-right: 8px;
       }
-    }
 
 
   </style>
