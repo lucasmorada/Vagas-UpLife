@@ -204,18 +204,19 @@
 
     /* --- AJUSTES PARA CELULAR --- */
     @media(max-width: 768px) {
-      header {
+  /* Header */
+  header {
     flex-direction: column;
     align-items: center;
     padding: 8px 10px; /* reduzido */
     text-align: center;
-      }
+  }
 
-      header img.logo {
-        display: none;
-      }
+  header img.logo {
+    display: none; /* remove logo no mobile */
+  }
 
-      .nav-buttons {
+  .nav-buttons {
     flex-direction: column;
     gap: 6px;
     margin: 8px 0;
@@ -225,7 +226,7 @@
     font-size: 16px !important;
   }
 
-.social-icons {
+  .social-icons {
     margin-top: 6px;
     display: flex;
     justify-content: center;
