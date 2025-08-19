@@ -130,6 +130,75 @@
 
     .msg-sucesso { background-color: #d4edda; color: #155724; }
     .msg-erro { background-color: #f8d7da; color: #721c24; }
+
+    /* --- AJUSTES PARA CELULAR --- */
+@media(max-width: 768px) {
+  body {
+    padding: 10px;
+    padding-top: 60px; /* mais espaço por causa do botão voltar */
+  }
+
+  .botao-voltar {
+    font-size: 18px;
+    top: 12px;
+    left: 12px;
+  }
+
+  .botao-voltar svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .container {
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+  }
+
+  label {
+    font-size: 0.9rem;
+    margin-top: 14px;
+  }
+
+  input, textarea {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 12px;
+    margin-top: 22px;
+  }
+
+  /* WhatsApp flutuante */
+  .whatsapp-container {
+    bottom: 15px;
+    right: 15px;
+    gap: 10px;
+  }
+
+  .whatsapp-link {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  .whatsapp-link img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+}
+
   </style>
 </head>
 

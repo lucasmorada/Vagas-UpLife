@@ -189,6 +189,92 @@
     .whatsapp-link:hover {
       background-color: #1ebc57;
     }
+
+    /* --- AJUSTES PARA CELULAR --- */
+@media(max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    text-align: center;
+  }
+
+  header img.logo {
+    height: 80px;
+    margin-bottom: 10px;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-buttons a {
+    font-size: 18px;
+  }
+
+  .social-icons {
+    margin-top: 10px;
+  }
+
+  .social-icons img {
+    width: 28px;
+    margin-left: 8px;
+  }
+
+  .container {
+    margin: 20px 10px;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  .btn-candidatar {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  .curso h3, .bloco-tecnico h3 {
+    font-size: 20px;
+  }
+
+  .botao-voltar {
+    font-size: 18px;
+    margin: 15px;
+  }
+
+  .botao-voltar svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* WhatsApp flutuante */
+  .whatsapp-container {
+    bottom: 15px;
+    right: 15px;
+    gap: 10px;
+  }
+
+  .whatsapp-link {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  .whatsapp-link img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+}
+
   </style>
 </head>
 <body>
