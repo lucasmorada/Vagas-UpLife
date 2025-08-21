@@ -20,6 +20,7 @@
   "homepage": "https://github.com/lucasmorada/Vagas-UpLife#readme",
   "dependencies": {
     "express": "^5.1.0",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "pg": "^8.10.0"
   }
 }
