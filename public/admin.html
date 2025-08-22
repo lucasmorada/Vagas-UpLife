@@ -1,260 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Painel Administrativo – UpLife</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #fafafa, #f5c6a9);
       margin: 0;
-      padding: 40px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 0;
+      background: #f7f7f7;
     }
-    h1 { color: #e65100; font-size: 32px; margin-bottom: 30px; }
-    h2 { color: #e65100; margin-top: 40px; margin-bottom: 20px; font-size: 24px; }
-    form {
+    header {
+      background: #f78c1e;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
       background: #fff;
-      width: 100%;
-      max-width: 700px;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    label { display: block; margin-top: 20px; font-weight: 600; font-size: 14px; color: #333; }
-    input, textarea, select {
-      width: 100%; padding: 12px; margin-top: 6px;
-      border: 1px solid #ccc; border-radius: 8px; font-size: 14px; transition: 0.2s;
-    }
-    textarea { overflow: hidden; resize: none; }
-    input:focus, textarea:focus, select:focus { border-color: #e65100; outline: none; }
-    button {
-      margin-top: 30px; background: #e65100; color: white;
-      border: none; padding: 14px 24px; font-size: 16px; font-weight: bold;
-      border-radius: 8px; cursor: pointer; transition: background 0.3s ease;
-    }
-    button:hover { background: #cf4c00; }
-    .container { width: 100%; max-width: 700px; }
-    .vaga, .solicitacao {
-      background: #fff; padding: 20px; border-radius: 14px; margin-bottom: 20px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05); transition: transform 0.2s ease;
-    }
-    .vaga:hover, .solicitacao:hover { transform: scale(1.01); }
-    .btn-excluir, .btn-editar {
-      background: #e65100; color: white; border: none; padding: 10px 16px;
-      border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 10px;
-      transition: background 0.3s ease;
-    }
-    .btn-excluir:hover, .btn-editar:hover { background: #cf4c00; }
-    a { color: #e65100; font-weight: bold; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    small { color: #777; }
+    h1 { margin-top: 0; }
+    form { display: grid; gap: 1rem; margin-bottom: 2rem; }
+    input, textarea, select, button { padding: 0.5rem; font-size: 1rem; width: 100%; }
+    button { cursor: pointer; background: #f78c1e; color: #fff; border: none; border-radius: 5px; }
+    .vaga { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; background: #fafafa; }
+    .vaga button { width: auto; margin-right: 0.5rem; }
   </style>
 </head>
 <body>
-<h1>Painel Administrativo</h1>
-<div class="container">
-  <h2>Cadastrar Nova Vaga</h2>
-  <form id="formVaga">
-    <label for="titulo">Título da Vaga</label>
-    <input type="text" id="titulo" name="titulo" required>
+  <header>
+    <h1>Painel Administrativo – UpLife</h1>
+  </header>
+  <main>
+    <form id="formVaga">
+      <input type="text" name="titulo" placeholder="Título da vaga" required>
+      <input type="text" name="empresa" placeholder="Empresa">
+      <input type="text" name="funcao" placeholder="Função">
+      <input type="text" name="local" placeholder="Local">
+      <input type="text" name="area" placeholder="Área">
+      <textarea name="descricao" placeholder="Descrição"></textarea>
+      <input type="text" name="link" placeholder="Link da vaga">
+      <label>
+        <input type="checkbox" name="tecnicoCompetencia"> Técnico por Competência
+      </label>
+      <h3>Curso relacionado</h3>
+      <input type="text" name="cursoNome" placeholder="Nome do curso">
+      <input type="text" name="cursoDescricao" placeholder="Descrição do curso">
+      <input type="text" name="cursoImagem" placeholder="URL da imagem do curso">
+      <input type="text" name="cursoLink" placeholder="Link do curso">
+      <button type="submit">Salvar Vaga</button>
+    </form>
 
-    <label for="empresa">Empresa</label>
-    <input type="text" id="empresa" name="empresa">
+    <div id="listaVagas"></div>
+  </main>
 
-    <label for="funcao">Função / Salário</label>
-    <input type="text" id="funcao" name="funcao">
+  <script>
+    let vagaEditando = null;
 
-    <label for="local">Local</label>
-    <input type="text" id="local" name="local" required>
+    // Função para carregar vagas
+    async function carregarVagas() {
+      try {
+        const res = await fetch('/api/vagas');
+        const text = await res.text();
+        let vagas;
+        try {
+          vagas = JSON.parse(text);
+        } catch(err) {
+          console.error("Erro ao interpretar JSON:", err, text);
+          vagas = [];
+        }
 
-    <label for="area">Área</label>
-    <select id="area" name="area" required>
-      <option value="">Selecione uma área</option>
-      <option value="Manutenção">Manutenção</option>
-      <option value="Logística">Logística</option>
-      <option value="Produção">Produção</option>
-      <option value="Elétrica">Elétrica</option>
-      <option value="Segurança do Trabalho">Segurança do Trabalho</option>
-      <option value="Administrativo">Administrativo</option>
-      <option value="Outras">Outras</option>
-    </select>
-
-    <label for="descricao">Descrição</label>
-    <textarea id="descricao" name="descricao" rows="4" required></textarea>
-
-    <label for="link">Link de Candidatura</label>
-    <input type="url" id="link" name="link" required>
-
-    <h3 style="margin-top:30px;">Curso Relacionado (opcional)</h3>
-    <label for="cursoNome">Nome do Curso</label>
-    <input type="text" id="cursoNome" name="cursoNome">
-
-    <label for="cursoDescricao">Descrição do Curso</label>
-    <textarea id="cursoDescricao" name="cursoDescricao" rows="3"></textarea>
-
-    <label for="cursoImagem">URL da Imagem do Curso</label>
-    <input type="url" id="cursoImagem" name="cursoImagem">
-
-    <label for="cursoLink">Link do Curso</label>
-    <input type="url" id="cursoLink" name="cursoLink">
-
-    <h3 style="margin-top: 30px;">Outras opções</h3>
-    <label style="display: flex; align-items: flex-start; gap: 10px; margin-top: 10px;">
-      <input type="checkbox" id="tecnicoCompetencia" name="tecnicoCompetencia" style="margin-top: 5px;">
-      <div>
-        <strong>Mostrar bloco "Técnico por Competência" na vaga</strong><br>
-        <small>Ao marcar essa opção, será exibida no detalhe da vaga uma explicação com botão de contato do Jeverson.</small>
-      </div>
-    </label>
-
-    <button type="submit">Cadastrar Vaga</button>
-  </form>
-
-  <h2>Vagas Cadastradas</h2>
-  <div id="listaVagas"></div>
-
-  <h2>Solicitações de Vagas Personalizadas</h2>
-  <div id="listaSolicitacoes"></div>
-</div>
-
-<script>
-let vagaEditando = null;
-
-// --- FUNÇÃO PARA CARREGAR VAGAS ---
-async function carregarVagas() {
-  try {
-    const res = await fetch('/api/vagas');
-    const text = await res.text();
-    let vagas;
-    try {
-      vagas = JSON.parse(text);
-    } catch(err) {
-      console.error("Erro ao interpretar JSON:", err, text);
-      vagas = [];
+        const lista = document.getElementById('listaVagas');
+        lista.innerHTML = '';
+        vagas.forEach(v => {
+          const div = document.createElement('div');
+          div.className = 'vaga';
+          div.innerHTML = `
+            <strong>${v.titulo ?? ''}</strong><br>
+            Empresa: ${v.empresa ?? ''}<br>
+            Função: ${v.funcao ?? ''}<br>
+            Local: ${v.local ?? ''}<br>
+            Área: ${v.area ?? ''}<br>
+            Descrição: ${v.descricao ? (v.descricao.length > 100 ? v.descricao.substring(0,100) + '...' : v.descricao) : ''}<br>
+            <a href="${v.link ?? '#'}" target="_blank">Ver Link</a><br>
+            <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
+            <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v).replace(/'/g,"\\'")})'>Editar</button>
+          `;
+          lista.appendChild(div);
+        });
+      } catch(e) { console.error(e); }
     }
 
-    const lista = document.getElementById('listaVagas');
-    lista.innerHTML = '';
-    vagas.forEach(v => {
-      const div = document.createElement('div');
-      div.className = 'vaga';
-      div.innerHTML = `
-        <strong>${v.titulo}</strong><br>
-        Empresa: ${v.empresa||'-'}<br>
-        Função: ${v.funcao||'-'}<br>
-        Local: ${v.local||'-'}<br>
-        Área: ${v.area||'-'}<br>
-        Descrição: ${v.descricao.length>100?v.descricao.substring(0,100)+'...':v.descricao}<br>
-        <a href="${v.link}" target="_blank">Ver Link</a><br>
-        <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
-        <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v).replace(/'/g,"\\'")})'>Editar</button>
-      `;
-      lista.appendChild(div);
+    // Função para editar vaga
+    function editarVaga(vaga){
+      const f = document.getElementById('formVaga');
+      f.titulo.value = vaga.titulo ?? '';
+      f.empresa.value = vaga.empresa ?? '';
+      f.funcao.value = vaga.funcao ?? '';
+      f.local.value = vaga.local ?? '';
+      f.area.value = vaga.area ?? '';
+      f.descricao.value = vaga.descricao ?? '';
+      f.link.value = vaga.link ?? '';
+      f.tecnicoCompetencia.checked = vaga.tecnicoCompetencia ?? false;
+      if(vaga.curso){
+        f.cursoNome.value = vaga.curso.nome ?? '';
+        f.cursoDescricao.value = vaga.curso.descricao ?? '';
+        f.cursoImagem.value = vaga.curso.imagem ?? '';
+        f.cursoLink.value = vaga.curso.link ?? '';
+      } else {
+        f.cursoNome.value = '';
+        f.cursoDescricao.value = '';
+        f.cursoImagem.value = '';
+        f.cursoLink.value = '';
+      }
+      vagaEditando = vaga.id ?? null;
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    // Função para excluir vaga
+    async function excluirVaga(id){
+      if(!confirm('Deseja realmente excluir esta vaga?')) return;
+      try{
+        await fetch(`/api/vagas/${id}`, { method: 'DELETE' });
+        carregarVagas();
+      } catch(e) { console.error(e); }
+    }
+
+    // Submissão do formulário
+    document.getElementById('formVaga').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const f = e.target;
+      const vagaData = {
+        titulo: f.titulo.value,
+        empresa: f.empresa.value,
+        funcao: f.funcao.value,
+        local: f.local.value,
+        area: f.area.value,
+        descricao: f.descricao.value,
+        link: f.link.value,
+        tecnicoCompetencia: f.tecnicoCompetencia.checked,
+        curso: {
+          nome: f.cursoNome.value,
+          descricao: f.cursoDescricao.value,
+          imagem: f.cursoImagem.value,
+          link: f.cursoLink.value
+        }
+      };
+      try{
+        if(vagaEditando){
+          await fetch(`/api/vagas/${vagaEditando}`, {
+            method: 'PUT',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(vagaData)
+          });
+        } else {
+          await fetch('/api/vagas', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(vagaData)
+          });
+        }
+        f.reset();
+        vagaEditando = null;
+        carregarVagas();
+      } catch(e){ console.error(e); }
     });
-  } catch(e) { console.error(e); }
-}
 
-// --- FUNÇÃO PARA EXCLUIR VAGA ---
-async function excluirVaga(id){
-  if(!confirm('Tem certeza que deseja excluir esta vaga?')) return;
-  try {
-    const res = await fetch(`/api/vagas/${id}`, { method: 'DELETE' });
-    if(res.ok) carregarVagas();
-    else console.error(await res.text());
-  } catch(e) { console.error(e); }
-}
-
-// --- FUNÇÃO EDITAR VAGA ---
-function editarVaga(vaga){
-  const f=document.getElementById('formVaga');
-  f.titulo.value=vaga.titulo;
-  f.empresa.value=vaga.empresa;
-  f.funcao.value=vaga.funcao;
-  f.local.value=vaga.local;
-  f.area.value=vaga.area;
-  f.descricao.value=vaga.descricao;
-  f.link.value=vaga.link;
-  f.tecnicoCompetencia.checked=vaga.tecnicoCompetencia||false;
-  if(vaga.curso){
-    f.cursoNome.value=vaga.curso.nome||'';
-    f.cursoDescricao.value=vaga.curso.descricao||'';
-    f.cursoImagem.value=vaga.curso.imagem||'';
-    f.cursoLink.value=vaga.curso.link||'';
-  }
-  vagaEditando=vaga.id;
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-// --- FORM SUBMIT ---
-document.getElementById('formVaga').addEventListener('submit', async e=>{
-  e.preventDefault();
-  const f=e.target;
-  const vaga={
-    titulo:f.titulo.value,
-    empresa:f.empresa.value,
-    funcao:f.funcao.value,
-    local:f.local.value,
-    area:f.area.value,
-    descricao:f.descricao.value,
-    link:f.link.value,
-    tecnicoCompetencia:f.tecnicoCompetencia.checked,
-    curso:{
-      nome:f.cursoNome.value,
-      descricao:f.cursoDescricao.value,
-      imagem:f.cursoImagem.value,
-      link:f.cursoLink.value
-    }
-  };
-  
-  try {
-    let res;
-    if(vagaEditando){
-      res = await fetch(`/api/vagas/${vagaEditando}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(vaga)
-      });
-    } else {
-      res = await fetch('/api/vagas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(vaga)
-      });
-    }
-
-    if(res.ok){
-      f.reset();
-      vagaEditando=null;
-      carregarVagas();
-    } else {
-      console.error(await res.text());
-    }
-  } catch(e) { console.error(e); }
-});
-
-// --- FUNÇÃO CARREGAR SOLICITAÇÕES ---
-async function carregarSolicitacoes(){
-  const lista=document.getElementById('listaSolicitacoes');
-  lista.innerHTML='<p>Nenhuma solicitação registrada.</p>';
-}
-
-// --- AUTO AJUSTE TEXTAREA ---
-document.querySelectorAll("textarea").forEach(t=>{
-  t.addEventListener("input", e=>{
-    e.target.style.height='auto';
-    e.target.style.height=e.target.scrollHeight+'px';
-  });
-  t.dispatchEvent(new Event('input'));
-});
-
-// --- CARREGAR AO ABRIR ---
-carregarVagas();
-carregarSolicitacoes();
-</script>
+    carregarVagas();
+  </script>
 </body>
 </html>
