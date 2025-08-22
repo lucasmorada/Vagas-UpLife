@@ -8,200 +8,192 @@
     * { box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
+      background: #f5f6fa;
       margin: 0;
-      background: #f4f6f9;
-      color: #333;
-    }
-    header {
-      background: #f78c1f;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
-    main {
       padding: 20px;
-      max-width: 1000px;
-      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #f78c1f;
     }
     form {
       background: white;
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 0 auto 30px auto;
     }
-    form h2 { margin-top: 0; }
-    label { display: block; margin-top: 10px; font-weight: 600; }
-    input, textarea, select {
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 600;
+    }
+    input, textarea, select, button {
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: inherit;
+      border-radius: 8px;
+      font-size: 14px;
     }
     button {
-      margin-top: 15px;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
       background: #f78c1f;
       color: white;
-      font-size: 16px;
+      font-weight: bold;
+      margin-top: 15px;
       cursor: pointer;
+      border: none;
+      transition: 0.3s;
     }
-    button:hover { background: #e67c12; }
-    .list {
-      display: grid;
-      gap: 20px;
+    button:hover {
+      background: #e57c10;
+    }
+    .lista {
+      max-width: 900px;
+      margin: 0 auto;
     }
     .card {
       background: white;
-      border-radius: 12px;
       padding: 15px;
+      border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
     }
-    .card h3 { margin: 0 0 10px; color: #f78c1f; }
+    .card h3 {
+      margin: 0 0 10px;
+      color: #333;
+    }
     .actions {
       margin-top: 10px;
     }
     .actions button {
-      margin-right: 8px;
-      background: #444;
+      width: auto;
+      margin-right: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
     }
-    .actions button.delete { background: crimson; }
   </style>
 </head>
 <body>
-  <header>Painel Administrativo – UpLife</header>
-  <main>
-    <!-- Formulário de cadastro de vagas -->
-    <form id="vagaForm">
-      <h2>Cadastrar Nova Vaga</h2>
-      <label>Título da Vaga:</label>
-      <input type="text" id="titulo" required>
+  <h1>Painel Administrativo – UpLife</h1>
 
-      <label>Área:</label>
-      <input type="text" id="area" placeholder="Ex: Produção, Engenharia" required>
+  <form id="vagaForm">
+    <label for="titulo">Título da Vaga:</label>
+    <input type="text" id="titulo" name="titulo" required>
 
-      <label>Salário:</label>
-      <input type="text" id="salario" placeholder="Ex: R$ 3.000,00">
+    <label for="descricao">Descrição:</label>
+    <textarea id="descricao" name="descricao" required></textarea>
 
-      <label>Descrição:</label>
-      <textarea id="descricao" rows="4" required></textarea>
+    <label for="area">Área:</label>
+    <input type="text" id="area" name="area" required>
 
-      <label>Link do LinkedIn:</label>
-      <input type="url" id="link">
+    <label for="link">Link da Vaga (LinkedIn):</label>
+    <input type="url" id="link" name="link" required>
 
-      <label>Cursos Relacionados (da UpLife):</label>
-      <input type="text" id="cursos" placeholder="Ex: PCP, MS Project">
+    <label for="curso">Curso Relacionado:</label>
+    <input type="text" id="curso" name="curso">
 
-      <label>
-        <input type="checkbox" id="tecnicoCompetencia">
-        Técnico por Competência
-      </label>
+    <label>
+      <input type="checkbox" id="tecnicoCompetencia" name="tecnicoCompetencia">
+      Técnico por Competência
+    </label>
 
-      <button type="submit">Salvar Vaga</button>
-    </form>
+    <button type="submit">Cadastrar Vaga</button>
+  </form>
 
+  <div class="lista">
     <h2>Vagas Cadastradas</h2>
-    <div id="vagasList" class="list"></div>
-
-    <h2>Solicitações Personalizadas</h2>
-    <div id="solicitacoesList" class="list"></div>
-  </main>
+    <div id="listaVagas"></div>
+  </div>
 
   <script>
-    const vagaForm = document.getElementById("vagaForm");
-    const vagasList = document.getElementById("vagasList");
-    const solicitacoesList = document.getElementById("solicitacoesList");
+    const API_URL = "https://vagas-uplife.onrender.com/api/vagas";
 
-    // Carregar vagas
     async function carregarVagas() {
-      const res = await fetch("/api/vagas");
-      const vagas = await res.json();
-      vagasList.innerHTML = "";
-      vagas.forEach(vaga => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <h3>${vaga.titulo}</h3>
-          <p><b>Área:</b> ${vaga.area}</p>
-          <p><b>Salário:</b> ${vaga.salario || "Não informado"}</p>
-          <p>${vaga.descricao}</p>
-          <p><b>Cursos:</b> ${vaga.cursos || "Nenhum"}</p>
-          <p><b>Técnico por Competência:</b> ${vaga.tecnicoCompetencia ? "Sim" : "Não"}</p>
-          <a href="${vaga.link}" target="_blank">Ver no LinkedIn</a>
-          <div class="actions">
-            <button onclick="editarVaga('${vaga.id}')">Editar</button>
-            <button class="delete" onclick="excluirVaga('${vaga.id}')">Excluir</button>
-          </div>
-        `;
-        vagasList.appendChild(card);
-      });
+      try {
+        const res = await fetch(API_URL);
+        const vagas = await res.json();
+
+        const lista = document.getElementById("listaVagas");
+        lista.innerHTML = "";
+
+        vagas.forEach(vaga => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <h3>${vaga.titulo}</h3>
+            <p><strong>Descrição:</strong> ${vaga.descricao}</p>
+            <p><strong>Área:</strong> ${vaga.area}</p>
+            <p><strong>Curso:</strong> ${vaga.curso || "—"}</p>
+            <p><a href="${vaga.link}" target="_blank">Ver no LinkedIn</a></p>
+            <p><strong>Técnico por Competência:</strong> ${vaga.tecnicoCompetencia ? "Sim" : "Não"}</p>
+            <div class="actions">
+              <button onclick="editarVaga('${vaga.id}')">Editar</button>
+              <button onclick="excluirVaga('${vaga.id}')">Excluir</button>
+            </div>
+          `;
+          lista.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Erro ao carregar vagas:", err);
+      }
     }
 
-    // Carregar solicitações personalizadas
-    async function carregarSolicitacoes() {
-      const res = await fetch("/api/solicitacoes");
-      const solicitacoes = await res.json();
-      solicitacoesList.innerHTML = "";
-      solicitacoes.forEach(s => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <h3>${s.nome}</h3>
-          <p><b>Email:</b> ${s.email}</p>
-          <p><b>Mensagem:</b> ${s.mensagem}</p>
-        `;
-        solicitacoesList.appendChild(card);
-      });
-    }
-
-    // Salvar nova vaga
-    vagaForm.addEventListener("submit", async (e) => {
+    document.getElementById("vagaForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const vaga = {
         titulo: document.getElementById("titulo").value,
-        area: document.getElementById("area").value,
-        salario: document.getElementById("salario").value,
         descricao: document.getElementById("descricao").value,
+        area: document.getElementById("area").value,
         link: document.getElementById("link").value,
-        cursos: document.getElementById("cursos").value,
+        curso: document.getElementById("curso").value,
         tecnicoCompetencia: document.getElementById("tecnicoCompetencia").checked
       };
 
-      await fetch("/api/vagas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(vaga)
-      });
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(vaga)
+        });
 
-      vagaForm.reset();
-      carregarVagas();
+        e.target.reset();
+        carregarVagas();
+      } catch (err) {
+        console.error("Erro ao salvar vaga:", err);
+      }
     });
 
     async function excluirVaga(id) {
-      await fetch(`/api/vagas/${id}`, { method: "DELETE" });
-      carregarVagas();
+      if (!confirm("Deseja excluir esta vaga?")) return;
+
+      try {
+        await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        carregarVagas();
+      } catch (err) {
+        console.error("Erro ao excluir vaga:", err);
+      }
     }
 
     async function editarVaga(id) {
       const novoTitulo = prompt("Novo título da vaga:");
       if (!novoTitulo) return;
-      await fetch(`/api/vagas/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ titulo: novoTitulo })
-      });
-      carregarVagas();
+
+      try {
+        await fetch(`${API_URL}/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ titulo: novoTitulo })
+        });
+        carregarVagas();
+      } catch (err) {
+        console.error("Erro ao editar vaga:", err);
+      }
     }
 
-    // Inicialização
     carregarVagas();
-    carregarSolicitacoes();
   </script>
 </body>
 </html>

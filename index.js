@@ -8,9 +8,10 @@ const PORT = process.env.PORT || 3000; // Render precisa disso
 
 // Conexão com PostgreSQL (Render fornece DATABASE_URL no ambiente)
 const pool = new Pool({
-  connectionString: process.env.DATABASEURL,
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
+
 
 // Middleware
 app.use(express.json());
@@ -50,11 +51,11 @@ app.get('/api/vagas/:id', async (req, res) => {
 
 // POST criar vaga
 app.post('/api/vagas', async (req, res) => {
-  const { titulo, descricao, area, cursos, tecnico_competencia } = req.body;
+  const { titulo, descricao, area, link, curso, tecnicoCompetencia } = req.body;
   try {
     await pool.query(
-      'INSERT INTO vagas (titulo, descricao, area, cursos, tecnico_competencia) VALUES ($1, $2, $3, $4, $5)',
-      [titulo, descricao, area, cursos, tecnico_competencia || false]
+      'INSERT INTO vagas (titulo, descricao, area, link, curso, tecnico_competencia) VALUES ($1, $2, $3, $4, $5, $6)',
+      [titulo, descricao, area, link, curso, tecnicoCompetencia || false]
     );
     res.status(201).json({ mensagem: 'Vaga criada com sucesso' });
   } catch (err) {
@@ -63,13 +64,14 @@ app.post('/api/vagas', async (req, res) => {
   }
 });
 
+
 // PUT atualizar vaga
 app.put('/api/vagas/:id', async (req, res) => {
-  const { titulo, descricao, area, cursos, tecnico_competencia } = req.body;
+  const { titulo, descricao, area, link, curso, tecnicoCompetencia } = req.body;
   try {
     const result = await pool.query(
-      'UPDATE vagas SET titulo=$1, descricao=$2, area=$3, cursos=$4, tecnico_competencia=$5 WHERE id=$6',
-      [titulo, descricao, area, cursos, tecnico_competencia, req.params.id]
+      'UPDATE vagas SET titulo=$1, descricao=$2, area=$3, link=$4, curso=$5, tecnico_competencia=$6 WHERE id=$7',
+      [titulo, descricao, area, link, curso, tecnicoCompetencia, req.params.id]
     );
     if (result.rowCount > 0) {
       res.json({ mensagem: 'Vaga atualizada com sucesso' });
@@ -81,6 +83,7 @@ app.put('/api/vagas/:id', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao atualizar vaga' });
   }
 });
+
 
 // DELETE excluir vaga
 app.delete('/api/vagas/:id', async (req, res) => {
