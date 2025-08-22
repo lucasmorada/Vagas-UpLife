@@ -1,34 +1,34 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
-const { Pool } = require('pg');
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Render precisa disso
+const PORT = process.env.PORT || 3000;
 
-// Conexão com PostgreSQL (Render fornece DATABASE_URL no ambiente)
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
+const VAGAS_PATH = path.join(__dirname, 'data', 'vagas.json');
 
 // Middleware
 app.use(express.json());
 app.use(cors());
-
-// Servir arquivos estáticos do frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
-//
-// ROTAS DE VAGAS
-//
+// Função para ler vagas
+function lerVagas() {
+  const data = fs.readFileSync(VAGAS_PATH, 'utf-8');
+  return JSON.parse(data || '[]');
+}
+
+// Função para salvar vagas
+function salvarVagas(vagas) {
+  fs.writeFileSync(VAGAS_PATH, JSON.stringify(vagas, null, 2));
+}
 
 // GET todas as vagas
-app.get('/api/vagas', async (req, res) => {
+app.get('/api/vagas', (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM vagas ORDER BY id DESC');
-    res.json(result.rows);
+    const vagas = lerVagas();
+    res.json(vagas);
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: 'Erro ao buscar vagas' });
@@ -36,109 +36,82 @@ app.get('/api/vagas', async (req, res) => {
 });
 
 // GET vaga por ID
-app.get('/api/vagas/:id', async (req, res) => {
+app.get('/api/vagas/:id', (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM vagas WHERE id = $1', [req.params.id]);
-    if (result.rows.length > 0) {
-      res.json(result.rows[0]);
-    } else {
-      res.status(404).json({ erro: 'Vaga não encontrada' });
-    }
+    const vagas = lerVagas();
+    const vaga = vagas.find(v => v.id === parseInt(req.params.id));
+    if (vaga) res.json(vaga);
+    else res.status(404).json({ erro: 'Vaga não encontrada' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ erro: 'Erro ao buscar vaga' });
   }
 });
 
 // POST criar vaga
-app.post('/api/vagas', async (req, res) => {
-  const { titulo, descricao, area, link, curso, tecnicoCompetencia } = req.body;
+app.post('/api/vagas', (req, res) => {
   try {
-    await pool.query(
-      'INSERT INTO vagas (titulo, descricao, area, link, curso, tecnico_competencia) VALUES ($1, $2, $3, $4, $5, $6)',
-      [titulo, descricao, area, link, curso, tecnicoCompetencia || false]
-    );
-    res.status(201).json({ mensagem: 'Vaga criada com sucesso' });
+    const vagas = lerVagas();
+    const { titulo, descricao, area, link, curso, tecnicoCompetencia } = req.body;
+    const novaVaga = {
+      id: vagas.length > 0 ? vagas[vagas.length - 1].id + 1 : 1,
+      titulo,
+      descricao,
+      area,
+      link,
+      curso,
+      tecnicoCompetencia: tecnicoCompetencia || false
+    };
+    vagas.push(novaVaga);
+    salvarVagas(vagas);
+    res.status(201).json({ mensagem: 'Vaga criada com sucesso', vaga: novaVaga });
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: 'Erro ao criar vaga' });
   }
 });
 
-
 // PUT atualizar vaga
-app.put('/api/vagas/:id', async (req, res) => {
-  const { titulo, descricao, area, link, curso, tecnicoCompetencia } = req.body;
+app.put('/api/vagas/:id', (req, res) => {
   try {
-    const result = await pool.query(
-      'UPDATE vagas SET titulo=$1, descricao=$2, area=$3, link=$4, curso=$5, tecnico_competencia=$6 WHERE id=$7',
-      [titulo, descricao, area, link, curso, tecnicoCompetencia, req.params.id]
-    );
-    if (result.rowCount > 0) {
-      res.json({ mensagem: 'Vaga atualizada com sucesso' });
-    } else {
-      res.status(404).json({ erro: 'Vaga não encontrada' });
-    }
+    const vagas = lerVagas();
+    const index = vagas.findIndex(v => v.id === parseInt(req.params.id));
+    if (index === -1) return res.status(404).json({ erro: 'Vaga não encontrada' });
+
+    const { titulo, descricao, area, link, curso, tecnicoCompetencia } = req.body;
+    vagas[index] = { ...vagas[index], titulo, descricao, area, link, curso, tecnicoCompetencia };
+    salvarVagas(vagas);
+    res.json({ mensagem: 'Vaga atualizada com sucesso' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: 'Erro ao atualizar vaga' });
   }
 });
 
-
 // DELETE excluir vaga
-app.delete('/api/vagas/:id', async (req, res) => {
+app.delete('/api/vagas/:id', (req, res) => {
   try {
-    const result = await pool.query('DELETE FROM vagas WHERE id=$1', [req.params.id]);
-    if (result.rowCount > 0) {
-      res.json({ mensagem: 'Vaga excluída com sucesso' });
-    } else {
-      res.status(404).json({ erro: 'Vaga não encontrada' });
-    }
+    let vagas = lerVagas();
+    const index = vagas.findIndex(v => v.id === parseInt(req.params.id));
+    if (index === -1) return res.status(404).json({ erro: 'Vaga não encontrada' });
+
+    vagas.splice(index, 1);
+    salvarVagas(vagas);
+    res.json({ mensagem: 'Vaga excluída com sucesso' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ erro: 'Erro ao excluir vaga' });
   }
 });
 
-//
-// ROTAS DE SOLICITAÇÕES
-//
+// Rotas de solicitacoes podem ser adaptadas do mesmo jeito, se quiser
 
-// GET todas as solicitações
-app.get('/api/solicitacoes', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM solicitacoes ORDER BY id DESC');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: 'Erro ao buscar solicitações' });
-  }
-});
-
-// POST criar solicitação
-app.post('/api/solicitacoes', async (req, res) => {
-  const { nome, email, mensagem } = req.body;
-  try {
-    await pool.query(
-      'INSERT INTO solicitacoes (nome, email, mensagem) VALUES ($1, $2, $3)',
-      [nome, email, mensagem]
-    );
-    res.status(201).json({ mensagem: 'Solicitação criada com sucesso' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ erro: 'Erro ao criar solicitação' });
-  }
-});
-
-//
 // ROTA CURINGA PARA FRONTEND
-//
 app.use((req, res, next) => {
-  if (req.path.startsWith('/api')) return next(); // passa para 404 API
+  if (req.path.startsWith('/api')) return next();
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Inicia servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
