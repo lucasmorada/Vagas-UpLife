@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+não deu pra salvar a vaga pelo painel do admin.html, deve ser problema no codigo dele, arrume pra mim pfvr: <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -7,7 +7,7 @@
   <style>
     * { box-sizing: border-box; }
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Poppins';
       background: linear-gradient(135deg, #fafafa, #f5c6a9);
       margin: 0;
       padding: 40px 20px;
@@ -25,28 +25,62 @@
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
-    label { display: block; margin-top: 20px; font-weight: 600; font-size: 14px; color: #333; }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+    }
     input, textarea, select {
-      width: 100%; padding: 12px; margin-top: 6px;
-      border: 1px solid #ccc; border-radius: 8px; font-size: 14px; transition: 0.2s;
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.2s;
     }
     textarea { overflow: hidden; resize: none; }
-    input:focus, textarea:focus, select:focus { border-color: #e65100; outline: none; }
+    input:focus, textarea:focus, select:focus {
+      border-color: #e65100;
+      outline: none;
+    }
     button {
-      margin-top: 30px; background: #e65100; color: white;
-      border: none; padding: 14px 24px; font-size: 16px; font-weight: bold;
-      border-radius: 8px; cursor: pointer; transition: background 0.3s ease;
+      margin-top: 30px;
+      background: #e65100;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
     button:hover { background: #cf4c00; }
-    .container { width: 100%; max-width: 700px; }
+    .container {
+      width: 100%;
+      max-width: 700px;
+    }
     .vaga, .solicitacao {
-      background: #fff; padding: 20px; border-radius: 14px; margin-bottom: 20px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05); transition: transform 0.2s ease;
+      background: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
     }
     .vaga:hover, .solicitacao:hover { transform: scale(1.01); }
     .btn-excluir, .btn-editar {
-      background: #e65100; color: white; border: none; padding: 10px 16px;
-      border-radius: 6px; font-size: 14px; cursor: pointer; margin-top: 10px;
+      background: #e65100;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
       transition: background 0.3s ease;
     }
     .btn-excluir:hover, .btn-editar:hover { background: #cf4c00; }
@@ -56,7 +90,9 @@
   </style>
 </head>
 <body>
+
 <h1>Painel Administrativo</h1>
+
 <div class="container">
   <h2>Cadastrar Nova Vaga</h2>
   <form id="formVaga">
@@ -66,7 +102,7 @@
     <label for="empresa">Empresa</label>
     <input type="text" id="empresa" name="empresa">
 
-    <label for="funcao">Função / Salário</label>
+    <label for="funcao">Salário</label>
     <input type="text" id="funcao" name="funcao">
 
     <label for="local">Local</label>
@@ -76,11 +112,12 @@
     <select id="area" name="area" required>
       <option value="">Selecione uma área</option>
       <option value="Manutenção">Manutenção</option>
-      <option value="Logística">Logística</option>
+      <option value="Logística">Mecânica</option>
       <option value="Produção">Produção</option>
       <option value="Elétrica">Elétrica</option>
       <option value="Segurança do Trabalho">Segurança do Trabalho</option>
-      <option value="Administrativo">Administrativo</option>
+      <option value="Administrativo">Planejamento</option>
+      <option value="Administrativo">Automação</option>
       <option value="Outras">Outras</option>
     </select>
 
@@ -91,6 +128,7 @@
     <input type="url" id="link" name="link" required>
 
     <h3 style="margin-top:30px;">Curso Relacionado (opcional)</h3>
+
     <label for="cursoNome">Nome do Curso</label>
     <input type="text" id="cursoNome" name="cursoNome">
 
@@ -129,6 +167,7 @@ let vagaEditando = null;
 async function carregarVagas() {
   try {
     const res = await fetch('/api/vagas');
+    if(!res.ok) throw new Error('Erro ao buscar vagas');
     const vagas = await res.json();
     const lista = document.getElementById('listaVagas');
     lista.innerHTML = '';
@@ -139,50 +178,46 @@ async function carregarVagas() {
         <strong>${v.titulo}</strong><br>
         Empresa: ${v.empresa||'-'}<br>
         Função: ${v.funcao||'-'}<br>
-        Local: ${v.local||'-'}<br>
-        Área: ${v.area||'-'}<br>
-        Descrição: ${v.descricao? (v.descricao.length>100?v.descricao.substring(0,100)+'...':v.descricao) : ''}<br>
-        <a href="${v.link||'#'}" target="_blank">Ver Link</a><br>
+        Local: ${v.local}<br>
+        Área: ${v.area}<br>
+        Descrição: ${v.descricao.length>100?v.descricao.substring(0,100)+'...':v.descricao}<br>
+        <a href="${v.link}" target="_blank">Ver Link</a><br>
         <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
         <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v).replace(/'/g,"\\'")})'>Editar</button>
       `;
       lista.appendChild(div);
     });
-  } catch(e){ console.error(e); }
+  } catch(e) { console.error(e); }
 }
 
 // --- FUNÇÃO PARA EXCLUIR VAGA ---
 async function excluirVaga(id){
-  if(!confirm('Deseja realmente excluir esta vaga?')) return;
+  if(!confirm('Tem certeza que deseja excluir esta vaga?')) return;
   try {
-    await fetch(`/api/vagas/${id}`, { method: 'DELETE' });
-    carregarVagas();
-  } catch(e){ console.error(e); }
+    const res = await fetch(`/api/vagas/${id}`, { method:'DELETE' });
+    if(res.ok) carregarVagas();
+    else alert('Erro ao excluir vaga');
+  } catch(e){ alert('Erro ao conectar com servidor'); }
 }
 
 // --- FUNÇÃO EDITAR VAGA ---
 function editarVaga(vaga){
   const f=document.getElementById('formVaga');
-  f.titulo.value=vaga.titulo||'';
-  f.empresa.value=vaga.empresa||'';
-  f.funcao.value=vaga.funcao||'';
-  f.local.value=vaga.local||'';
-  f.area.value=vaga.area||'';
-  f.descricao.value=vaga.descricao||'';
-  f.link.value=vaga.link||'';
+  f.titulo.value=vaga.titulo;
+  f.empresa.value=vaga.empresa;
+  f.funcao.value=vaga.funcao;
+  f.local.value=vaga.local;
+  f.area.value=vaga.area;
+  f.descricao.value=vaga.descricao;
+  f.link.value=vaga.link;
   f.tecnicoCompetencia.checked=vaga.tecnicoCompetencia||false;
   if(vaga.curso){
     f.cursoNome.value=vaga.curso.nome||'';
     f.cursoDescricao.value=vaga.curso.descricao||'';
     f.cursoImagem.value=vaga.curso.imagem||'';
     f.cursoLink.value=vaga.curso.link||'';
-  } else {
-    f.cursoNome.value='';
-    f.cursoDescricao.value='';
-    f.cursoImagem.value='';
-    f.cursoLink.value='';
   }
-  vagaEditando=vaga.id||null;
+  vagaEditando=vaga.id;
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
@@ -190,7 +225,7 @@ function editarVaga(vaga){
 document.getElementById('formVaga').addEventListener('submit', async e=>{
   e.preventDefault();
   const f=e.target;
-  const vagaData={
+  const vaga={
     titulo:f.titulo.value,
     empresa:f.empresa.value,
     funcao:f.funcao.value,
@@ -208,36 +243,58 @@ document.getElementById('formVaga').addEventListener('submit', async e=>{
   };
   try {
     if(vagaEditando){
-      await fetch(`/api/vagas/${vagaEditando}`, {
-        method:'PUT',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(vagaData)
+      const res=await fetch(`/api/vagas/${vagaEditando}`, {
+        method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(vaga)
       });
+      if(res.ok){ vagaEditando=null; f.reset(); carregarVagas(); }
+      else alert('Erro ao atualizar vaga');
     } else {
-      await fetch('/api/vagas', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(vagaData)
+      const res=await fetch('/api/vagas', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(vaga)
       });
+      if(res.ok){ f.reset(); carregarVagas(); }
+      else alert('Erro ao cadastrar vaga');
     }
-    f.reset();
-    vagaEditando=null;
-    carregarVagas();
-  } catch(e){ console.error(e); }
+  } catch(e){ alert('Erro na conexão'); }
 });
 
 // --- FUNÇÃO CARREGAR SOLICITAÇÕES ---
 async function carregarSolicitacoes(){
-  const lista=document.getElementById('listaSolicitacoes');
-  lista.innerHTML='<p>Nenhuma solicitação registrada.</p>';
+  try {
+    const res=await fetch('/api/vagasPersonalizadas');
+    if(!res.ok) throw new Error('Erro ao buscar solicitações');
+    const solicitacoes=await res.json();
+    const lista=document.getElementById('listaSolicitacoes');
+    lista.innerHTML='';
+    if(!solicitacoes.length){ lista.innerHTML='<p>Nenhuma solicitação registrada.</p>'; return; }
+    solicitacoes.forEach(s=>{
+      const div=document.createElement('div');
+      div.className='solicitacao';
+      div.innerHTML=`
+        <strong>${s.nome}</strong> – ${s.telefone}<br>
+        <strong>Área:</strong> ${s.area}<br>
+        <strong>Local:</strong> ${s.local}<br>
+        <small>Data: ${s.data}</small><br>
+        <button class="btn-excluir" onclick="excluirSolicitacao('${s.data}')">Excluir</button>
+      `;
+      lista.appendChild(div);
+    });
+  } catch(e){ console.error(e); }
+}
+
+// --- EXCLUIR SOLICITAÇÃO ---
+async function excluirSolicitacao(data){
+  if(!confirm('Tem certeza que deseja excluir esta solicitação?')) return;
+  try {
+    const res=await fetch('/api/vagasPersonalizadas',{ method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({data}) });
+    if(res.ok) carregarSolicitacoes();
+    else alert('Erro ao excluir solicitação');
+  } catch(e){ alert('Erro na conexão'); }
 }
 
 // --- AUTO AJUSTE TEXTAREA ---
 document.querySelectorAll("textarea").forEach(t=>{
-  t.addEventListener("input", e=>{
-    e.target.style.height='auto';
-    e.target.style.height=e.target.scrollHeight+'px';
-  });
+  t.addEventListener("input", e=>{ e.target.style.height='auto'; e.target.style.height=e.target.scrollHeight+'px'; });
   t.dispatchEvent(new Event('input'));
 });
 
@@ -245,5 +302,6 @@ document.querySelectorAll("textarea").forEach(t=>{
 carregarVagas();
 carregarSolicitacoes();
 </script>
+
 </body>
 </html>
