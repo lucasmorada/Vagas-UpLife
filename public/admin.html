@@ -110,6 +110,9 @@
     <label for="descricao">Descrição</label>
     <textarea id="descricao" name="descricao" rows="4" required></textarea>
 
+    <label for="link">Link da Vaga</label>
+    <input type="url" id="link" name="link" placeholder="https://exemplo.com" >
+
     <label>
       <input type="checkbox" id="tecnico" name="tecnico">
       Técnico (por competência)
@@ -141,6 +144,7 @@ async function carregarVagas() {
       <strong>Salário:</strong> ${v.salario || '-'}<br>
       <strong>Área:</strong> ${v.area}<br>
       <strong>Descrição:</strong> ${v.descricao}<br>
+      <strong>Link:</strong> ${v.link ? `<a href="${v.link}" target="_blank">${v.link}</a>` : '-'}<br>
       <small>Técnico: ${v.tecnico ? 'Sim' : 'Não'}</small><br>
       <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
       <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v)})'>Editar</button>
@@ -165,6 +169,7 @@ function editarVaga(v) {
   f.salario.value = v.salario || '';
   f.area.value = v.area;
   f.descricao.value = v.descricao;
+  f.link.value = v.link || '';
   f.tecnico.checked = v.tecnico;
   vagaEditando = v.id;
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -181,7 +186,8 @@ document.getElementById('formVaga').addEventListener('submit', async e => {
     salario: f.salario.value,
     area: f.area.value,
     descricao: f.descricao.value,
-    tecnico: f.tecnico.checked
+    tecnico: f.tecnico.checked,
+    link: f.link.value
   };
 
   if (vagaEditando) {

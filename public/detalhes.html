@@ -279,7 +279,7 @@
 </head>
 <body>
 
-  <header>
+   <header>
     <a href="index.html">
       <img src="Logo (2).png" class="logo" alt="UpLife Educacional Logo" />
     </a>
@@ -305,69 +305,34 @@
   <div class="container" id="vagaDetalhe"></div>
 
   <script>
-  async function carregarDetalhes() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
+    async function carregarDetalhes() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
 
-    const res = await fetch(`/api/vagas/${id}`);
-    const vaga = await res.json();
-
-    const container = document.getElementById('vagaDetalhe');
-
-    if (!vaga || !vaga.id) {
-      container.innerHTML = "<p>Vaga não encontrada.</p>";
-      return;
-    }
-
-    container.innerHTML = `
-      <h2>${vaga.titulo}</h2>
-      <p><strong>Empresa:</strong> ${vaga.empresa || '-'}</p>
-      <p><strong>Função:</strong> ${vaga.funcao || '-'}</p>
-      <p><strong>Local:</strong> ${vaga.local}</p>
-      <p><strong>Área:</strong> ${vaga.area}</p>
-      <p><strong>Descrição:</strong><br>${vaga.descricao.replace(/\n/g, '<br>')}</p>
-      <a href="${vaga.link}" target="_blank" class="btn-candidatar">Candidatar-se</a>
-    `;
-
-    const blocosContainer = document.createElement('div');
-    container.appendChild(blocosContainer);
-
-    if (vaga.curso && vaga.curso.nome) {
-      const cursoSection = document.createElement('div');
-      cursoSection.className = 'curso-recomendado';
-      cursoSection.innerHTML = `<h2>Não Está Preparado para essa vaga? Nós Temos a Solução</h2>`;
-      blocosContainer.appendChild(cursoSection);
-
-      if (vaga.tecnicoCompetencia) {
-        const blocoTecnico = document.createElement('div');
-        blocoTecnico.className = 'bloco-tecnico';
-        blocoTecnico.innerHTML = `
-          <h3>Técnico por Competência</h3>
-          <p>Conquiste seu diploma técnico de forma mais rápida, reconhecendo suas experiências e habilidades. Clique abaixo e entenda como funciona o Técnico por Competência!</p>
-          <a href="https://wa.me/554198505518?text=Ol%C3%A1%2C%20tenho%20interesse%20em%20saber%20mais%20sobre%20o%20T%C3%A9cnico%20por%20Compet%C3%AAncia." 
-            target="_blank" 
-            class="whatsapp-link" 
-            style="margin-top: 15px; display: inline-flex;">
-            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-            Falar com Jeverson
-          </a>
-        `;
-        cursoSection.appendChild(blocoTecnico);
+      if (!id) {
+        document.getElementById('vagaDetalhe').innerHTML = "<p>ID da vaga não informado.</p>";
+        return;
       }
 
-      const cursoDiv = document.createElement('div');
-      cursoDiv.className = 'curso';
-      cursoDiv.innerHTML = `
-        <a href="${vaga.curso.link}" target="_blank">
-          <img src="${vaga.curso.imagem}" alt="Curso">
-          <h3>${vaga.curso.nome}</h3>
-          <p>${vaga.curso.descricao}</p>
-        </a>
+      const res = await fetch(`/api/vagas/${id}`);
+      if (!res.ok) {
+        document.getElementById('vagaDetalhe').innerHTML = "<p>Vaga não encontrada.</p>";
+        return;
+      }
+      const vaga = await res.json();
+
+      const container = document.getElementById('vagaDetalhe');
+      container.innerHTML = `
+        <h2>${vaga.titulo}</h2>
+        <p><strong>Empresa:</strong> ${vaga.empresa || '-'}</p>
+        <p><strong>Localização:</strong> ${vaga.localizacao || '-'}</p>
+        <p><strong>Área:</strong> ${vaga.area}</p>
+        <p><strong>Salário:</strong> ${vaga.salario || '-'}</p>
+        <p><strong>Descrição:</strong><br>${vaga.descricao.replace(/\n/g, '<br>')}</p>
+        ${vaga.link ? `<a href="${vaga.link}" target="_blank" class="btn-candidatar">Candidatar-se</a>` : ''}
       `;
-      cursoSection.appendChild(cursoDiv);
-    } else {
-      
-      if (vaga.tecnicoCompetencia) {
+
+      if (vaga.tecnico) {
         const blocoTecnico = document.createElement('div');
         blocoTecnico.className = 'bloco-tecnico';
         blocoTecnico.innerHTML = `
@@ -381,19 +346,18 @@
             Falar com Jeverson
           </a>
         `;
-        blocosContainer.appendChild(blocoTecnico);
+        container.appendChild(blocoTecnico);
       }
     }
-  }
 
-  carregarDetalhes();
-</script>
-
+    carregarDetalhes();
+  </script>
 
   <div class="whatsapp-container">
     <a href="https://wa.me/554196924779" target="_blank" class="whatsapp-link">
       <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
       Suporte
+    </a>
     <a href="https://wa.me/554198505518" target="_blank" class="whatsapp-link">
       <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
       Coordenação

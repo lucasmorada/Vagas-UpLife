@@ -45,14 +45,15 @@ app.post("/api/vagas", async (req, res) => {
       local,
       tecnico,
       area,
+      link, // adicionando o link
     } = req.body;
 
     const result = await pool.query(
       `INSERT INTO vagas 
-        (titulo, descricao, empresa, localizacao, salario, local, tecnico, area) 
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) 
+        (titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link) 
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) 
        RETURNING *`,
-      [titulo, descricao, empresa, localizacao, salario, local, tecnico, area]
+      [titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link]
     );
 
     res.status(201).json(result.rows[0]);
@@ -75,13 +76,14 @@ app.put("/api/vagas/:id", async (req, res) => {
       local,
       tecnico,
       area,
+      link, // adicionando o link
     } = req.body;
 
     const result = await pool.query(
       `UPDATE vagas 
-       SET titulo=$1, descricao=$2, empresa=$3, localizacao=$4, salario=$5, local=$6, tecnico=$7, area=$8
-       WHERE id=$9 RETURNING *`,
-      [titulo, descricao, empresa, localizacao, salario, local, tecnico, area, id]
+       SET titulo=$1, descricao=$2, empresa=$3, localizacao=$4, salario=$5, local=$6, tecnico=$7, area=$8, link=$9
+       WHERE id=$10 RETURNING *`,
+      [titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link, id]
     );
 
     res.json(result.rows[0]);
