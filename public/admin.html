@@ -51,7 +51,7 @@
     }
     button:hover { background: #cf4c00; }
     .container { width: 100%; max-width: 700px; }
-    .vaga, .solicitacao {
+    .vaga {
       background: #fff;
       padding: 20px;
       border-radius: 14px;
@@ -59,7 +59,7 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
       transition: transform 0.2s ease;
     }
-    .vaga:hover, .solicitacao:hover { transform: scale(1.01); }
+    .vaga:hover { transform: scale(1.01); }
     .btn-excluir, .btn-editar {
       background: #e65100;
       color: white;
@@ -85,6 +85,12 @@
     <label for="titulo">Título da Vaga</label>
     <input type="text" id="titulo" name="titulo" required>
 
+    <label for="empresa">Empresa</label>
+    <input type="text" id="empresa" name="empresa" required>
+
+    <label for="localizacao">Localização</label>
+    <input type="text" id="localizacao" name="localizacao">
+
     <label for="salario">Salário</label>
     <input type="text" id="salario" name="salario">
 
@@ -104,12 +110,9 @@
     <label for="descricao">Descrição</label>
     <textarea id="descricao" name="descricao" rows="4" required></textarea>
 
-    <label for="cursos">Cursos Relacionados (texto ou links separados por vírgula)</label>
-    <input type="text" id="cursos" name="cursos">
-
     <label>
-      <input type="checkbox" id="tecnicoCompetencia" name="tecnicoCompetencia">
-      Mostrar bloco "Técnico por Competência"
+      <input type="checkbox" id="tecnico" name="tecnico">
+      Técnico (por competência)
     </label>
 
     <button type="submit">Salvar Vaga</button>
@@ -133,11 +136,12 @@ async function carregarVagas() {
     div.className = 'vaga';
     div.innerHTML = `
       <strong>${v.titulo}</strong><br>
+      <strong>Empresa:</strong> ${v.empresa}<br>
+      <strong>Localização:</strong> ${v.localizacao || '-'}<br>
       <strong>Salário:</strong> ${v.salario || '-'}<br>
       <strong>Área:</strong> ${v.area}<br>
       <strong>Descrição:</strong> ${v.descricao}<br>
-      <strong>Cursos:</strong> ${v.cursos || '-'}<br>
-      <small>Técnico por Competência: ${v.tecnico_competencia ? 'Sim' : 'Não'}</small><br>
+      <small>Técnico: ${v.tecnico ? 'Sim' : 'Não'}</small><br>
       <button class="btn-excluir" onclick="excluirVaga(${v.id})">Excluir</button>
       <button class="btn-editar" onclick='editarVaga(${JSON.stringify(v)})'>Editar</button>
     `;
@@ -156,11 +160,12 @@ async function excluirVaga(id) {
 function editarVaga(v) {
   const f = document.getElementById('formVaga');
   f.titulo.value = v.titulo;
+  f.empresa.value = v.empresa;
+  f.localizacao.value = v.localizacao || '';
   f.salario.value = v.salario || '';
   f.area.value = v.area;
   f.descricao.value = v.descricao;
-  f.cursos.value = v.cursos || '';
-  f.tecnicoCompetencia.checked = v.tecnico_competencia;
+  f.tecnico.checked = v.tecnico;
   vagaEditando = v.id;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -171,11 +176,12 @@ document.getElementById('formVaga').addEventListener('submit', async e => {
   const f = e.target;
   const vaga = {
     titulo: f.titulo.value,
+    empresa: f.empresa.value,
+    localizacao: f.localizacao.value,
     salario: f.salario.value,
     area: f.area.value,
     descricao: f.descricao.value,
-    cursos: f.cursos.value,
-    tecnico_competencia: f.tecnicoCompetencia.checked
+    tecnico: f.tecnico.checked
   };
 
   if (vagaEditando) {
