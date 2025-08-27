@@ -45,7 +45,7 @@ app.post("/api/vagas", async (req, res) => {
       local,
       tecnico,
       area,
-      link, // adicionando o link
+      link,
     } = req.body;
 
     const result = await pool.query(
@@ -76,7 +76,7 @@ app.put("/api/vagas/:id", async (req, res) => {
       local,
       tecnico,
       area,
-      link, // adicionando o link
+      link,
     } = req.body;
 
     const result = await pool.query(
@@ -121,7 +121,6 @@ app.get("/api/vagas/:id", async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar vaga" });
   }
 });
-
 
 // ====================== ROTAS DE SOLICITAÇÕES ======================
 
