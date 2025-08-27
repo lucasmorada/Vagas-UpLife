@@ -92,7 +92,7 @@
     <input type="text" id="localizacao" name="localizacao">
 
     <label for="salario">Salário</label>
-    <input type="text" id="salario" name="salario">
+    <input type="number" id="salario" name="salario" step="0.01">
 
     <label for="area">Área</label>
     <select id="area" name="area" required>
@@ -180,14 +180,15 @@ document.getElementById('formVaga').addEventListener('submit', async e => {
   e.preventDefault();
   const f = e.target;
   const vaga = {
-    titulo: f.titulo.value,
-    empresa: f.empresa.value,
-    localizacao: f.localizacao.value,
-    salario: f.salario.value,
-    area: f.area.value,
-    descricao: f.descricao.value,
-    tecnico: f.tecnico.checked,
-    link: f.link.value
+  titulo: f.titulo.value,
+  empresa: f.empresa.value,
+  localizacao: f.localizacao.value,
+  salario: f.salario.value ? parseFloat(f.salario.value) : null,
+  area: f.area.value,
+  descricao: f.descricao.value,
+  tecnico: f.tecnico.checked,
+  link: f.link.value,
+  local: null
   };
 
   if (vagaEditando) {
