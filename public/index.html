@@ -515,25 +515,24 @@ header::before {
   });
 }
 
+function filtrarVagas() {
+  const termo = document.getElementById('searchInput').value.toLowerCase();
+  const cidade = document.getElementById('cidadeFiltro').value;
+  const area = document.getElementById('areaFiltro').value;
 
-    function filtrarVagas() {
-      const termo = document.getElementById('searchInput').value.toLowerCase();
-      const cidade = document.getElementById('cidadeFiltro').value;
-      const area = document.getElementById('areaFiltro').value;
+  const filtradas = vagasGlobal.filter(v => {
+    const matchCidade = cidade ? v.localizacao.includes(cidade) : true;
+    const matchArea = area ? v.area === area : true;
+    const matchTermo = termo ? (
+      v.titulo.toLowerCase().includes(termo) ||
+      v.localizacao.toLowerCase().includes(termo) ||
+      (v.descricao && v.descricao.toLowerCase().includes(termo))
+    ) : true;
+    return matchCidade && matchArea && matchTermo;
+  });
 
-      const filtradas = vagasGlobal.filter(v => {
-        const matchCidade = cidade ? v.local.includes(cidade) : true;
-        const matchArea = area ? v.area === area : true;
-        const matchTermo = termo ? (
-          v.titulo.toLowerCase().includes(termo) ||
-          v.local.toLowerCase().includes(termo) ||
-          (v.descricao && v.descricao.toLowerCase().includes(termo))
-        ) : true;
-        return matchCidade && matchArea && matchTermo;
-      });
-
-      renderVagas(filtradas);
-    }
+  renderVagas(filtradas);
+}
 
     carregarVagas();
   </script>
