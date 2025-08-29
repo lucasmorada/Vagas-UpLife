@@ -527,14 +527,27 @@ header::before {
 
   <script>
 
-    let vagasGlobal = [];
+let vagasGlobal = [];
 
-    async function carregarVagas() {
+async function carregarVagas() {
   const container = document.querySelector('.jobs');
   const spinner = document.getElementById('spinner');
 
   spinner.style.display = 'flex';
   container.innerHTML = '';
+
+  // Mensagem de aviso se demorar muito
+  const splash = document.getElementById('splash');
+  const avisoSplash = document.createElement("p");
+  avisoSplash.style.marginTop = "15px";
+  avisoSplash.style.fontSize = "1rem";
+  avisoSplash.style.color = "#fff";
+  avisoSplash.innerText = "";
+  splash.appendChild(avisoSplash);
+
+  const timeoutAviso = setTimeout(() => {
+    avisoSplash.innerText = "O servidor está acordando... isso pode levar alguns segundos.";
+  }, 5000); // aparece após 5 segundos
 
   try {
     const resposta = await fetch('/api/vagas');
@@ -550,17 +563,16 @@ header::before {
     renderVagas(vagasLocais);
   }
 
+  clearTimeout(timeoutAviso);
   spinner.style.display = 'none';
 
-  
-  const splash = document.getElementById('splash');
   if (splash) {
     splash.style.opacity = "0";
     setTimeout(() => splash.style.display = "none", 500);
   }
 }
 
-    function renderVagas(lista) {
+function renderVagas(lista) {
   const container = document.querySelector('.jobs');
   container.innerHTML = '';
   if (!lista.length) {
@@ -602,8 +614,7 @@ function filtrarVagas() {
   renderVagas(filtradas);
 }
 
-    carregarVagas();
-
+carregarVagas();
 
   </script>
 </body>
