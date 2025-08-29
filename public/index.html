@@ -456,7 +456,7 @@ header::before {
 
   <div id="splash">
     <img src="Logo (2).png" alt="UpLife Logo">
-    <p>Carregando...</p>
+    <p>Estamos preparando tudo pra você... Aguarde um instante.</p>
     <div class="progress-bar">
       <div class="progress"></div>
     </div>
@@ -530,32 +530,35 @@ header::before {
     let vagasGlobal = [];
 
     async function carregarVagas() {
-      const container = document.querySelector('.jobs');
-      const spinner = document.getElementById('spinner');
+  const container = document.querySelector('.jobs');
+  const spinner = document.getElementById('spinner');
 
-      spinner.style.display = 'flex';
-      container.innerHTML = '';
+  spinner.style.display = 'flex';
+  container.innerHTML = '';
 
-      try {
-        const resposta = await fetch('/api/vagas');
-        if (!resposta.ok) throw new Error('Erro ao carregar vagas');
-        const vagas = await resposta.json();
-        vagasGlobal = vagas;
-        localStorage.setItem('vagas', JSON.stringify(vagas));
-        renderVagas(vagas);
-      } catch (erro) {
-        console.error('Erro ao buscar vagas:', erro);
-        const vagasLocais = JSON.parse(localStorage.getItem('vagas')) || [];
-        vagasGlobal = vagasLocais;
-        renderVagas(vagasLocais);
-      }
+  try {
+    const resposta = await fetch('/api/vagas');
+    if (!resposta.ok) throw new Error('Erro ao carregar vagas');
+    const vagas = await resposta.json();
+    vagasGlobal = vagas;
+    localStorage.setItem('vagas', JSON.stringify(vagas));
+    renderVagas(vagas);
+  } catch (erro) {
+    console.error('Erro ao buscar vagas:', erro);
+    const vagasLocais = JSON.parse(localStorage.getItem('vagas')) || [];
+    vagasGlobal = vagasLocais;
+    renderVagas(vagasLocais);
+  }
 
-      spinner.style.display = 'none';
-    }
+  spinner.style.display = 'none';
 
-const splash = document.getElementById('splash');
-  if (splash) splash.style.display = 'none';
-
+  
+  const splash = document.getElementById('splash');
+  if (splash) {
+    splash.style.opacity = "0";
+    setTimeout(() => splash.style.display = "none", 500);
+  }
+}
 
     function renderVagas(lista) {
   const container = document.querySelector('.jobs');
@@ -600,6 +603,8 @@ function filtrarVagas() {
 }
 
     carregarVagas();
+
+
   </script>
 </body>
 </html>
