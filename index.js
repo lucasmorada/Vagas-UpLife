@@ -17,18 +17,19 @@ async function initDB() {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS vagas (
-        id SERIAL PRIMARY KEY,
-        titulo TEXT NOT NULL,
-        descricao TEXT,
-        empresa TEXT,
-        localizacao TEXT,
-        salario TEXT,
-        local TEXT,
-        tecnico TEXT,
-        area TEXT,
-        link TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
+  id SERIAL PRIMARY KEY,
+  titulo TEXT NOT NULL,
+  descricao TEXT,
+  empresa TEXT,
+  localizacao TEXT,
+  salario TEXT,
+  local TEXT,
+  tecnico BOOLEAN,
+  area TEXT,
+  link TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
     `);
 
     await pool.query(`
