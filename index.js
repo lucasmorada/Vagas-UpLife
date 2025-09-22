@@ -9,8 +9,45 @@ const PORT = process.env.PORT || 3000;
 // ====================== CONFIGURAÇÃO DO BANCO ======================
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, 
+  ssl: { rejectUnauthorized: false },
 });
+
+// ====================== CRIAÇÃO DE TABELAS AUTOMÁTICA ======================
+async function initDB() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS vagas (
+        id SERIAL PRIMARY KEY,
+        titulo TEXT NOT NULL,
+        descricao TEXT,
+        empresa TEXT,
+        localizacao TEXT,
+        salario TEXT,
+        local TEXT,
+        tecnico TEXT,
+        area TEXT,
+        link TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS solicitacoes (
+        id SERIAL PRIMARY KEY,
+        nome TEXT NOT NULL,
+        email TEXT,
+        telefone TEXT,
+        mensagem TEXT,
+        vaga_id INT REFERENCES vagas(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    console.log("✅ Tabelas verificadas/criadas com sucesso!");
+  } catch (err) {
+    console.error("❌ Erro ao inicializar tabelas:", err);
+  }
+}
 
 // ====================== MIDDLEWARES ======================
 app.use(express.json());
@@ -153,6 +190,7 @@ app.post("/api/solicitacoes", async (req, res) => {
 });
 
 // ====================== INICIAR SERVIDOR ======================
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await initDB(); // garante tabelas na inicialização
   console.log(`Servidor rodando na porta ${PORT}`);
 });
