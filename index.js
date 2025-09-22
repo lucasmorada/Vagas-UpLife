@@ -1,4 +1,3 @@
-// index.js
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -7,13 +6,13 @@ const { Pool } = require("pg");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuração do banco (Render já fornece DATABASE_URL)
+// ====================== CONFIGURAÇÃO DO BANCO ======================
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
+  connectionString: "postgresql://uplife_user:NFgtA5VnUP59ch27mGPHNq4diSWjBvrR@dpg-d38qh2er433s73fp95g0-a.oregon-postgres.render.com/uplife",
+  ssl: { rejectUnauthorized: false }, // necessário no Render
 });
 
-// Middlewares
+// ====================== MIDDLEWARES ======================
 app.use(express.json());
 app.use(cors());
 
