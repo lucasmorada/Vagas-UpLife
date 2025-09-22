@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 3000;
 
 // ====================== CONFIGURAÇÃO DO BANCO ======================
 const pool = new Pool({
-  connectionString: "postgresql://uplife_user:NFgtA5VnUP59ch27mGPHNq4diSWjBvrR@dpg-d38qh2er433s73fp95g0-a.oregon-postgres.render.com/uplife",
-  ssl: { rejectUnauthorized: false }, // necessário no Render
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, 
 });
 
 // ====================== MIDDLEWARES ======================
