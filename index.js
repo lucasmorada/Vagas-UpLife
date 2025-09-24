@@ -18,12 +18,12 @@ async function initDB() {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS vagas (
-        id SERIAL PRIMARY KEY,
+        id BIGSERIAL PRIMARY KEY,
         titulo TEXT NOT NULL,
         descricao TEXT,
         empresa TEXT,
         localizacao TEXT,
-        salario TEXT,
+        salario NUMERIC,
         local TEXT,
         tecnico BOOLEAN,
         area TEXT,
@@ -34,12 +34,12 @@ async function initDB() {
 
     await pool.query(`
       CREATE TABLE IF NOT EXISTS solicitacoes (
-        id SERIAL PRIMARY KEY,
+        id BIGSERIAL PRIMARY KEY,
         nome TEXT NOT NULL,
         email TEXT,
         telefone TEXT,
         mensagem TEXT,
-        vaga_id INT REFERENCES vagas(id) ON DELETE CASCADE,
+        vaga_id BIGINT REFERENCES vagas(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
@@ -53,8 +53,6 @@ async function initDB() {
 // ====================== MIDDLEWARES ======================
 app.use(express.json());
 app.use(cors());
-
-// Servir frontend da pasta public
 app.use(express.static(path.join(__dirname, "public")));
 
 // ====================== ROTAS DE VAGAS ======================
@@ -63,6 +61,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/api/vagas", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM vagas ORDER BY id DESC");
+    console.log("GET /api/vagas result:", result.rows);
     res.json(result.rows);
   } catch (err) {
     console.error("Erro ao buscar vagas:", err);
@@ -85,7 +84,7 @@ app.post("/api/vagas", async (req, res) => {
       link,
     } = req.body;
 
-     console.log("POST /api/vagas body:", req.body);
+    console.log("POST /api/vagas body:", req.body);
 
     const result = await pool.query(
       `INSERT INTO vagas 
@@ -124,6 +123,10 @@ app.put("/api/vagas/:id", async (req, res) => {
        WHERE id=$10 RETURNING *`,
       [titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link, id]
     );
+
+    if (!result.rows[0]) {
+      return res.status(404).json({ error: "Vaga não encontrada" });
+    }
 
     res.json(result.rows[0]);
   } catch (err) {
