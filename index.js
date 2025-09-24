@@ -13,9 +13,14 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// ====================== CRIAÇÃO DE TABELAS AUTOMÁTICA ======================
+// ====================== FUNÇÃO DE INICIALIZAÇÃO ======================
 async function initDB() {
   try {
+    // Testa conexão
+    const test = await pool.query("SELECT NOW()");
+    console.log("✅ Conectado ao DB em:", test.rows[0].now);
+
+    // Cria tabela vagas
     await pool.query(`
       CREATE TABLE IF NOT EXISTS vagas (
         id BIGSERIAL PRIMARY KEY,
@@ -32,6 +37,7 @@ async function initDB() {
       );
     `);
 
+    // Cria tabela solicitacoes
     await pool.query(`
       CREATE TABLE IF NOT EXISTS solicitacoes (
         id BIGSERIAL PRIMARY KEY,
@@ -46,7 +52,8 @@ async function initDB() {
 
     console.log("✅ Tabelas verificadas/criadas com sucesso!");
   } catch (err) {
-    console.error("❌ Erro ao inicializar tabelas:", err);
+    console.error("❌ Erro ao inicializar tabelas ou conectar ao DB:", err);
+    process.exit(1); // encerra app se não conseguir conectar
   }
 }
 
@@ -61,7 +68,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/api/vagas", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM vagas ORDER BY id DESC");
-    console.log("🚀 Result do DB:", result); // adiciona este log
     res.json(result.rows);
   } catch (err) {
     console.error("Erro ao buscar vagas:", err);
@@ -69,28 +75,14 @@ app.get("/api/vagas", async (req, res) => {
   }
 });
 
-
 // Criar vaga
 app.post("/api/vagas", async (req, res) => {
   try {
-    const {
-      titulo,
-      descricao,
-      empresa,
-      localizacao,
-      salario,
-      local,
-      tecnico,
-      area,
-      link,
-    } = req.body;
-
-    console.log("POST /api/vagas body:", req.body);
+    const { titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link } = req.body;
 
     const result = await pool.query(
-      `INSERT INTO vagas 
-        (titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link) 
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) 
+      `INSERT INTO vagas (titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
        RETURNING *`,
       [titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link]
     );
@@ -106,28 +98,15 @@ app.post("/api/vagas", async (req, res) => {
 app.put("/api/vagas/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      titulo,
-      descricao,
-      empresa,
-      localizacao,
-      salario,
-      local,
-      tecnico,
-      area,
-      link,
-    } = req.body;
+    const { titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link } = req.body;
 
     const result = await pool.query(
-      `UPDATE vagas 
-       SET titulo=$1, descricao=$2, empresa=$3, localizacao=$4, salario=$5, local=$6, tecnico=$7, area=$8, link=$9
+      `UPDATE vagas SET titulo=$1, descricao=$2, empresa=$3, localizacao=$4, salario=$5, local=$6, tecnico=$7, area=$8, link=$9
        WHERE id=$10 RETURNING *`,
       [titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link, id]
     );
 
-    if (!result.rows[0]) {
-      return res.status(404).json({ error: "Vaga não encontrada" });
-    }
+    if (!result.rows[0]) return res.status(404).json({ error: "Vaga não encontrada" });
 
     res.json(result.rows[0]);
   } catch (err) {
@@ -148,26 +127,7 @@ app.delete("/api/vagas/:id", async (req, res) => {
   }
 });
 
-// Buscar vaga por ID
-app.get("/api/vagas/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await pool.query("SELECT * FROM vagas WHERE id=$1", [id]);
-    
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Vaga não encontrada" });
-    }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error("Erro ao buscar vaga:", err);
-    res.status(500).json({ error: "Erro ao buscar vaga" });
-  }
-});
-
 // ====================== ROTAS DE SOLICITAÇÕES ======================
-
-// Listar solicitações
 app.get("/api/solicitacoes", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM solicitacoes ORDER BY id DESC");
@@ -178,7 +138,6 @@ app.get("/api/solicitacoes", async (req, res) => {
   }
 });
 
-// Criar solicitação
 app.post("/api/solicitacoes", async (req, res) => {
   try {
     const { nome, email, telefone, mensagem, vaga_id } = req.body;
@@ -197,7 +156,9 @@ app.post("/api/solicitacoes", async (req, res) => {
 });
 
 // ====================== INICIAR SERVIDOR ======================
-app.listen(PORT, async () => {
-  await initDB(); // garante tabelas na inicialização
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+(async () => {
+  await initDB(); // garante tabelas antes de iniciar
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+})();
