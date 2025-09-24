@@ -61,13 +61,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/api/vagas", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM vagas ORDER BY id DESC");
-    console.log("GET /api/vagas result:", result.rows);
+    console.log("🚀 Result do DB:", result); // adiciona este log
     res.json(result.rows);
   } catch (err) {
     console.error("Erro ao buscar vagas:", err);
     res.status(500).json({ error: "Erro ao buscar vagas" });
   }
 });
+
 
 // Criar vaga
 app.post("/api/vagas", async (req, res) => {
