@@ -85,6 +85,8 @@ app.post("/api/vagas", async (req, res) => {
       link,
     } = req.body;
 
+     console.log("POST /api/vagas body:", req.body);
+
     const result = await pool.query(
       `INSERT INTO vagas 
         (titulo, descricao, empresa, localizacao, salario, local, tecnico, area, link) 
